@@ -1,4 +1,4 @@
-const CONTRACT_NAME = process.env.CONTRACT_NAME ||'fono-root'
+const CONTRACT_NAME = process.env.CONTRACT_NAME || 'exp1.optr.testnet';
 
 function getConfig(env) {
   switch (env) {

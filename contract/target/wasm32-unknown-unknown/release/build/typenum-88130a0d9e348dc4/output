@@ -1,0 +1,2 @@
+cargo:rustc-env=TYPENUM_BUILD_CONSTS=/home/user/MetaBUILD/fono-root/contract/target/wasm32-unknown-unknown/release/build/typenum-88130a0d9e348dc4/out/consts.rs
+cargo:rustc-env=TYPENUM_BUILD_OP=/home/user/MetaBUILD/fono-root/contract/target/wasm32-unknown-unknown/release/build/typenum-88130a0d9e348dc4/out/op.rs
