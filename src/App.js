@@ -64,10 +64,10 @@ export default function App() {
       .finally(() => console.log("finally"));
   }
 
-  function getMeta() {
+  function getMeta(tokenId) {
     console.log(window.accountId)
     const options = {
-      token_id: "22",
+      token_id: tokenId,
     }
 
     window.contract.nft_token(options)
@@ -109,7 +109,9 @@ export default function App() {
       <button onClick={() => initContract()}>INIT</button>
       <button onClick={() => mintRoot()}>MintRoot</button>
       <button onClick={() => getContractMeta()}>Get Contract Meta</button>
-      <button onClick={() => getMeta()}>Get Meta for 22</button>
+      <button onClick={() => getMeta("22")}>Get Meta for 22</button>
+      <button onClick={() => getMeta("220")}>Get Meta for 220</button>
+      <button onClick={() => getMeta("221")}>Get Meta for 221</button>
 
       <p>{msg}</p>
     </>

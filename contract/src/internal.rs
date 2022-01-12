@@ -3,8 +3,6 @@ use near_sdk::{CryptoHash};
 use std::mem::size_of;
 
 
-
-
 // Used to generate unique prefix in our storage collections to avoid data collisions
 pub(crate) fn hash_account_id(account_id: &AccountId) -> CryptoHash {
     let mut hash = CryptoHash::default();
@@ -119,6 +117,7 @@ impl Contract {
         approval_id: Option<u64>,
         memo: Option<String>,
     ) -> Token {
+        // !! We would have to check somewhere in internal_transfer that the token is moving from Vault to user
         let token = self.tokens_by_id.get(token_id).expect("No token");
   
         if sender_id != &token.owner_id {
@@ -175,6 +174,11 @@ impl Contract {
                 memo,
             }]),
         };
+
+        if sender_id.to_string() == env::current_account_id().to_string() {                 // If this is a transfer from Vault to user, create 2 new NFTs
+            // We should be sure that this is happening for the first time, this can not run multiple times. This is not done yet.
+            self.create_children(token_id.to_string(), Some(HashMap::new()));
+        }
 
         env::log_str(&nft_transfer_log.to_string());                                        // Log the serialized json.
 

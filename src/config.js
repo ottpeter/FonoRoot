@@ -1,10 +1,11 @@
-const CONTRACT_NAME = process.env.CONTRACT_NAME || 'exp1.optr.testnet';
+const CONTRACT_NAME = process.env.CONTRACT_NAME || 'dev-1641920882471-32216856354561';
 
 function getConfig(env) {
   switch (env) {
 
   case 'production':
-  case 'mainnet':
+  // Deactivate for development
+  /*case 'mainnet':
     return {
       networkId: 'mainnet',
       nodeUrl: 'https://rpc.mainnet.near.org',
@@ -12,6 +13,15 @@ function getConfig(env) {
       walletUrl: 'https://wallet.near.org',
       helperUrl: 'https://helper.mainnet.near.org',
       explorerUrl: 'https://explorer.mainnet.near.org',
+    }*/
+  case 'mainnet':
+    return {
+      networkId: 'testnet',
+      nodeUrl: 'https://rpc.testnet.near.org',
+      contractName: CONTRACT_NAME,
+      walletUrl: 'https://wallet.testnet.near.org',
+      helperUrl: 'https://helper.testnet.near.org',
+      explorerUrl: 'https://explorer.testnet.near.org',
     }
   case 'development':
   case 'testnet':

@@ -77,7 +77,7 @@ impl Contract {
     /// * `parent` id of the parent NFT
     /// * `perpetual_royalties` probably we won't have this field
     #[payable]
-    pub fn create_children(
+    pub(crate) fn create_children(
         &mut self,
         //token_id: TokenId,
         parent: TokenId,
@@ -85,7 +85,7 @@ impl Contract {
     ) {
         log!("Starting CreateChildren...");
         let initial_storage_usage = env::storage_usage();                                       // Take note of initial storage usage for refund
-                                                                                                // This probably shouldn't exist, because create_children should be always wrapped in other function
+                                                                                                // This probably shouldn't exist, because create_children should be always wrapped in other functiongit                                                                                                      
         
         for child_num in 0..2 {
             log!("Entering loop...");
