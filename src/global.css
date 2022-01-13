@@ -3,7 +3,7 @@
 }
 
 html {
-  --bg: #efefef;
+  --bg: #222222;
   --fg: #1e1e1e;
   --gray: #555;
   --light-gray: #ccc;
@@ -185,4 +185,9 @@ aside footer *:last-child {
   input:focus {
     box-shadow: 0 0 10em rgba(255, 255, 255, 0.02) inset;
   }
+}
+
+#testWrapper {
+  width: 44%;
+  margin: auto;
 }
