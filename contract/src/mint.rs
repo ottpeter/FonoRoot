@@ -26,6 +26,14 @@ impl Contract {
         receiver_id: AccountId,
         perpetual_royalties: Option<HashMap<AccountId, u32>>,
     ) {
+        // Instead of adding TokenId as param
+        // it should be generated from a nounce, 
+        // e.g. "fono-root-" + nounce
+        // "fono-root-0"
+        // "fono-root-1"
+        // "fono-root-2"
+
+
         log!("Starting MintRoot...");
         let initial_storage_usage = env::storage_usage();                                   // Take note of initial storage usage for refund
         let mut royalty = HashMap::new();                                                   // Create royalty map to store in the token
