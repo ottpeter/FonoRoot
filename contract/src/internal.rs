@@ -177,7 +177,8 @@ impl Contract {
 
         if sender_id.to_string() == env::current_account_id().to_string() {                 // If this is a transfer from Vault to user, create 2 new NFTs
             // We should be sure that this is happening for the first time, this can not run multiple times. This is not done yet.
-            self.create_children(token_id.to_string(), Some(HashMap::new()));
+            // we need to loop to get root
+            //self.create_children(token_id.to_string(), Some(HashMap::new()));
         }
 
         env::log_str(&nft_transfer_log.to_string());                                        // Log the serialized json.

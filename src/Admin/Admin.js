@@ -57,7 +57,7 @@ export default function Admin() {
       <MusicDropzone onDrop={onDropMusic} accept={"audio/*"} multiple={false} /><br></br>
       <input type={"number"} min={0} value={price} onChange={(e) => setPrice(e.target.value)} /><br></br>
       
-      <button onClick={mintRootNFT}>CREATE</button>
+      <button onClick={() => mintRootNFT(title, desc, imageCID, imageHash, musicCID, musicHash)}>CREATE</button>
     </div>
   )
 }

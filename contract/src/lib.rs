@@ -34,6 +34,7 @@ pub const NFT_STANDARD_NAME: &str = "nep171";
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
 pub struct Contract {    
     pub owner_id: AccountId,                                                               // Contract owner
+    pub root_nounce: u128,
     pub tokens_per_owner: LookupMap<AccountId, UnorderedSet<TokenId>>,                     // Keeps track of all the token IDs for a given account
     pub tokens_by_id: LookupMap<TokenId, Token>,                                           // Keeps track of the token struct for a given token ID
     pub token_metadata_by_id: UnorderedMap<TokenId, TokenMetadata>,                        // Keeps track of the token metadata for a given token ID
@@ -84,6 +85,7 @@ impl Contract {
             ),
             // Set the owner_id field equal to the passed in owner_id. 
             owner_id,
+            root_nounce: 0,
             metadata: LazyOption::new(
                 StorageKey::NFTContractMetadata.try_to_vec().unwrap(),
                 Some(&metadata),

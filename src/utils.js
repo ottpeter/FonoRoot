@@ -1,4 +1,4 @@
-import { connect, Contract, keyStores, WalletConnection } from 'near-api-js'
+import { connect, Contract, keyStores, WalletConnection, utils } from 'near-api-js'
 import getConfig from './config'
 
 const nearConfig = getConfig(process.env.NODE_ENV || 'development')
@@ -14,7 +14,7 @@ export async function initContract() {
   // Initializing our contract APIs by contract name and configuration
   window.contract = await new Contract(window.walletConnection.account(), nearConfig.contractName, {
     // View methods are read only. They don't modify the state, but usually return some value.
-    viewMethods: ['nft_metadata', 'nft_token', 'nft_tokens_for_owner'],
+    viewMethods: ['nft_metadata', 'nft_token', 'nft_tokens_for_owner', 'nft_tokens'],
     // Change methods can modify the state. But you don't receive the returned value when called.
     changeMethods: ['new_default_meta', 'new', 'mint_root'],
   })
@@ -22,7 +22,6 @@ export async function initContract() {
 
 export function mintRootNFT(title, desc, imageCID, imageHash, musicCID, musicHash) {
   const root_args = {
-    token_id: "22",                                                // We will need to change this
     receiver_id: window.accountId,
     metadata: {
       title: title,                                          
@@ -37,6 +36,7 @@ export function mintRootNFT(title, desc, imageCID, imageHash, musicCID, musicHas
       extra: JSON.stringify({
         music_cid: musicCID,                                       // This is the CID of the music
         music_hash: btoa(musicHash),                               // This is the SHA256 hash of the music, converted to Base64 
+        instance_nounce: 0,                                        // Mandatory
       }),
       reference: null,                                             // URL to an off-chain JSON file with more info.
       reference_hash: null                                         // Base64-encoded sha256 hash of JSON from reference field. Required if `reference` is included.
