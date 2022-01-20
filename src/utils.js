@@ -1,7 +1,8 @@
-import { connect, Contract, keyStores, WalletConnection, utils } from 'near-api-js'
-import getConfig from './config'
+import { connect, Contract, keyStores, WalletConnection, utils } from 'near-api-js';
+const CryptoJS = require('crypto-js');;
+import getConfig from './config';
 
-const nearConfig = getConfig(process.env.NODE_ENV || 'development')
+const nearConfig = getConfig(process.env.NODE_ENV || 'development');
 
 // Initialize contract & set global variables
 export async function initContract() {
@@ -14,9 +15,9 @@ export async function initContract() {
   // Initializing our contract APIs by contract name and configuration
   window.contract = await new Contract(window.walletConnection.account(), nearConfig.contractName, {
     // View methods are read only. They don't modify the state, but usually return some value.
-    viewMethods: ['nft_metadata', 'nft_token', 'nft_tokens_for_owner', 'nft_tokens'],
+    viewMethods: ['nft_metadata', 'nft_token', 'nft_tokens_for_owner', 'nft_tokens', 'get_crust_key'],
     // Change methods can modify the state. But you don't receive the returned value when called.
-    changeMethods: ['new_default_meta', 'new', 'mint_root'],
+    changeMethods: ['new_default_meta', 'new', 'mint_root', 'set_crust_key'],
   })
 }
 
@@ -53,6 +54,36 @@ export function mintRootNFT(title, desc, imageCID, imageHash, musicCID, musicHas
     .finally(() => console.log("finally()"));
 }
 
+export async function setSeed(seed) {
+  const accountId = window.accountId;                              // We encrypt the Crust key using the NEAR priv key (has to be owner)
+  const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+  const keyPair = await keyStore.getKey("testnet", accountId);
+
+  const encryptedKey = CryptoJS.AES.encrypt(seed, keyPair.secretKey).toString();
+
+  window.contract.set_crust_key({encrypted_key: encryptedKey})
+    .then((msg) => console.log("The Contract says ", msg))
+    .catch((err) => console.error("Error occured while uploading encrypted key:", err));
+}
+
+
+export async function getSeed() {
+  const accountId = window.accountId;                              // We decrypt the Crust key using the NEAR priv key (has to be owner)
+  const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+  const keyPair = await keyStore.getKey("testnet", accountId);
+  let encryptedKey = null;
+
+  await window.contract.get_crust_key()
+    .then((result) => encryptedKey = result)
+    .catch((err) => console.log("Error occured while fetching encrypted key: ", err))
+  
+  if (encryptedKey) {
+    return CryptoJS.AES.decrypt(encryptedKey, keyPair.secretKey).toString(CryptoJS.enc.Utf8);
+  } else {
+    return null;                                                   // Error occured while fetching key
+  }
+}
+
 export function logout() {
   window.walletConnection.signOut()
   window.location.replace(window.location.origin + window.location.pathname)               // reload page
@@ -61,3 +92,4 @@ export function logout() {
 export function login() {
   window.walletConnection.requestSignIn(nearConfig.contractName)
 }
+

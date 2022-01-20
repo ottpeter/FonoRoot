@@ -6,6 +6,7 @@ import 'regenerator-runtime/runtime';
 export default function TopMenu() {
   function initContract() {
     // This could be 'new' for user provided init
+    // WE WILL HAVE TO CHANGE THIS TO THE OWNER (or create admin user in lib.rs), BUT NOW THE ASSERT IS TURNED OFF INSTEAD!!
     window.contract.new_default_meta({owner_id: process.env.CONTRACT_NAME})
       .then((msg) => console.log("Initialized! ", msg))
       .catch((err) => console.error(err))

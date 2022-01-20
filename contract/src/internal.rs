@@ -178,7 +178,21 @@ impl Contract {
         if sender_id.to_string() == env::current_account_id().to_string() {                 // If this is a transfer from Vault to user, create 2 new NFTs
             // We should be sure that this is happening for the first time, this can not run multiple times. This is not done yet.
             // we need to loop to get root
-            //self.create_children(token_id.to_string(), Some(HashMap::new()));
+            // This is not tested because we haven't reach that point in front-end yet.
+            let mut searched_token_id = token_id.clone();
+            loop {
+                let current_metadata = self.token_metadata_by_id.get(&searched_token_id.to_owned()).unwrap();
+                let current_extra_obj: Extra = serde_json::from_str(&current_metadata.extra.unwrap()).unwrap();
+                match current_extra_obj.parent {
+                    Some(current_parent) => searched_token_id = current_parent,
+                    None => break,
+                }
+                env::log_str(&format!("Loop").to_string());
+            }
+
+            let root_id = searched_token_id;
+
+            self.create_children(root_id, token_id.to_string(), Some(HashMap::new()));
         }
 
         env::log_str(&nft_transfer_log.to_string());                                        // Log the serialized json.

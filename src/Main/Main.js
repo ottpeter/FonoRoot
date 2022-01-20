@@ -81,12 +81,10 @@ export default function Main() {
     <>
       {nftList.map((nft) => (
         <TokenCard 
+          key={nft.token_id}
           id={nft.token_id}
           owner={nft.owner_id}
-          title={nft.metadata.title}
-          desc={nft.metadata.description}
-
-          etc={[null]}
+          metadata={nft.metadata}
         />
       ))}
 

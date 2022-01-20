@@ -5,11 +5,11 @@ use near_sdk::serde::{Serialize, Deserialize};
 // Probably this should be moved. This is the _extra_ property of the NFT standard. It will be stored as JSON serialized string.
 #[derive(Serialize, Deserialize)]                                 
 #[serde(crate = "near_sdk::serde")]
-struct Extra {
-    music_cid: Option<String>,
-    music_hash: Option<Base64VecU8>,
-    parent: Option<TokenId>,
-    instance_nounce: u128,
+pub struct Extra {
+    pub music_cid: Option<String>,
+    pub music_hash: Option<Base64VecU8>,
+    pub parent: Option<TokenId>,
+    pub instance_nounce: u128,
 }
 
 #[near_bindgen]

@@ -14,6 +14,7 @@ pub use crate::nft_core::*;
 pub use crate::approval::*;
 pub use crate::royalty::*;
 pub use crate::events::*;
+pub use crate::crust::*;
 
 mod internal;
 mod approval; 
@@ -23,6 +24,7 @@ mod mint;
 mod nft_core; 
 mod royalty; 
 mod events;
+mod crust;
 
 /// This spec can be treated like a version of the standard.
 pub const NFT_METADATA_SPEC: &str = "1.0.0";
@@ -33,12 +35,13 @@ pub const NFT_STANDARD_NAME: &str = "nep171";
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
 pub struct Contract {    
-    pub owner_id: AccountId,                                                               // Contract owner
-    pub root_nounce: u128,
+    pub owner_id: AccountId,                                                               // Contract owner. Maybe we will create an admin as well
+    pub root_nounce: u128,                                                                 // We will use this for the creation of the `token_id`
     pub tokens_per_owner: LookupMap<AccountId, UnorderedSet<TokenId>>,                     // Keeps track of all the token IDs for a given account
     pub tokens_by_id: LookupMap<TokenId, Token>,                                           // Keeps track of the token struct for a given token ID
     pub token_metadata_by_id: UnorderedMap<TokenId, TokenMetadata>,                        // Keeps track of the token metadata for a given token ID
     pub metadata: LazyOption<NFTContractMetadata>,                                         // Keeps track of the metadata for the contract (not metadata for NFT)
+    pub crust_key: String,                                                                 // The encrypted private key for the Crust Network
 }
 
 /// Helper structure for keys of the persistent collections.
@@ -90,6 +93,7 @@ impl Contract {
                 StorageKey::NFTContractMetadata.try_to_vec().unwrap(),
                 Some(&metadata),
             ),
+            crust_key: "".to_string(),
         };
 
         this
