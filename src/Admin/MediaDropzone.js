@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDropzone } from 'react-dropzone';
 
-export default function ImageDropzone({ onDrop, accept }) {
+export default function MediaDropzone({ onDrop, accept }) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept
@@ -19,7 +19,7 @@ export default function ImageDropzone({ onDrop, accept }) {
         {isDragActive ? (
           <p className="dropzone-content">Release to drop the file here</p>
         ) : (
-          <p className="dropzone-content">DROPZONE FOR IMAGE</p>
+          <p className="dropzone-content">DROPZONE FOR MEDIA</p>
         )}
       </div>
     </div>

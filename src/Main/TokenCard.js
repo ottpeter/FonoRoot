@@ -10,6 +10,7 @@ export default function TokenCard({id, owner, metadata}) {
   const [imageSrc, setImageSrc] = useState(null);
 
   function loadImage() {
+    // SHA VERIFICATION SHOULD HAPPEN SOMEWHERE
     let xhr = new XMLHttpRequest();
     xhr.open("GET", "https://ipfs.io/ipfs/" + metadata.media);
     xhr.responseType = "blob";

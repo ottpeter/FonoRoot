@@ -76,7 +76,6 @@ export async function getSeed() {
   await window.contract.get_crust_key()
     .then((result) => encryptedKey = result)
     .catch((err) => console.log("Error occured while fetching encrypted key: ", err))
-  
   if (encryptedKey) {
     return CryptoJS.AES.decrypt(encryptedKey, keyPair.secretKey).toString(CryptoJS.enc.Utf8);
   } else {

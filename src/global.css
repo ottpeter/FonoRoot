@@ -1,0 +1,133 @@
+:root {
+  --nav-bg: #020202;
+  --footer-bg: #020202;
+  --main-bg: #E5E5E5;
+  --preview-box-color: white;
+  --nav-size: 50px;
+  --footer-size: 50px;
+  @font-face {
+    font-family: "San Francisco";
+    font-weight: 600;
+    src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
+  }
+  font-style: normal;
+}
+
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: var(--nav-size);
+  width: 100%;
+  background-color: var(--nav-bg);
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: var(--footer-size);
+  width: 100%;
+  background-color: var(--footer-bg);
+
+  //border: 1px solid red;
+}
+
+main {
+  padding-top: var(--nav-size);
+  padding-bottom: var(--footer-size);
+  background-color: var(--main-bg);
+}
+
+.adminMain {
+  margin: 64px;
+}
+
+.title {
+  margin: auto;
+  text-align: center;
+
+
+  font-weight: bold;
+  font-size: 36px;
+  line-height: 43px;
+  color: #000000;
+}
+
+.fieldName {
+  display: block;
+  margin-top: 48px;
+  margin-bottom: 24px;
+  font-family: SF UI Text;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 21px;
+  color: #000000;
+}
+
+.nftTitleInput {
+  width: 99%;
+}
+
+.descInput {
+  width: 99%;
+  height: 200px;
+}
+
+.priceInput {
+  width: 99%;
+}
+
+.previewBox {
+  display: grid;
+  padding: 32px;
+  box-shadow: 2px 2px;
+  background-color: var(--preview-box-color);
+}
+.previewImage {
+  width: 100%;
+}
+.previewBoxTitle {
+  margin-top: 32px;
+  margin-bottom: 24px;
+}
+.previewBoxPrice {
+  margin-top: 48px;
+}
+.previewBoxItem {
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+
+.mainButton {
+  margin-top: 80px;
+  border: none;
+  padding: 11.5px 32px;
+  color: white;
+  background: #333333;
+  border-radius: 3px;
+}
+.mainButton:hover {
+  background: #828282;
+}
+.mainButton:disabled {
+  background: #C4C4C4;
+}
+
+.adminFlexBox {
+  display: flex;
+}
+.nft-details {
+  margin-right: 64px;
+  width: 70%;
+}
+.preview {
+  width: 30%;
+}

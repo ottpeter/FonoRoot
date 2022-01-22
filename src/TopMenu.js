@@ -7,7 +7,7 @@ export default function TopMenu() {
   function initContract() {
     // This could be 'new' for user provided init
     // WE WILL HAVE TO CHANGE THIS TO THE OWNER (or create admin user in lib.rs), BUT NOW THE ASSERT IS TURNED OFF INSTEAD!!
-    window.contract.new_default_meta({owner_id: process.env.CONTRACT_NAME})
+    window.contract.new_default_meta({owner_id: process.env.CONTRACT_NAME || 'dev-1642861172287-75129619871212'})
       .then((msg) => console.log("Initialized! ", msg))
       .catch((err) => console.error(err))
       .finally(() => console.log("end."));
@@ -56,7 +56,7 @@ export default function TopMenu() {
 
 
   return (
-    <div>
+    <nav>
       <button onClick={() => initContract()}>INIT</button>
       <button onClick={() => mintRoot()}>MintRoot</button>
       <button onClick={() => getContractMeta()}>Get Contract Meta</button>
@@ -64,6 +64,6 @@ export default function TopMenu() {
       <button onClick={() => getMeta("220")}>Get Meta for 220</button>
       <button onClick={() => getMeta("221")}>Get Meta for 221</button>
       <button onClick={() => getList()}>Get List</button>
-    </div>
+    </nav>
   )
 }
