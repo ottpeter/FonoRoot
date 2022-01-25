@@ -1,5 +1,5 @@
-import React from 'react';
-import { useState } from 'react/cjs/react.development';
+import React, { useState } from 'react';
+import { buyNFTfromVault } from '../utils';
 
 
 export default function TokenCard({id, owner, metadata}) {
@@ -8,6 +8,7 @@ export default function TokenCard({id, owner, metadata}) {
   console.log("metadata: ", metadata)
 
   const [imageSrc, setImageSrc] = useState(null);
+  const extra = JSON.parse(metadata.extra);
 
   function loadImage() {
     // SHA VERIFICATION SHOULD HAPPEN SOMEWHERE
@@ -25,15 +26,23 @@ export default function TokenCard({id, owner, metadata}) {
     xhr.send();
   }
   loadImage();
+
+  function buyNFT() {
+    const badPrice = 100;
+    console.log("Orig.price: ", extra.original_price);
+    //extra.original_price
+    buyNFTfromVault(id, extra.original_price, "100000000");
+  }
   
   return (
     <div>
-      <button>
+      <button onClick={buyNFT}>
         {id}<br></br>
         {owner}<br></br>
         {metadata.title}<br></br>
         {metadata.description}<br></br>
-        <img id="nft-image" src={imageSrc}></img>
+        generation: {extra.generation}<br></br>
+        <img id="nft-image" className="temporaryCARD" src={imageSrc}></img>
       </button>
     </div>
   )

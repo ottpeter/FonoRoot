@@ -107,7 +107,7 @@ export default function Admin() {
       return;
     }      // or maybe that could be optional
     // we should set some error message before return
-    mintRootNFT(title, desc, imageCID, imageHash, musicCID, musicHash);
+    mintRootNFT(title, desc, imageCID, imageHash, musicCID, musicHash, price);
   }
 /*
       <button onClick={() => setSeed(testingOnly)}>AES Set</button>

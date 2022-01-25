@@ -3,6 +3,7 @@ const CryptoJS = require('crypto-js');;
 import getConfig from './config';
 
 const nearConfig = getConfig(process.env.NODE_ENV || 'development');
+const contractAccount = process.env.CONTRACT_NAME || 'dev-1643108238965-30590107738953';
 
 // Initialize contract & set global variables
 export async function initContract() {
@@ -15,13 +16,13 @@ export async function initContract() {
   // Initializing our contract APIs by contract name and configuration
   window.contract = await new Contract(window.walletConnection.account(), nearConfig.contractName, {
     // View methods are read only. They don't modify the state, but usually return some value.
-    viewMethods: ['nft_metadata', 'nft_token', 'nft_tokens_for_owner', 'nft_tokens', 'get_crust_key'],
+    viewMethods: ['nft_metadata', 'nft_token', 'nft_tokens_for_owner', 'nft_tokens', 'get_crust_key', 'get_next_buyable'],
     // Change methods can modify the state. But you don't receive the returned value when called.
-    changeMethods: ['new_default_meta', 'new', 'mint_root', 'set_crust_key'],
+    changeMethods: ['new_default_meta', 'new', 'mint_root', 'set_crust_key', 'buy_nft_from_vault'],
   })
 }
 
-export function mintRootNFT(title, desc, imageCID, imageHash, musicCID, musicHash) {
+export function mintRootNFT(title, desc, imageCID, imageHash, musicCID, musicHash, price) {
   const root_args = {
     receiver_id: window.accountId,
     metadata: {
@@ -37,11 +38,14 @@ export function mintRootNFT(title, desc, imageCID, imageHash, musicCID, musicHas
       extra: JSON.stringify({
         music_cid: musicCID,                                       // This is the CID of the music
         music_hash: btoa(musicHash),                               // This is the SHA256 hash of the music, converted to Base64 
+        original_price: "0",                                       // The RootNFT will be transfered to Owner (for free)
         instance_nounce: 0,                                        // Mandatory
+        generation: 1,                                             // RootNFT is the first generation
       }),
       reference: null,                                             // URL to an off-chain JSON file with more info.
       reference_hash: null                                         // Base64-encoded sha256 hash of JSON from reference field. Required if `reference` is included.
     },
+    children_price: utils.format.parseNearAmount(price),           // Price for the next 2 NFTs (children). This will be their original_price
     perpetual_royalties: null
   }
 
@@ -81,6 +85,67 @@ export async function getSeed() {
   } else {
     return null;                                                   // Error occured while fetching key
   }
+}
+
+export async function buyNFTfromVault(tokenId, price, newPrice) {
+  const accountId = window.accountId;
+  const args = {
+    token_id: tokenId,
+    new_price: newPrice
+  };
+  //const gas = 100_000_000_000_000;
+  const gas = 200_000_000_000_000;
+  const amount = /*price +*/ utils.format.parseNearAmount("0.05");
+  //const price = 50000000000000000000000 + parseInt(price);
+  
+  await window.contract.buy_nft_from_vault(args, gas, amount)
+    .then((result) => console.log("Buy-result: ", result))
+    .catch((err) => console.error("Error during buy-from-Vault: ", err));
+}
+
+export async function getBuyableTokens() {
+  let rootIDs = null;
+  let inVault = null;
+
+  console.log(window.accountId)
+  console.log(contractAccount)
+  const options = {
+    limit: 999_999,
+  }
+
+  await window.contract.nft_tokens(options)
+    .then((response) => {                                          
+      inVault = response.filter((nft) => nft.owner_id === contractAccount);
+      rootIDs = inVault.map((nft) => {                             // First we make a list of the NFTs that are in the Vault
+        const pos = nft.token_id.lastIndexOf("-");
+        return nft.token_id.substr(0, pos);
+      });
+      rootIDs = [...new Set(rootIDs)];                             // IDs of the RootNFTs which has children in the Vault
+    })
+    .catch((err) => console.error(err))
+    
+    const nextNFTs = await Promise.all(rootIDs.map(async (id) => { // We get the next buyable NFT for each root (lowest generation)
+      const result = await getNextBuyableInstance(id);
+      return result;
+    }))
+    const finalRes = nextNFTs.map((id) => inVault.find((nft) => {
+      return nft.token_id === id;
+    }))
+    console.log(finalRes)
+    return finalRes;                                               // Results will be array of NFT objects
+}
+
+export async function getNextBuyableInstance(rootId) {
+  let nextId = null;
+  const args = {
+    root_id: rootId
+  }
+
+  await window.contract.get_next_buyable(args)
+    .then((result) => nextId = result)
+    .catch((err) => console.error(err));
+
+  return nextId;
 }
 
 export function logout() {

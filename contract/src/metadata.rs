@@ -1,5 +1,7 @@
 use crate::*;
+use near_sdk::serde::{Serialize, Deserialize};
 pub type TokenId = String;
+
 
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "near_sdk::serde")]
@@ -19,7 +21,7 @@ pub struct NFTContractMetadata {
     pub reference_hash: Option<Base64VecU8>,                      // Base64-encoded sha256 hash of JSON from reference field. Required if `reference` is included.
 }
 
-#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Debug)]
 #[serde(crate = "near_sdk::serde")]
 pub struct TokenMetadata {
     pub title: Option<String>,                                    // ex. "Arch Nemesis: Mail Carrier" or "Parcel #5055"
@@ -31,7 +33,7 @@ pub struct TokenMetadata {
     pub expires_at: Option<u64>,                                  // When token expires, Unix epoch in milliseconds
     pub starts_at: Option<u64>,                                   // When token starts being valid, Unix epoch in milliseconds
     pub updated_at: Option<u64>,                                  // When token was last updated, Unix epoch in milliseconds
-    pub extra: Option<String>,                                     // Anything extra the NFT wants to store on-chain. Can be stringified JSON.
+    pub extra: Option<String>,                                    // Anything extra the NFT wants to store on-chain. Can be stringified JSON.
     pub reference: Option<String>,                                // URL to an off-chain JSON file with more info.
     pub reference_hash: Option<Base64VecU8>,                      // Base64-encoded sha256 hash of JSON from reference field. Required if `reference` is included.
 }
@@ -44,6 +46,16 @@ pub struct Token {
     pub royalty: HashMap<AccountId, u32>,                         // Royalties
 }
 
+#[derive(Serialize, Deserialize)]                                 
+#[serde(crate = "near_sdk::serde")]
+pub struct Extra {
+    pub music_cid: Option<String>,
+    pub music_hash: Option<Base64VecU8>,
+    pub parent: Option<TokenId>,
+    pub instance_nounce: u32,
+    pub generation: u32,
+    pub original_price: SalePriceInYoctoNear,
+}
 
 #[derive(Serialize, Deserialize)]                                 // This is what we will get on the front-end
 #[serde(crate = "near_sdk::serde")]

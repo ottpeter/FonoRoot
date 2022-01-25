@@ -1,11 +1,12 @@
 import React from 'react';
-import { login, logout } from '../utils';
+import { getBuyableTokens, login, logout } from '../utils';
 import { utils } from 'near-api-js';
 import Map from "../Map";
 import 'regenerator-runtime/runtime';
 
 import getConfig from '../config'
 import TokenCard from './TokenCard';
+import { getNextBuyableInstance } from '../utils';
 const { networkId } = getConfig(process.env.NODE_ENV || 'development')
 
 export default function Main() {
@@ -27,26 +28,10 @@ export default function Main() {
     setCenter([x, y]);
   }
 
-  React.useEffect(() => {
-    console.log(window.accountId)
-    console.log(process.env.CONTRACT_NAME)
-    const options = {
-      limit: 9999,
-    }
-
-    window.contract.nft_tokens(options)
-      .then((response) => {
-        const inVault = response.filter((nft) => nft.owner_id === process.env.CONTRACT_NAME);
-        setNftList(inVault);
-        console.log("Response: ", response);
-        console.log("In Vault: ", inVault)
-      })
-      .catch((err) => console.error(err))
-      .finally(() => console.log("finally"));
-
-    return () => {
-      console.log("cleanup");
-    }
+  React.useEffect(async () => {
+    const buyable = await getBuyableTokens();
+    console.log("NEXT NFTs: ", buyable);
+    setNftList(buyable);
   }, [])
 
   // if not signed in, return early with sign-in prompt
@@ -75,7 +60,37 @@ export default function Main() {
   }
 
 
+/*
+<div style={{ textAlign: "center" }}>
+  <div style={{ padding: "1rem 0" }}>
+    <input type="color" id="waterColor" name="waterColor" value={waterColor} onChange={(e) => setWaterColor(e.target.value)}/> 
+    <input type="color" id="continentColor" name="continentColor" value={continentColor} onChange={(e) => setContinentColor(e.target.value)}/> 
+    <input type="color" id="lineColor" name="lineColor" value={lineColor} onChange={(e) => setLineColor(e.target.value)}/> 
+    <input type="range" id="markerSize" name="markerSize" min="1" max="50" value={markerSize} onChange={(e) => setMarkerSize(e.target.value)}/> 
+    <input type="color" id="markerColor" name="markerColor" value={markerColor} onChange={(e) => setMarkerColor(e.target.value)}/> 
+    <button
+      className="btn"
+      onClick={() => changeCenter([-73.9808, 40.7648])}
+    >
+      {"New York"}
+    </button>
+    <button
+      className="btn"
+      onClick={() => changeCenter([-9.13333, 38.71667])}
+    >
+      {"Lisbon"}
+    </button>
+    <button
+      className="btn"
+      onClick={() => changeCenter([19.03991, 47.49801])}
+    >
+      {"Budapest"}
+    </button>
+  </div>
+  <Map center={center} waterColor={waterColor} continentColor={continentColor} lineColor={lineColor} markerSize={markerSize} markerColor={markerColor}/>
+</div>
 
+*/
     
   return (
     <>
@@ -88,34 +103,6 @@ export default function Main() {
         />
       ))}
 
-      <div style={{ textAlign: "center" }}>
-        <div style={{ padding: "1rem 0" }}>
-          <input type="color" id="waterColor" name="waterColor" value={waterColor} onChange={(e) => setWaterColor(e.target.value)}/> 
-          <input type="color" id="continentColor" name="continentColor" value={continentColor} onChange={(e) => setContinentColor(e.target.value)}/> 
-          <input type="color" id="lineColor" name="lineColor" value={lineColor} onChange={(e) => setLineColor(e.target.value)}/> 
-          <input type="range" id="markerSize" name="markerSize" min="1" max="50" value={markerSize} onChange={(e) => setMarkerSize(e.target.value)}/> 
-          <input type="color" id="markerColor" name="markerColor" value={markerColor} onChange={(e) => setMarkerColor(e.target.value)}/> 
-          <button
-            className="btn"
-            onClick={() => changeCenter([-73.9808, 40.7648])}
-          >
-            {"New York"}
-          </button>
-          <button
-            className="btn"
-            onClick={() => changeCenter([-9.13333, 38.71667])}
-          >
-            {"Lisbon"}
-          </button>
-          <button
-            className="btn"
-            onClick={() => changeCenter([19.03991, 47.49801])}
-          >
-            {"Budapest"}
-          </button>
-        </div>
-        <Map center={center} waterColor={waterColor} continentColor={continentColor} lineColor={lineColor} markerSize={markerSize} markerColor={markerColor}/>
-      </div>
     </>
   )
 }

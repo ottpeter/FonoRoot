@@ -7,7 +7,7 @@ export default function TopMenu() {
   function initContract() {
     // This could be 'new' for user provided init
     // WE WILL HAVE TO CHANGE THIS TO THE OWNER (or create admin user in lib.rs), BUT NOW THE ASSERT IS TURNED OFF INSTEAD!!
-    window.contract.new_default_meta({owner_id: process.env.CONTRACT_NAME || 'dev-1642861172287-75129619871212'})
+    window.contract.new_default_meta({owner_id: process.env.CONTRACT_NAME || 'dev-1643108238965-30590107738953'})
       .then((msg) => console.log("Initialized! ", msg))
       .catch((err) => console.error(err))
       .finally(() => console.log("end."));
@@ -43,7 +43,7 @@ export default function TopMenu() {
     console.log(window.accountId)
     const options = {
       //from_index: "0",
-      limit: 10,
+      limit: 999_999,
     }
 
     window.contract.nft_tokens(options)

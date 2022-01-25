@@ -1,29 +1,16 @@
 use crate::*;
-use near_sdk::serde::{Serialize, Deserialize};
-
-
-// Probably this should be moved. This is the _extra_ property of the NFT standard. It will be stored as JSON serialized string.
-#[derive(Serialize, Deserialize)]                                 
-#[serde(crate = "near_sdk::serde")]
-pub struct Extra {
-    pub music_cid: Option<String>,
-    pub music_hash: Option<Base64VecU8>,
-    pub parent: Option<TokenId>,
-    pub instance_nounce: u128,
-}
 
 #[near_bindgen]
 impl Contract {
     /// `mint_root` will mint a new root NFT, that has a unique music attached to it (IPFS CID),
     /// will automatically mint 2 children. The root NFT goes to `receiver_id`, the 2 children go to Vault.
     /// `perpetual_royalties` is not used yet.
-    /// `token_id` should be calculated inside the contract. But we will not delete this parameter yet.
-    /// First we will pass token_id from front-end
     #[payable]
     pub fn mint_root(
         &mut self,
         metadata: TokenMetadata,
         receiver_id: AccountId,
+        children_price: SalePriceInYoctoNear,
         perpetual_royalties: Option<HashMap<AccountId, u32>>,
     ) {
         log!("Starting MintRoot...");
@@ -58,6 +45,8 @@ impl Contract {
         let mut modified_metadata = metadata;
         let mut extra_obj: Extra = serde_json::from_str(&modified_metadata.extra.unwrap()).unwrap();
         extra_obj.instance_nounce = 0;
+        extra_obj.generation = 1;                                                               // The Root NFT is the first generation
+        extra_obj.original_price = U128(0);                                                     // The Root NFT has no original price
         modified_metadata.extra = Some(serde_json::to_string(&extra_obj).unwrap());
 
         self.token_metadata_by_id.insert(&token_id, &modified_metadata);                        // Insert new NFT
@@ -76,7 +65,7 @@ impl Contract {
         env::log_str(&nft_mint_log.to_string());                                                // Log the serialized json.
 
         
-        self.create_children(token_id.clone(), token_id, Some(HashMap::new()));                 // This has to happen before the refund
+        self.create_children(token_id.clone(), token_id, children_price, Some(HashMap::new())); // This has to happen before the refund
 
         let required_storage_in_bytes = env::storage_usage() - initial_storage_usage;
         refund_deposit(required_storage_in_bytes);                                              // Refund not-used storage
@@ -85,12 +74,14 @@ impl Contract {
     /// 'create_children' will mint 2 new NFTs and put them to the Vault
     /// * `token_id` is id of the new token this should be probably generated from inside the contract as well
     /// * `parent` id of the parent NFT
+    /// * `new_price` is the price the NFT can be purchased at from Vault
     /// * `perpetual_royalties` probably we won't have this field
     #[payable]
     pub(crate) fn create_children(
         &mut self,
         root: TokenId,
         parent: TokenId,
+        new_price: SalePriceInYoctoNear,
         perpetual_royalties: Option<HashMap<AccountId, u32>>,
     ) {
         log!("Starting CreateChildren...");
@@ -99,7 +90,7 @@ impl Contract {
         
         for child_num in 0..2 {
             log!("Entering loop...{}", child_num);
-            let mut royalty = HashMap::new();                                                   // We will decide on this later. Probably royalty shouldn't exist here
+            let royalty = HashMap::new();                                                   // We will decide on this later. Probably royalty shouldn't exist here
             /*if let Some(perpetual_royalties) = perpetual_royalties {
                 assert!(perpetual_royalties.len() < 7, "Cannot add more than 6 perpetual royalty amounts");
         
@@ -111,19 +102,28 @@ impl Contract {
             // We create the token_id. For this, we need the meta of the root NFT. We need to increment nounce
             let mut root_metadata = self.token_metadata_by_id.get(&root.to_owned()).unwrap();
             let mut root_extra_obj: Extra = serde_json::from_str(&root_metadata.extra.unwrap()).unwrap();
-            let token_id = "fono-root-".to_string() + &self.root_nounce.to_string() + &"-".to_string() + &root_extra_obj.instance_nounce.to_string();
+            let token_id = root.clone().to_owned() + &"-".to_string() + &root_extra_obj.instance_nounce.to_string();
+
+            let mut metadata = self.token_metadata_by_id.get(&parent.to_owned()).unwrap();      // Current NFT meta
+            let mut extra_obj: Extra = serde_json::from_str(&metadata.extra.unwrap()).unwrap();
+            
+            extra_obj.parent =  Some(parent.clone());                                           // We write the parent to the current NFT extra
+            extra_obj.original_price = new_price.clone();                                       // This is the price that should be paid when first bought from Vault
+            
+            if extra_obj.generation == 1 {                                                      // If called from mint_root()
+                extra_obj.generation = 2; 
+            } else if root_extra_obj.instance_nounce > (u32::checked_pow(2, extra_obj.generation).unwrap() -3) {
+                extra_obj.generation = extra_obj.generation + 1;                                // 2^Gen-3 is the LastIndex in a generation
+            }
+              
+            metadata.extra = Some(serde_json::to_string(&extra_obj).unwrap());                  // Insert modified metadata into meta field
+            env::log_str(&serde_json::to_string(&extra_obj).unwrap());
+            
             root_extra_obj.instance_nounce = root_extra_obj.instance_nounce + 1;                // We increment instance_nounce
             root_metadata.extra = Some(serde_json::to_string(&root_extra_obj).unwrap());
             self.token_metadata_by_id.insert(&root, &root_metadata);                            // Insert back the updated root meta
             env::log_str(&serde_json::to_string(&root_extra_obj).unwrap());
-            
-            // We write the parent to the current NFT extra. 
-            let mut metadata = self.token_metadata_by_id.get(&parent.to_owned()).unwrap();
-            let mut extra_obj: Extra = serde_json::from_str(&metadata.extra.unwrap()).unwrap();
-            extra_obj.parent =  Some(parent.clone());
-            metadata.extra = Some(serde_json::to_string(&extra_obj).unwrap());
-            env::log_str(&serde_json::to_string(&extra_obj).unwrap());
-    
+
             let token = Token {
                 owner_id: env::current_account_id(),
                 approved_account_ids: Default::default(),                                       // This is an individual NFT, all the values should start with 0,
@@ -156,6 +156,6 @@ impl Contract {
 
         let required_storage_in_bytes = env::storage_usage() - initial_storage_usage;
 
-        refund_deposit(required_storage_in_bytes);                                          // Refund not-used storage
+        refund_deposit(required_storage_in_bytes);                                              // Refund not-used storage
     }
 }

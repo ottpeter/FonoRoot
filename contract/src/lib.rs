@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::collections::{LazyOption, LookupMap, UnorderedMap, UnorderedSet};
 use near_sdk::json_types::{Base64VecU8, U128};
-use near_sdk::serde::{Deserialize, Serialize};
+//use near_sdk::serde::{Deserialize, Serialize};
 use near_sdk::{
     env, log, near_bindgen, AccountId, Balance, CryptoHash, PanicOnDefault, Promise, PromiseOrValue,
 };
@@ -15,6 +15,7 @@ pub use crate::approval::*;
 pub use crate::royalty::*;
 pub use crate::events::*;
 pub use crate::crust::*;
+pub use crate::buy::*;
 
 mod internal;
 mod approval; 
@@ -25,12 +26,14 @@ mod nft_core;
 mod royalty; 
 mod events;
 mod crust;
+mod buy;
 
 /// This spec can be treated like a version of the standard.
 pub const NFT_METADATA_SPEC: &str = "1.0.0";
 /// This is the name of the NFT standard we're using
 pub const NFT_STANDARD_NAME: &str = "nep171";
 
+pub type SalePriceInYoctoNear = U128;                                                      // Price in NEAR
 
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
