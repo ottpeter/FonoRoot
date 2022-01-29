@@ -3,7 +3,7 @@ const CryptoJS = require('crypto-js');;
 import getConfig from './config';
 
 const nearConfig = getConfig(process.env.NODE_ENV || 'development');
-const contractAccount = process.env.CONTRACT_NAME || 'dev-1643108238965-30590107738953';
+const contractAccount = process.env.CONTRACT_NAME || 'dev-1643218536025-85404878099863';
 
 // Initialize contract & set global variables
 export async function initContract() {

@@ -1,42 +1,91 @@
 :root {
-  --nav-bg: #020202;
-  --footer-bg: #020202;
+  --nav-bg: #dfdbe6;
+  --footer-bg: #dfdbe6;
   --main-bg: #E5E5E5;
-  --preview-box-color: white;
-  --nav-size: 50px;
-  --footer-size: 50px;
-  @font-face {
-    font-family: "San Francisco";
-    font-weight: 600;
-    src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
-  }
-  font-style: normal;
+  --box-color: white;
+  --nav-size: 64px;
+  --footer-size: 64px;
+  
+  --spacing-1: 16px;
+  --spacing-2: 24px;
+  --spacing-3: 32px;
+  --spacing-4: 48px;
+  --spacing-5: 64px;
+
+  /* Toast Notifications*/
+  --toastify-toast-width: 388px;
+  --toastify-font-family: OurCustomFont;
+
+  --toastify-text-color-light: #ffffff;
+  --toastify-text-color-dark: #000000;
+  
 }
 
+@font-face {
+  font-family: OurCustomFont;
+  font-weight: 1600;
+  /* orig: 100 900*/
+  font-display: swap;  --toastify-color-progress-dark: #bb86fc;
+  font-style: oblique 0deg 10deg;
+  src: url('assets/Inter.var.woff2') format("woff2");
+}
+
+@font-face {
+  font-family: SK-Primo;
+  src: url('./assets/skPrimo.ttf');
+}
 
 body {
   padding: 0;
   margin: 0;
+  font-family: OurCustomFont;
 }
 
 nav {
   position: fixed;
+  display: flex;
   top: 0;
   left: 0;
+  align-items: center;
   height: var(--nav-size);
   width: 100%;
   background-color: var(--nav-bg);
 }
+.logo {
+  flex-grow: 1;
+  font-family: SK-Primo;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 31px;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+  color: #333333;
+  padding-left: var(--spacing-2);
+}
+.controls {
+  flex-shrink: 0;
+}
+.controls:last-child {
+  padding-right: var(--spacing-2);
+}
+.controls button {
+  background: transparent;
+  border: none;
+  outline: none;
+  display: block;
+  cursor:pointer;
+}
 
 footer {
   position: fixed;
+  display: flex;
   bottom: 0;
   left: 0;
   height: var(--footer-size);
   width: 100%;
   background-color: var(--footer-bg);
-
-  //border: 1px solid red;
+  align-items: center;
 }
 
 main {
@@ -46,26 +95,61 @@ main {
 }
 
 .adminMain {
-  margin: 64px;
+  padding: var(--spacing-5);
+}
+
+.darkeningOverlay {
+  position: absolute;
+  background-color: rgba(0,0,0,0.5);
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+.blurred {
+  filter: blur(5px);
+}
+.keyInput {
+  position: absolute;
+  width: 100%;
+  top: 46%;
+  text-align: center;
+  left: 0;
+  font-family: OurCustomFont;
+  z-index: 3;
+}
+.keyInput input {
+  width: 50%;
+  height: 48px;
+}
+.keyInput p {
+  display: block;
+  font-size: 22px;
+  color: white;
+  margin-bottom: var(--spacing-3);
+}
+.keyInput button {
+  display: inline;
+  margin-left: var(--spacing-3);
+  width: 100px;
+  height: 48px;
 }
 
 .title {
   margin: auto;
   text-align: center;
-
-
+  font-style: normal;
   font-weight: bold;
   font-size: 36px;
-  line-height: 43px;
+  line-height: 44px;
   color: #000000;
 }
 
 .fieldName {
   display: block;
-  margin-top: 48px;
-  margin-bottom: 24px;
-  font-family: SF UI Text;
-  font-style: normal;
+  margin-top: var(--spacing-4);
+  margin-bottom: var(--spacing-2);
   font-weight: 600;
   font-size: 18px;
   line-height: 21px;
@@ -87,16 +171,16 @@ main {
 
 .previewBox {
   display: grid;
-  padding: 32px;
-  box-shadow: 2px 2px;
-  background-color: var(--preview-box-color);
+  padding: var(--spacing-3);
+  box-shadow: 0 0 6px rgba(35, 173, 278, 1);
+  background-color: var(--box-color);
 }
 .previewImage {
   width: 100%;
 }
 .previewBoxTitle {
-  margin-top: 32px;
-  margin-bottom: 24px;
+  margin-top: var(--spacing-3);
+  margin-bottom: var(--spacing-2);
 }
 .previewBoxPrice {
   margin-top: 48px;
@@ -106,10 +190,44 @@ main {
   grid-column-end: 4;
 }
 
+.imageDropZone {
+  width: 99%;
+  height: var(--spacing-5);
+  border: solid 2px #009aff;
+  background-color: #f0f9ff;
+  border-style: dashed;
+  border-radius: 2px;
+  text-align: center;
+}
+.imageDropZoneActive {
+  background-color: white;
+}
+.imageDropZone img {
+  padding: 20px;
+}
+.smallUploader {
+  width: max-content;
+  height: 28px;
+  padding-left: 9px;
+  padding-right: 9px;
+  padding-top: 5px;
+  border: solid 2px #009aff;
+  background-color: #f0f9ff;
+  border-style: dashed;
+  border-radius: 27px;
+  text-align: center;
+}
+.smallUploader button {
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
 .mainButton {
   margin-top: 80px;
   border: none;
-  padding: 11.5px 32px;
+  padding: 11.5px var(--spacing-3);
   color: white;
   background: #333333;
   border-radius: 3px;
@@ -119,6 +237,9 @@ main {
 }
 .mainButton:disabled {
   background: #C4C4C4;
+}
+.buttonContainer {
+  text-align: center;
 }
 
 .adminFlexBox {
@@ -132,6 +253,84 @@ main {
   width: 30%;
 }
 
+
 .temporaryCARD {
   width: 300px;
+}
+.activityBox {
+  position: absolute;
+  top: var(--nav-size);
+  right: var(--spacing-3);
+  width: 480px;
+  background-color: var(--box-color);
+  box-shadow: 0 0 6px rgba(35, 173, 278, 1);
+  z-index: 9998;
+}
+
+/* Toast messages*/
+/*  This rule has to be upper then success */
+.Toastify__toast-theme--light {
+  background-color: #4f2e6d;
+  width: 388px;
+  border-radius: 0px;
+}
+.Toastify__toast--success {
+  background-color: #1c7c20;
+}
+.Toastify__toast--error {
+  background-color: #ba0f76;
+}
+.messageTitle {
+  font-weight: 600;
+  font-size: 17px;
+  font-style: bold;
+  margin-bottom: var(--spacing-1);
+}
+.messageDesc {
+  font-weight: 600;
+  font-size: 14px;
+}
+.toastMargin {
+  margin-left: var(--spacing-2);
+}
+
+.notificationsTitle {
+  margin-top: var(--spacing-2);
+  margin-bottom: var(--spacing-1);
+  text-align: center;
+}
+
+.notificationLine {
+  color: #828282;
+  width: 80%;
+}
+
+.notificationList {
+  padding: 0;
+  margin: var(--spacing-2);
+  margin-bottom: var(--spacing-1);
+}
+.notificationList li {
+  list-style: none;
+  margin: 0;
+	padding: 0 0 0 60px;
+  background-repeat: no-repeat;
+	background-position: left center;
+	background-size: 40px;
+  margin-bottom: var(--spacing-1);
+}
+.successNotification {
+  background-image: url('assets/ok-256.png');
+}
+.errorNotification {
+  background-image: url('assets/ok-256.png');
+}
+.infoNotification {
+  background-image: url('assets/ok-256.png');
+}
+
+
+.testClass {
+  /* this is where toastify would append this class*/
+  font-style: italic;
 }

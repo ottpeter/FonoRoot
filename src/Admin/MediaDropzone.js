@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDropzone } from 'react-dropzone';
+import uploadLogo from '../assets/Upload.svg';
 
 export default function MediaDropzone({ onDrop, accept }) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -12,14 +13,19 @@ export default function MediaDropzone({ onDrop, accept }) {
     return `${className} ${className}-active`;
   };
 
+
   return (
     <div {...getRootProps()}>
       <input className={getClassName("dropzone", isDragActive)} {...getInputProps()} />
       <div className="text-center">
         {isDragActive ? (
-          <p className="dropzone-content">Release to drop the file here</p>
+          <div className="imageDropZone">
+            <img src={uploadLogo}></img>
+          </div>
         ) : (
-          <p className="dropzone-content">DROPZONE FOR MEDIA</p>
+          <div className="imageDropZone imageDropZoneActive">
+            <img src={uploadLogo}></img>
+          </div>
         )}
       </div>
     </div>
