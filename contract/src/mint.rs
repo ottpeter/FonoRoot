@@ -64,29 +64,29 @@ impl Contract {
 
         env::log_str(&nft_mint_log.to_string());                                                // Log the serialized json.
 
-        
+        log!("Exactly before CreateChildren");
         self.create_children(token_id.clone(), token_id, children_price, Some(HashMap::new())); // This has to happen before the refund
 
         let required_storage_in_bytes = env::storage_usage() - initial_storage_usage;
         refund_deposit(required_storage_in_bytes);                                              // Refund not-used storage
     }
 
+
     /// 'create_children' will mint 2 new NFTs and put them to the Vault
     /// * `token_id` is id of the new token this should be probably generated from inside the contract as well
     /// * `parent` id of the parent NFT
     /// * `new_price` is the price the NFT can be purchased at from Vault
     /// * `perpetual_royalties` probably we won't have this field
-    #[payable]
-    pub(crate) fn create_children(
+    pub(crate) fn create_children( // remove (crate)
         &mut self,
         root: TokenId,
         parent: TokenId,
         new_price: SalePriceInYoctoNear,
-        perpetual_royalties: Option<HashMap<AccountId, u32>>,
+        _perpetual_royalties: Option<HashMap<AccountId, u32>>,
     ) {
         log!("Starting CreateChildren...");
-        let initial_storage_usage = env::storage_usage();                                       // Take note of initial storage usage for refund
-                                                                                                // This probably shouldn't exist, because create_children should be always wrapped in other functiongit                                                                                                      
+    // !!! CreateChildren will run 2 times !!
+        
         
         for child_num in 0..2 {
             log!("Entering loop...{}", child_num);
@@ -117,12 +117,12 @@ impl Contract {
             }
               
             metadata.extra = Some(serde_json::to_string(&extra_obj).unwrap());                  // Insert modified metadata into meta field
-            env::log_str(&serde_json::to_string(&extra_obj).unwrap());
+            //env::log_str(&serde_json::to_string(&extra_obj).unwrap());
             
             root_extra_obj.instance_nounce = root_extra_obj.instance_nounce + 1;                // We increment instance_nounce
             root_metadata.extra = Some(serde_json::to_string(&root_extra_obj).unwrap());
             self.token_metadata_by_id.insert(&root, &root_metadata);                            // Insert back the updated root meta
-            env::log_str(&serde_json::to_string(&root_extra_obj).unwrap());
+            //env::log_str(&serde_json::to_string(&root_extra_obj).unwrap());
 
             let token = Token {
                 owner_id: env::current_account_id(),
@@ -154,8 +154,6 @@ impl Contract {
             env::log_str(&nft_mint_log.to_string());                                            // Log the serialized json.    
         }
 
-        let required_storage_in_bytes = env::storage_usage() - initial_storage_usage;
 
-        refund_deposit(required_storage_in_bytes);                                              // Refund not-used storage
     }
 }

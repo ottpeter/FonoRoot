@@ -16,6 +16,7 @@ pub use crate::royalty::*;
 pub use crate::events::*;
 pub use crate::crust::*;
 pub use crate::buy::*;
+//pub use crate::tests::*;        // probably this is not an independent crate
 
 mod internal;
 mod approval; 
@@ -27,6 +28,9 @@ mod royalty;
 mod events;
 mod crust;
 mod buy;
+
+#[cfg(all(test, not(target_arch = "wasm32")))]
+mod tests;
 
 /// This spec can be treated like a version of the standard.
 pub const NFT_METADATA_SPEC: &str = "1.0.0";

@@ -16,18 +16,14 @@ impl Contract {
             "Token must be owned by Vault"
         );
 
-        /*assert_eq!(                                             //Probably approval_id, too. Most likely we don't approval id.
-            the_extra.original_price, 
-            U128(env::attached_deposit()), 
-            "Must send the exact amount"
-        );*/
+        /*assert_eq!(the_extra.original_price, U128(env::attached_deposit()), "Must send the exact amount");*/
         let test: U128 = the_extra.original_price;
         if u128::from(test) > env::attached_deposit().into() {
-            env::panic_str("Must send the exact amount");
+            env::panic_str("Must send enough NEAR");
         }
         
         
-        let root_id = self.get_root(token_id.clone());                    // root could be calculated with string manipulation as well.
+        let root_id = self.get_root(token_id.clone());            // root could be calculated with string manipulation as well.
         assert_eq!(                                               // Assert that this is the next one in line
             &self.get_next_buyable(root_id.clone()), 
             &token_id, 

@@ -21,7 +21,7 @@ pub struct NFTContractMetadata {
     pub reference_hash: Option<Base64VecU8>,                      // Base64-encoded sha256 hash of JSON from reference field. Required if `reference` is included.
 }
 
-#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Debug)]
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Debug, Clone)]
 #[serde(crate = "near_sdk::serde")]
 pub struct TokenMetadata {
     pub title: Option<String>,                                    // ex. "Arch Nemesis: Mail Carrier" or "Parcel #5055"
@@ -57,7 +57,7 @@ pub struct Extra {
     pub original_price: SalePriceInYoctoNear,
 }
 
-#[derive(Serialize, Deserialize)]                                 // This is what we will get on the front-end
+#[derive(Serialize, Deserialize, Debug)]                          // This is what we will get on the front-end
 #[serde(crate = "near_sdk::serde")]
 pub struct JsonToken {
     pub token_id: TokenId,

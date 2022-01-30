@@ -186,6 +186,7 @@ dependencies = [
 name = "fono_root"
 version = "0.1.0"
 dependencies = [
+ "hex",
  "near-sdk",
  "serde_json",
 ]

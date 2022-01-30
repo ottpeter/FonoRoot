@@ -117,7 +117,6 @@ impl Contract {
         approval_id: Option<u64>,
         memo: Option<String>,
     ) -> Token {
-        // !! We would have to check somewhere in internal_transfer that the token is moving from Vault to user
         let token = self.tokens_by_id.get(token_id).expect("No token");
   
         if sender_id != &token.owner_id {
@@ -175,20 +174,7 @@ impl Contract {
             }]),
         };
 
-        if sender_id.to_string() == env::current_account_id().to_string() {                 // If this is a transfer from Vault to user, create 2 new NFTs
-            // We should be sure that this is happening for the first time, this can not run multiple times. This is not done yet.
-            // we need to loop to get root
-            // This is not tested because we haven't reach that point in front-end yet.
-            
-            let root_id = self.get_root(token_id.to_string());
-            self.create_children(root_id, token_id.to_string(), U128(0), Some(HashMap::new()));
-            env::log_str(&nft_transfer_log.to_string());                                        // Log the serialized json.
-            
-            token
-        } else {
-            env::log_str(&nft_transfer_log.to_string());                                        // Log the serialized json.
-            token                                                                               // We don't create children, only return the token
-        }
-        
+        env::log_str(&nft_transfer_log.to_string());                                        // Log the serialized json.
+        token                                                                               // We don't create children, only return the token        
     }
 } 
