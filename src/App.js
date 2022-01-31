@@ -22,9 +22,7 @@ export default function App() {
   /**STATES */
   const [actionHistory, setActionHistory] = React.useState([]);
   const [showActivity, setShowActivity] = React.useState(false);
-  const [oneKindOfPromise, setOneKindOfPromie] = React.useState(false);
-  const [otherKindOfServerPending, setOtherKindOfServerPending] = React.useState(false);
-  const [orWeCouldSetAnObjectThatHasItsOwnEverything, setterForThat] = React.useState({});
+  const [showWallet, setShowWallet] = React.useState(false);
 
   
 
@@ -82,10 +80,6 @@ export default function App() {
     }
   }
 
-  function switchActivityBox() {
-    setShowActivity((state) => !state);
-  }
-
   console.log("actionHistory: ", actionHistory);
 
 
@@ -101,13 +95,19 @@ export default function App() {
     initContract();
     return;
   }
-  
+  /*
+
+  <ActivityBox setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} />
+  */
+
   if (urlParams.includes('admin')) {
     return (
       <>
         <ToastContainer hideProgressBar={true} position="bottom-right" transition={Slide} />
-        <TopMenu switchActivityBox={switchActivityBox} />
-        <ActivityBox showActivity={showActivity} actionHistory={actionHistory} />
+        <TopMenu 
+          setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} 
+          setShowWallet={setShowWallet} showWallet={showWallet}
+        />
         <main>
           <Admin newAction={newAction} />
         </main>

@@ -2,7 +2,7 @@ import React from 'react';
 import Message from './Message';
 import icon from '../assets/bell_with_dot.svg'
 
-export default function ActivityBox({switchActivityBox, showActivity, actionHistory}) {
+export default function ActivityBox({setShowActivity, showActivity, actionHistory}) {
   /* This probably does not exist
   if (listItem.infoMsg) return <li className="infoNotification"><Message title={listItem.infoMsg} desc={listItem.infoMsgDesc} /></li>
   className="errorNotification" not used yet
@@ -17,19 +17,20 @@ export default function ActivityBox({switchActivityBox, showActivity, actionHist
  return (
    <>
       <div className="controls">
-        <button 
-          onClick={switchActivityBox} 
-          onBlur={() =>switchActivityBox()}
+        <button
+          className="controlsButton"
+          onClick={() => setShowActivity(!showActivity)} 
+          onBlur={() => setShowActivity(false)}
           tabIndex={"0"} >
             <img src={icon}></img>
         </button>
       </div>
 
       {showActivity && (
-        <div id="activityBox" className="activityBox"  >
-          <h3 id="notificationsTitle" className="notificationsTitle">Notifications</h3>
+        <div id="activityBox" className="dropdownContainer"  >
+          <h3 id="notificationsTitle" className="dropdownTitle">Notifications</h3>
           
-          <hr id="notificationLine" className="notificationLine" />
+          <hr id="notificationLine" className="dropdownLine" />
           
           <ul id="notificationList" className="notificationList">
             {lastFive.map((listItem) => {

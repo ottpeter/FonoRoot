@@ -6,7 +6,7 @@ export default function Twitter() {
   return (
     <>
       <div className="controls">
-        <button>
+        <button className="controlsButton">
           <img src={icon}></img>
         </button>
       </div>

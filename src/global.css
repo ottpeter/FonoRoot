@@ -69,12 +69,49 @@ nav {
 .controls:last-child {
   padding-right: var(--spacing-2);
 }
-.controls button {
+.controlsButton {
   background: transparent;
   border: none;
   outline: none;
   display: block;
   cursor:pointer;
+}
+.connectButton {
+  width: 90px;
+  height: 30px;
+  background: transparent;
+  border: solid 2px gray;
+  border-radius: 5px;
+  margin-right: 7px;
+}
+.walletBadge {
+  background-color: #e9e6ed;
+  border-radius: 25px;
+  border: transparent;
+  height: 30px;
+  padding-left: 14px;
+  padding-right: 14px;
+  margin-right: 7px;
+  /*#4d00b4*/
+}
+.wallet {
+  position: absolute;
+  top: var(--nav-size);
+  right: var(--spacing-3);
+  width: 480px;
+  background-color: var(--box-color);
+  box-shadow: 0 0 6px rgba(35, 173, 278, 1);
+  z-index: 9998;
+}
+.upperWalletLine {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+.accountBalanceBox {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  color: red;
+  text-align: center;
 }
 
 footer {
@@ -257,7 +294,7 @@ main {
 .temporaryCARD {
   width: 300px;
 }
-.activityBox {
+.dropdownContainer {
   position: absolute;
   top: var(--nav-size);
   right: var(--spacing-3);
@@ -294,13 +331,13 @@ main {
   margin-left: var(--spacing-2);
 }
 
-.notificationsTitle {
+.dropdownTitle {
   margin-top: var(--spacing-2);
   margin-bottom: var(--spacing-1);
   text-align: center;
 }
 
-.notificationLine {
+.dropdownLine {
   color: #828282;
   width: 80%;
 }

@@ -148,6 +148,13 @@ export async function getNextBuyableInstance(rootId) {
   return nextId;
 }
 
+export async function getBalance() {
+  const near = await connect(Object.assign({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() } }, nearConfig))
+  const account = await near.account(window.accountId);
+  const yocto =  await account.getAccountBalance();
+  return utils.format.formatNearAmount(yocto.available);
+}
+
 export function logout() {
   window.walletConnection.signOut()
   window.location.replace(window.location.origin + window.location.pathname)               // reload page

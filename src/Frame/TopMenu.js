@@ -8,7 +8,7 @@ import Settings from './Settings';
 import Help from './Help';
 
 
-export default function TopMenu({switchActivityBox}) {
+export default function TopMenu({setShowActivity, showActivity, actionHistory, setShowWallet, showWallet}) {
   function getContractMeta() {
     window.contract.nft_metadata()
       .then((msg) => {
@@ -64,8 +64,15 @@ export default function TopMenu({switchActivityBox}) {
   return (
     <nav>
       <Logo />
-      <Wallet />
-      <Notifications switchActivityBox={switchActivityBox} />
+      <Wallet 
+        setShowWallet={setShowWallet}
+        showWallet={showWallet}
+      />
+      <Notifications 
+        setShowActivity={setShowActivity} 
+        showActivity={showActivity}
+        actionHistory={actionHistory} 
+      />
       <Settings />
       <Help />      
     </nav>

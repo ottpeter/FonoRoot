@@ -11,7 +11,7 @@ export default function GitHub() {
   return (
     <>
       <div className="controls">
-        <button>
+        <button className="controlsButton">
           <img src={icon}></img>
         </button>
       </div>

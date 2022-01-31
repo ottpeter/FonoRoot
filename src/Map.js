@@ -15,7 +15,7 @@ const mapStyles = {
   //background: "#0000FF",
 };
 
-const globeSize = 250;
+//const globeSize = 250;
 const width = 500;
 
 // Coordinates are reversed!
@@ -25,7 +25,16 @@ const markers = [
   { coordinates: [19.03991, 47.49801] },
 ]
 
-const Map = ({ center, waterColor, continentColor, lineColor, markerSize, markerColor }) => (
+function RandomColor() {
+  let maxVal = 0xFFFFFF; // 16777215
+  let randomNumber = Math.random() * maxVal; 
+  randomNumber = Math.floor(randomNumber);
+  randomNumber = randomNumber.toString(16);
+  let randColor = randomNumber.padStart(6, 0);   
+  return `#${randColor.toUpperCase()}`;
+}
+
+const Map = ({ center, waterColor, colors, lineColor, markerSize, markerColor, selectCountry, globeSize }) => (
   <div id="testWrapper">
     <Motion
       defaultStyle={{
@@ -59,14 +68,19 @@ const Map = ({ center, waterColor, continentColor, lineColor, markerSize, marker
             >
               {(geos, proj) =>
                 geos.map((geo, i) => (
-                  <Geography
-                    key={geo.id + i}
-                    geography={geo}
-                    projection={proj}
-                    style={{
-                      default: { fill: continentColor, stroke: lineColor }
-                    }}
-                  />
+                    <Geography
+                      key={geo.id + i}
+                      geography={geo}
+                      projection={proj}
+                      onClick={() => {
+                        console.log("hello World!");
+                        console.log(geos.length);
+                        selectCountry(i);
+                      }}
+                      style={{
+                        default: { fill: colors[i], stroke: lineColor }
+                      }}
+                    />  
                 ))
               }
             </Geographies>
