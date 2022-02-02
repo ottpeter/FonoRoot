@@ -42,8 +42,8 @@ where
 }
 
 // Get royalty amount from percentage and total amount. Currently 0.01% is minimum that can be set.
-pub(crate) fn royalty_to_payout(royalty_percentage: u32, amount_to_pay: Balance) -> U128 {
-    U128(royalty_percentage as u128 * amount_to_pay / 10_000u128)
+pub(crate) fn royalty_to_payout(royalty_percentage: u32, total: Balance) -> U128 {
+    U128(royalty_percentage as u128 * total / 10_000u128)
 }
 
 pub(crate) fn refund_approved_account_ids(
@@ -53,7 +53,7 @@ pub(crate) fn refund_approved_account_ids(
     refund_approved_account_ids_iter(account_id, approved_account_ids.keys())
 }
 
-pub(crate) fn refund_deposit(storage_used: u64) {
+pub(crate) fn refund_deposit(storage_used: u64, nft_price: SalePriceInYoctoNear) {
     let required_cost = env::storage_byte_cost() * Balance::from(storage_used);
     let attached_deposit = env::attached_deposit();
 
@@ -63,7 +63,7 @@ pub(crate) fn refund_deposit(storage_used: u64) {
         required_cost,
     );
 
-    let refund = attached_deposit - required_cost;
+    let refund = attached_deposit - required_cost - u128::from(nft_price);
 
     if refund > 1 {
         Promise::new(env::predecessor_account_id()).transfer(refund);

@@ -2,7 +2,6 @@ use std::collections::HashMap;
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::collections::{LazyOption, LookupMap, UnorderedMap, UnorderedSet};
 use near_sdk::json_types::{Base64VecU8, U128};
-//use near_sdk::serde::{Deserialize, Serialize};
 use near_sdk::{
     env, log, near_bindgen, AccountId, Balance, CryptoHash, PanicOnDefault, Promise, PromiseOrValue,
 };
@@ -16,7 +15,6 @@ pub use crate::royalty::*;
 pub use crate::events::*;
 pub use crate::crust::*;
 pub use crate::buy::*;
-//pub use crate::tests::*;        // probably this is not an independent crate
 
 mod internal;
 mod approval; 

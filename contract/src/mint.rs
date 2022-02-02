@@ -68,7 +68,7 @@ impl Contract {
         self.create_children(token_id.clone(), token_id, children_price, Some(HashMap::new())); // This has to happen before the refund
 
         let required_storage_in_bytes = env::storage_usage() - initial_storage_usage;
-        refund_deposit(required_storage_in_bytes);                                              // Refund not-used storage
+        refund_deposit(required_storage_in_bytes, U128(0));                                     // Refund not-used storage
     }
 
 
@@ -85,7 +85,7 @@ impl Contract {
         _perpetual_royalties: Option<HashMap<AccountId, u32>>,
     ) {
         log!("Starting CreateChildren...");
-    // !!! CreateChildren will run 2 times !!
+
         
         
         for child_num in 0..2 {

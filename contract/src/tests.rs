@@ -17,21 +17,12 @@ mod tests {
 
     // part of writing unit tests is setting up a mock context
     // provide a `predecessor` here, it'll modify the default context
-    fn get_context() -> VMContextBuilder {
+    fn get_context(deposit: Balance) -> VMContextBuilder {
         let mut builder = VMContextBuilder::new();
         builder.predecessor_account_id(to_valid_account("alice.near"));                     // Caller will be Alice
         builder.signer_account_id(to_valid_account("alice.near"));                          // (the person who interacts with the contract)
         builder.current_account_id(to_valid_account("vault.near"));                         // Owner is Vault
-        builder.attached_deposit(50_000_000_000_000_000_000_000);
-        builder
-    }
-
-    fn get_context_low_deposit() -> VMContextBuilder {
-        let mut builder = VMContextBuilder::new();
-        builder.predecessor_account_id(to_valid_account("alice.near"));                     // Caller will be Alice
-        builder.signer_account_id(to_valid_account("alice.near"));                          // (the person who interacts with the contract)
-        builder.current_account_id(to_valid_account("vault.near"));                         // Owner is Vault
-        builder.attached_deposit(10_000_000_000_000_000_000_000);
+        builder.attached_deposit(deposit);
         builder
     }
 
@@ -89,10 +80,22 @@ mod tests {
         list
     }
 
+    fn test_nft_contract_metadata() -> NFTContractMetadata {
+        NFTContractMetadata {
+            spec: "nft-1.0.0".to_string(),
+            name: "NFT Tutorial Contract Default Name For Development".to_string(),
+            symbol: "DEFAULT".to_string(),
+            icon: None,
+            base_uri: None,
+            reference: None,
+            reference_hash: None
+        }
+    }
+
     #[test]
     fn crust_save_works() {
         // set up the mock context into the testing environment
-        let context = get_context();
+        let context = get_context(50_000_000_000_000_000_000_000);
         testing_env!(context.build());
 
         let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));
@@ -107,7 +110,7 @@ mod tests {
 
     #[test]
     fn buy_from_vault_works() {
-        let context = get_context();                                                          // Alice is person who interacts
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
         testing_env!(context.build());
         let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
       
@@ -132,7 +135,7 @@ mod tests {
     #[test]
     #[should_panic]
     fn buy_from_vault_only_next() {
-        let context = get_context();                                                          // Alice is person who interacts
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
         testing_env!(context.build());
         let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
       
@@ -147,7 +150,7 @@ mod tests {
     #[test]
     #[should_panic]
     fn buy_from_vault_cant_be_lower() {
-        let context = get_context_low_deposit();                // Alice is person who interacts
+        let context = get_context(10_000_000_000_000_000_000_000);                            // Alice is person who interacts
         testing_env!(context.build());
         let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
     
@@ -161,7 +164,7 @@ mod tests {
     #[test]
     #[should_panic]
     fn buy_from_vault_has_to_be_in_vault() {
-        let context = get_context();                            // Alice is person who interacts
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
         testing_env!(context.build());
         let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
   
@@ -175,7 +178,7 @@ mod tests {
     
     #[test]
     fn buy_from_vault_exact_exist() {
-        let context = get_context();                                                          // Alice is person who interacts
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
         testing_env!(context.build());
         let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
       
@@ -194,7 +197,7 @@ mod tests {
 
     #[test]
     fn enumeration_nft_tokens_works() {
-        let context = get_context();                                                          // Alice is person who interacts
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
         testing_env!(context.build());
         let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
       
@@ -219,7 +222,7 @@ mod tests {
 
     #[test]
     fn enumeration_nft_supply_for_owner_works() {
-        let context = get_context();                                                          // Alice is person who interacts
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
         testing_env!(context.build());
         let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
       
@@ -256,7 +259,7 @@ mod tests {
 
     #[test]
     fn enumeration_nft_tokens_for_owner_works() {
-        let context = get_context();                                                          // Alice is person who interacts
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
         testing_env!(context.build());
         let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
       
@@ -276,7 +279,7 @@ mod tests {
 
     #[test]
     fn can_calculate_next_buyable() {
-        let context = get_context();                                                          // Alice is person who interacts
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
         testing_env!(context.build());
         let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
       
@@ -298,7 +301,7 @@ mod tests {
 
     #[test]
     fn get_root_works() {
-        let context = get_context();                                                          // Alice is person who interacts
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
         testing_env!(context.build());
         let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
 
@@ -322,6 +325,361 @@ mod tests {
             format!("{:?}", hash_account_id(&to_valid_account("alice.near"))),
             format!("{:?}", hex::decode("2DD5DDA540767B3A1AA33544BCBA38042F4DF6DE9BDDB46798B29481C842C558").expect("Decoding failed")),
             "SHA256 value for alice.near is not correct!"
+        );
+    }
+
+    #[test]
+    fn byte_calculation_works() {
+        assert_eq!(
+            bytes_for_approved_account_id(&to_valid_account("alice.near")),
+            22,
+            "Byte length for alice.near should be 22!"
+        );
+    }
+
+    #[test]
+    fn royalty_amount_calculation_works() {
+        assert_eq!(
+            royalty_to_payout(1000, 5000),
+            U128(500),
+            "10_000 is 100% so (1000, 5000) should give 500 as a result!"
+        );
+    }
+
+    #[test]
+    fn refund_deposit_after_mint_works() {
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        testing_env!(context.build());
+        let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
+
+        log!("{:?}", env::account_balance());
+        contract.mint_root(test_token_metadata(), to_valid_account("alice.near"), U128(100), None);
+        log!("{:?}", env::account_balance());
+        assert_eq!(1,2, "this does not work");
+        
+        /*
+        50000000000000000000000
+        50000000000000000000000
+        50000000000000000000000
+        500000000000000000000000
+        27200000000000000000000
+        500000000000000000000000
+        027200000000000000000000
+        27200000000000000000000
+        27200000000000000000000
+         */
+    }
+
+    #[test]
+    fn add_token_to_owner_works() {
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        testing_env!(context.build());
+        let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
+
+        contract.mint_root(test_token_metadata(), to_valid_account("carol.near"), U128(100), None);
+
+        contract.internal_add_token_to_owner(&to_valid_account("alice.near"), &"fono-root-0-0".to_string());
+        assert_eq!( 
+            contract.tokens_per_owner.contains_key(&to_valid_account("alice.near")),
+            true,
+            "alice.near should have been added to the set!"
+        );
+        contract.internal_add_token_to_owner(&to_valid_account("alice.near"), &"fono-root-0-1".to_string());
+        assert_eq!(
+            contract.nft_supply_for_owner(to_valid_account("alice.near")),
+            U128(2),
+            "alice.near should have 2 NFTs!"
+        );
+    }
+
+    #[test]
+    fn remove_token_from_owner_works() {
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        testing_env!(context.build());
+        let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
+
+        contract.mint_root(test_token_metadata(), to_valid_account("carol.near"), U128(100), None);
+
+        contract.internal_add_token_to_owner(&to_valid_account("alice.near"), &"fono-root-0-0".to_string());
+        contract.internal_add_token_to_owner(&to_valid_account("alice.near"), &"fono-root-0-1".to_string());
+        contract.internal_remove_token_from_owner(&to_valid_account("alice.near"), &"fono-root-0-1".to_string());
+        assert_eq!(
+            contract.nft_supply_for_owner(to_valid_account("alice.near")),
+            U128(1),
+            "alice.near should have 1 NFTs!"
+        );
+        contract.internal_remove_token_from_owner(&to_valid_account("alice.near"), &"fono-root-0-0".to_string());
+        assert_eq!( 
+            contract.tokens_per_owner.contains_key(&to_valid_account("alice.near")),
+            false,
+            "alice.near should have been removed from the set!"
+        );
+    }
+
+    #[test]
+    fn internal_transfer_works() {
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        testing_env!(context.build());
+        let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
+
+        contract.mint_root(test_token_metadata(), to_valid_account("carol.near"), U128(100), None);
+
+        // Carol will transfer the RootNFT to Alice
+        contract.internal_transfer(
+            &to_valid_account("carol.near"), 
+            &to_valid_account("alice.near"), 
+            &"fono-root-0".to_string(), 
+            None, 
+            None,
+        );
+
+        assert_eq!( 
+            contract.tokens_per_owner.contains_key(&to_valid_account("carol.near")),
+            false,
+            "carol.near shouldn't have any NFTs at this point!"
+        );
+
+        assert_eq!( 
+            contract.nft_tokens_for_owner(to_valid_account("alice.near"), None, Some(10))[0].token_id,
+            test_nft_list()[0].token_id,
+            "Alice should own fono-root-0 at this point!"
+        );
+    }
+
+    #[test]
+    fn nft_metadata_getter_works() {
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        testing_env!(context.build());
+        let contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
+      
+        log!("{:?}", contract.nft_metadata());
+        assert_eq!(contract.nft_metadata().spec, test_nft_contract_metadata().spec, "nft_metadata() does not give back correct 'spec'");
+        assert_eq!(contract.nft_metadata().symbol, test_nft_contract_metadata().symbol, "nft_metadata() does not give back correct 'symbol'");
+        assert_eq!(contract.nft_metadata().name, test_nft_contract_metadata().name, "nft_metadata() does not give back correct 'name'");
+    }
+
+    #[test]
+    fn mint_root_creates_new() {
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        testing_env!(context.build());
+        let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
+  
+        let token_metadata = test_token_metadata();
+
+        assert_eq!(
+            contract.nft_tokens(None, Some(500)).len(), 
+            0, 
+            "NFT count before mint should be zero!"
+        );
+
+        contract.mint_root(token_metadata, to_valid_account("carol.near"), U128(100), None);  // fono-root-0, fono-root-0-0, fono-root-0-1 should exist at this point
+        assert_eq!(
+            contract.tokens_by_id.contains_key(&"fono-root-0".to_string()),
+            true,
+            "RootNFT should exist (fono-root-0)!"
+        );
+    }
+    
+    #[test]
+    fn mint_root_nounce_increses() {
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        testing_env!(context.build());
+        let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
+        
+        let token_metadata = test_token_metadata();
+        contract.mint_root(token_metadata, to_valid_account("carol.near"), U128(100), None);  // fono-root-0, fono-root-0-0, fono-root-0-1 should exist at this point
+        
+        assert_eq!(
+            contract.root_nounce,
+            1,
+            "mint_root() should increase root_nounce by 1!"
+        );
+    }
+
+    #[test]
+    fn mint_root_creates_exactly_2_children() {
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        testing_env!(context.build());
+        let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
+        
+        let token_metadata = test_token_metadata();
+        contract.mint_root(token_metadata, to_valid_account("carol.near"), U128(100), None);  // fono-root-0, fono-root-0-0, fono-root-0-1 should exist at this point
+        
+        assert_eq!(
+            contract.nft_tokens(None, Some(500)).len(), 
+            3,
+            "mint_root() should create exactly 2 children!"
+        );
+    }
+
+    #[test]
+    fn mint_root_nft_goes_to_receiver() {
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        testing_env!(context.build());
+        let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
+        
+        let token_metadata = test_token_metadata();
+        contract.mint_root(token_metadata, to_valid_account("carol.near"), U128(100), None);  // fono-root-0, fono-root-0-0, fono-root-0-1 should exist at this point
+        
+        assert_eq!(
+            contract.nft_tokens_for_owner(to_valid_account("carol.near"), None, Some(10))[0].owner_id,
+            test_nft_list()[0].owner_id,
+            "RootNFT should go to receiver_id!"
+        );
+    }
+
+    #[test]
+    fn mint_root_two_nfts_go_to_vault() {
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        testing_env!(context.build());
+        let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
+        
+        let token_metadata = test_token_metadata();
+        contract.mint_root(token_metadata, to_valid_account("carol.near"), U128(100), None);  // fono-root-0, fono-root-0-0, fono-root-0-1 should exist at this point
+        
+        assert_eq!(
+            contract.nft_tokens_for_owner(to_valid_account("vault.near"), None, Some(10))[0].owner_id,
+            test_nft_list()[1].owner_id,
+            "2 NFTs should go to Vault!"
+        );
+        assert_eq!(
+            contract.nft_tokens_for_owner(to_valid_account("vault.near"), None, Some(10))[1].owner_id,
+            test_nft_list()[2].owner_id,
+            "2 NFTs should go to Vault!"
+        );
+    }
+
+    #[test]
+    fn mint_root_token_id_is_correct() {
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        testing_env!(context.build());
+        let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
+        
+        contract.mint_root(test_token_metadata(), to_valid_account("carol.near"), U128(100), None);
+        contract.mint_root(test_token_metadata(), to_valid_account("carol.near"), U128(100), None);
+        contract.mint_root(test_token_metadata(), to_valid_account("carol.near"), U128(100), None);
+
+        assert_eq!(
+            contract.nft_tokens_for_owner(to_valid_account("carol.near"), None, Some(10))[0].token_id,
+            "fono-root-0",
+            "First token_id that Carol owns should be fono-root-0!"
+        );
+        assert_eq!(
+            contract.nft_tokens_for_owner(to_valid_account("carol.near"), None, Some(10))[1].token_id,
+            "fono-root-1",
+            "First token_id that Carol owns should be fono-root-1!"
+        );
+        assert_eq!(
+            contract.nft_tokens_for_owner(to_valid_account("carol.near"), None, Some(10))[2].token_id,
+            "fono-root-2",
+            "First token_id that Carol owns should be fono-root-2!"
+        );
+    }
+
+    #[test]
+    fn create_children_creates_exactly_2_children() {
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        testing_env!(context.build());
+        let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
+        
+        contract.mint_root(test_token_metadata(), to_valid_account("carol.near"), U128(100), None);
+
+        let supply_before = contract.nft_tokens(None, Some(500)).len();
+        contract.create_children("fono-root-0".to_string(), "fono-root-0-1".to_string(), U128(100), None);
+        assert_eq!(
+            contract.nft_tokens(None, Some(500)).len(),
+            supply_before + 2,
+            "create_children should create exactly 2 new NFTs!"
+        );
+    }
+
+    #[test]
+    fn create_children_ids_are_correct() {
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        testing_env!(context.build());
+        let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
+        
+        contract.mint_root(test_token_metadata(), to_valid_account("carol.near"), U128(100), None);
+        contract.create_children("fono-root-0".to_string(), "fono-root-0-1".to_string(), U128(100), None);
+        
+        assert_eq!(
+            contract.nft_tokens(None, Some(500))[3].token_id,
+            "fono-root-0-2",
+            "The token ID for the newly created NFT is not correct!"
+        );
+        assert_eq!(
+            contract.nft_tokens(None, Some(500))[4].token_id,
+            "fono-root-0-3",
+            "The token ID for the newly created NFT is not correct!"
+        );
+    } 
+    
+    #[test]
+    fn create_children_generation_is_correct() {
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        testing_env!(context.build());
+        let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
+        
+        contract.mint_root(test_token_metadata(), to_valid_account("carol.near"), U128(100), None);
+        contract.create_children("fono-root-0".to_string(), "fono-root-0-1".to_string(), U128(100), None);
+
+        let metadata = contract.token_metadata_by_id.get(&"fono-root-0-2".to_string()).unwrap();
+        let extra: Extra = serde_json::from_str(&metadata.extra.unwrap()).unwrap();
+        assert_eq!(
+            extra.generation,
+            3,
+            "Generation value for the newly created token is not correct!"
+        );
+        let metadata = contract.token_metadata_by_id.get(&"fono-root-0-3".to_string()).unwrap();
+        let extra: Extra = serde_json::from_str(&metadata.extra.unwrap()).unwrap();
+        assert_eq!(
+            extra.generation,
+            3,
+            "Generation value for the newly created token is not correct!"
+        );
+    }
+
+    #[test]
+    fn create_children_parent_is_correct() {
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        testing_env!(context.build());
+        let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
+        
+        contract.mint_root(test_token_metadata(), to_valid_account("carol.near"), U128(100), None);
+        contract.create_children("fono-root-0".to_string(), "fono-root-0-1".to_string(), U128(100), None);
+
+        let metadata = contract.token_metadata_by_id.get(&"fono-root-0-2".to_string()).unwrap();
+        let extra: Extra = serde_json::from_str(&metadata.extra.unwrap()).unwrap();
+        assert_eq!(
+            extra.parent,
+            Some("fono-root-0-1".to_string()),
+            "Parent field for the newly created token is not correct!"
+        );
+        let metadata = contract.token_metadata_by_id.get(&"fono-root-0-3".to_string()).unwrap();
+        let extra: Extra = serde_json::from_str(&metadata.extra.unwrap()).unwrap();
+        assert_eq!(
+            extra.parent,
+            Some("fono-root-0-1".to_string()),
+            "Parent field for the newly created token is not correct!"
+        );
+    }
+
+    #[test]
+    fn create_children_instance_nounce_increased() {
+        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        testing_env!(context.build());
+        let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
+        
+        contract.mint_root(test_token_metadata(), to_valid_account("carol.near"), U128(100), None);
+        contract.create_children("fono-root-0".to_string(), "fono-root-0-1".to_string(), U128(100), None);
+
+        let metadata = contract.token_metadata_by_id.get(&"fono-root-0".to_string()).unwrap();
+        let extra: Extra = serde_json::from_str(&metadata.extra.unwrap()).unwrap();
+
+        assert_eq!(
+            extra.instance_nounce,
+            4,
+            "Instance nounce was not increased when create_children ran or it didn't increase with right amount!"
         );
     }
 }

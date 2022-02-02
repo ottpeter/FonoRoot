@@ -9,7 +9,7 @@ pub struct Payout {
     pub payout: HashMap<AccountId, U128>,
 } 
 
-#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Clone)]
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Debug, Clone)]
 #[serde(crate = "near_sdk::serde")]
 pub struct NFTContractMetadata {
     pub spec: String,                                             // required, essentially a version like "nft-1.0.0"

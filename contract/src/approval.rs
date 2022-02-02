@@ -61,7 +61,7 @@ impl NonFungibleTokenCore for Contract {
         token.next_approval_id += 1;
         self.tokens_by_id.insert(&token_id, &token);
 
-        refund_deposit(storage_used);
+        refund_deposit(storage_used, U128(0));
 
         //if some message was passed into the function, we initiate a cross contract call on the
         //account we're giving access to. 
