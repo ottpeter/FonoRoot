@@ -12,7 +12,9 @@ export default function GitHub() {
     <>
       <div className="controls">
         <button className="controlsButton">
-          <img src={icon}></img>
+          <a href={"https://github.com/ottpeter/FonoRoot"}  target={"_blank"}>
+            <img src={icon}></img>
+          </a>
         </button>
       </div>
     </>

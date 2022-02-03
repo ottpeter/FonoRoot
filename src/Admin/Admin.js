@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 const IPFS = require('ipfs-core')
 const all = require('it-all')
-//const { concat: uint8ArrayConcat } = require('uint8arrays/concat');
-//const { fromString: uint8ArrayFromString } = require('uint8arrays/from-string');
-//const { toString: uint8ArrayToString } = require('uint8arrays/to-string');
 const CryptoJS = require('crypto-js');
 const crustPin = require('@crustio/crust-pin').default;
 import MediaDropzone from './MediaDropzone';
@@ -11,6 +8,8 @@ import { getSeed, mintRootNFT, setSeed } from '../utils';
 import PreviewBox from './PreviewBox';
 import Loading from './Loading';
 import SmallUploader from './SmallUploader';
+import infoLogo from '../assets/info.svg';
+import ConnectWallet from './ConnectWallet';
 
 
 export default function Admin({newAction}) {
@@ -19,7 +18,7 @@ export default function Admin({newAction}) {
   
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState("");
   
   // For the image
   const [image, setPreview] = useState({name: "empty", src: "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D"});                     // This will store actual data
@@ -28,7 +27,7 @@ export default function Admin({newAction}) {
   const [imageHash, setImageHash] = useState("");
   
   // For the music
-  const [music, setMusic] = useState({name: "empty", src: "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D"});                     // This will store actual data
+  const [music, setMusic] = useState({name: "empty", src: null});                     // This will store actual data
   const [musicReady, setMusicReady] = useState(false);
   const [musicCID, setMusicCID] = useState("");
   const [musicHash, setMusicHash] = useState("");
@@ -159,6 +158,7 @@ export default function Admin({newAction}) {
 
 */
 
+  if (!window.walletConnection.isSignedIn()) return <ConnectWallet />
   if (pageSwitch === 0) return <Loading />
 
   return (
@@ -193,17 +193,21 @@ export default function Admin({newAction}) {
                     </>
                   )
                 }
+                <div className="infoDiv">
+                  <img src={infoLogo}></img>
+                  <p>{"Supported formats .jpg .png and .mp3"}</p>
+                </div>
               </>
             )}
             <label className="fieldName">Title</label>
             <input type={"text"} value={title} className="nftTitleInput" onChange={(e) => setTitle(e.target.value)} />
             <label className="fieldName">Description</label>
-            <input type={"textarea"} value={desc} className="descInput" onChange={(e) => setDesc(e.target.value)} />
+            <textarea value={desc} className="descInput" onChange={(e) => setDesc(e.target.value)} />
             <label className="fieldName">Price</label>
             <input type={"number"} min={0} value={price} className="priceInput" onChange={(e) => setPrice(e.target.value)} />
           </div>
 
-          <PreviewBox title={title} image={image} price={price}/>
+          <PreviewBox title={title} image={image} music={music} price={price}/>
         </div>
         <div className="buttonContainer">
           <button onClick={createNFT} className="mainButton">Mint</button>

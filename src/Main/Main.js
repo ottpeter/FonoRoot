@@ -96,81 +96,81 @@ function stringifyColorsData() {
   return JSON.stringify(obj, null, 2);
 }
 /*
+<SmallUploader onDrop={(files) => loadClick(files)} accept={"application/json"} />
+<a href={ URL.createObjectURL(new Blob([stringifyColorsData()], { type: "application/json" }) )} download={"colors.json"}>SAVE</a>
+<div>
+  <button style={{ backgroundColor: colorHistory[0], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[0])} ></button>
+  <button style={{ backgroundColor: colorHistory[1], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[1])} ></button>
+  <button style={{ backgroundColor: colorHistory[2], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[2])} ></button>
+  <button style={{ backgroundColor: colorHistory[3], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[3])} ></button>
+  <button style={{ backgroundColor: colorHistory[4], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[4])} ></button>
+  <button style={{ backgroundColor: colorHistory[5], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[5])} ></button>
+  <button style={{ backgroundColor: colorHistory[6], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[6])} ></button>
+  <button style={{ backgroundColor: colorHistory[7], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[7])} ></button>
+  <button style={{ backgroundColor: colorHistory[8], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[8])} ></button>
+  <button style={{ backgroundColor: colorHistory[9], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[9])} ></button>
+  <button style={{ backgroundColor: colorHistory[10], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[10])} ></button>
+  <button style={{ backgroundColor: colorHistory[11], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[11])} ></button>
+  <button style={{ backgroundColor: colorHistory[12], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[12])} ></button>
+  <button style={{ backgroundColor: colorHistory[13], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[13])} ></button>
+  <button style={{ backgroundColor: colorHistory[14], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[14])} ></button>
+  <button style={{ backgroundColor: colorHistory[15], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[15])} ></button>
+</div>
+<input type="color" id="waterColor" name="waterColor" value={waterColor} onChange={(e) => setWaterColor(e.target.value)}/> 
+<input type="color" id="lineColor" name="lineColor" value={lineColor} onChange={(e) => setLineColor(e.target.value)}/> 
+<input type="range" id="markerSize" name="markerSize" min="1" max="50" value={markerSize} onChange={(e) => setMarkerSize(e.target.value)}/> 
+<input type="color" id="markerColor" name="markerColor" value={markerColor} onChange={(e) => setMarkerColor(e.target.value)}/>
+<input type="range" id="globeZoom" name="globeZoom" value={zoom} onChange={(e) => setZoom(e.target.value)} min={"20"} max={"900"} />
+
+<label>SELECTED: </label>
+<input 
+  type="color" 
+  id="countryColor" 
+  name="countryColor" 
+  value={countryColors[lastClicked]} 
+  onChange={(e) => setColor(e.target.value, lastClicked)}
+/>
+
+<div style={{ textAlign: "center" }}>
+  <div style={{ padding: "1rem 0" }}>
+    <button
+      className="btn"
+      onClick={() => changeCenter([-73.9808, 40.7648])}
+    >
+      {"New York"}
+    </button>
+    <button
+      className="btn"
+      onClick={() => changeCenter([-9.13333, 38.71667])}
+    >
+      {"Lisbon"}
+    </button>
+    <button
+      className="btn"
+      onClick={() => changeCenter([19.03991, 47.49801])}
+    >
+      {"Budapest"}
+    </button>
+  </div>
+  <Map 
+    center={center} 
+    waterColor={waterColor} 
+    colors={countryColors} 
+    lineColor={lineColor} 
+    markerSize={markerSize} 
+    markerColor={markerColor}
+    globeSize={zoom}
+    setLastClicked={setLastClicked}
+    pushColor={pushColor}
+    selectCountry={selectCountry}
+  />
+</div>
 
 */
     
   return (
     <>
-      <SmallUploader onDrop={(files) => loadClick(files)} accept={"application/json"} />
-      <a href={ URL.createObjectURL(new Blob([stringifyColorsData()], { type: "application/json" }) )} download={"colors.json"}>SAVE</a>
-      <div>
-        <button style={{ backgroundColor: colorHistory[0], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[0])} ></button>
-        <button style={{ backgroundColor: colorHistory[1], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[1])} ></button>
-        <button style={{ backgroundColor: colorHistory[2], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[2])} ></button>
-        <button style={{ backgroundColor: colorHistory[3], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[3])} ></button>
-        <button style={{ backgroundColor: colorHistory[4], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[4])} ></button>
-        <button style={{ backgroundColor: colorHistory[5], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[5])} ></button>
-        <button style={{ backgroundColor: colorHistory[6], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[6])} ></button>
-        <button style={{ backgroundColor: colorHistory[7], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[7])} ></button>
-        <button style={{ backgroundColor: colorHistory[8], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[8])} ></button>
-        <button style={{ backgroundColor: colorHistory[9], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[9])} ></button>
-        <button style={{ backgroundColor: colorHistory[10], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[10])} ></button>
-        <button style={{ backgroundColor: colorHistory[11], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[11])} ></button>
-        <button style={{ backgroundColor: colorHistory[12], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[12])} ></button>
-        <button style={{ backgroundColor: colorHistory[13], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[13])} ></button>
-        <button style={{ backgroundColor: colorHistory[14], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[14])} ></button>
-        <button style={{ backgroundColor: colorHistory[15], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[15])} ></button>
-      </div>
-      <input type="color" id="waterColor" name="waterColor" value={waterColor} onChange={(e) => setWaterColor(e.target.value)}/> 
-      <input type="color" id="lineColor" name="lineColor" value={lineColor} onChange={(e) => setLineColor(e.target.value)}/> 
-      <input type="range" id="markerSize" name="markerSize" min="1" max="50" value={markerSize} onChange={(e) => setMarkerSize(e.target.value)}/> 
-      <input type="color" id="markerColor" name="markerColor" value={markerColor} onChange={(e) => setMarkerColor(e.target.value)}/>
-      <input type="range" id="globeZoom" name="globeZoom" value={zoom} onChange={(e) => setZoom(e.target.value)} min={"20"} max={"900"} />
-
-      <label>SELECTED: </label>
-      <input 
-        type="color" 
-        id="countryColor" 
-        name="countryColor" 
-        value={countryColors[lastClicked]} 
-        onChange={(e) => setColor(e.target.value, lastClicked)}
-      />
-
-      <div style={{ textAlign: "center" }}>
-        <div style={{ padding: "1rem 0" }}>
-          <button
-            className="btn"
-            onClick={() => changeCenter([-73.9808, 40.7648])}
-          >
-            {"New York"}
-          </button>
-          <button
-            className="btn"
-            onClick={() => changeCenter([-9.13333, 38.71667])}
-          >
-            {"Lisbon"}
-          </button>
-          <button
-            className="btn"
-            onClick={() => changeCenter([19.03991, 47.49801])}
-          >
-            {"Budapest"}
-          </button>
-        </div>
-        <Map 
-          center={center} 
-          waterColor={waterColor} 
-          colors={countryColors} 
-          lineColor={lineColor} 
-          markerSize={markerSize} 
-          markerColor={markerColor}
-          globeSize={zoom}
-          setLastClicked={setLastClicked}
-          pushColor={pushColor}
-          selectCountry={selectCountry}
-        />
-      </div>
-
+    
 
       {nftList.map((nft) => (
         <TokenCard 

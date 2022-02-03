@@ -7,7 +7,9 @@ export default function Telegram() {
     <>
       <div className="controls">
         <button className="controlsButton">
-          <img src={icon}></img>
+          <a href={"https://t.me/near_tr"} target={"_blank"}>
+            <img src={icon}></img>
+          </a>
         </button>
       </div>
     </>

@@ -12,6 +12,9 @@
   --spacing-4: 48px;
   --spacing-5: 64px;
 
+  --small-input: 28px;
+  --large-input: 200px;
+
   /* Toast Notifications*/
   --toastify-toast-width: 388px;
   --toastify-font-family: OurCustomFont;
@@ -66,7 +69,7 @@ nav {
 .controls {
   flex-shrink: 0;
 }
-.controls:last-child {
+.controlsLast {
   padding-right: var(--spacing-2);
 }
 .controlsButton {
@@ -75,6 +78,9 @@ nav {
   outline: none;
   display: block;
   cursor:pointer;
+}
+.controlsButton img:hover {
+  filter: brightness(2.5);
 }
 .connectButton {
   width: 90px;
@@ -85,6 +91,8 @@ nav {
   margin-right: 7px;
 }
 .walletBadge {
+  display: flex;
+  align-items: center;
   background-color: #e9e6ed;
   border-radius: 25px;
   border: transparent;
@@ -113,6 +121,20 @@ nav {
   color: red;
   text-align: center;
 }
+.dot {
+  height: 5px;
+  width: 5px;
+  margin-right: 6px;
+  background-color: #000000;
+  border-radius: 50%;
+  display: inline-block;
+}
+.redDot {
+  background-color: #EE0000;
+}
+.blueDot {
+  background-color: #4d00b4;
+}
 
 footer {
   position: fixed;
@@ -133,6 +155,14 @@ main {
 
 .adminMain {
   padding: var(--spacing-5);
+}
+
+.connectWallet {
+  padding-top: var(--spacing-5);
+  height: 100vh;
+  font-size: 40px;
+  font-weight: bold;
+  text-align: center;
 }
 
 .darkeningOverlay {
@@ -195,15 +225,29 @@ main {
 
 .nftTitleInput {
   width: 99%;
+  height: var(--small-input);
 }
 
 .descInput {
   width: 99%;
-  height: 200px;
+  height: var(--large-input);
 }
 
 .priceInput {
   width: 99%;
+  height: 28px;
+  background: white url('./assets/logo-black.svg') right no-repeat;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
 .previewBox {
@@ -261,6 +305,15 @@ main {
   cursor: pointer;
 }
 
+.infoDiv {
+  color: #bdbdbf;
+  display: flex;
+  margin-bottom: -16px;
+}
+.infoDiv p {
+  margin-left: 8px;
+}
+
 .mainButton {
   margin-top: 80px;
   border: none;
@@ -287,6 +340,7 @@ main {
   width: 70%;
 }
 .preview {
+  position: static;
   width: 30%;
 }
 
@@ -302,6 +356,15 @@ main {
   background-color: var(--box-color);
   box-shadow: 0 0 6px rgba(35, 173, 278, 1);
   z-index: 9998;
+}
+
+.nftDetailsModal {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  top: 100px;
+  left: 100px;
+  background-color: rgba(0, 0, 0, 0.90);
 }
 
 /* Toast messages*/

@@ -9,6 +9,13 @@ export default function Wallet({setShowWallet, showWallet}) {
     setBalance(result);
   }, [])
 
+  function formatNumber(number, maxDecimal) {
+    return Math.round(number * Math.pow(10,maxDecimal)) / Math.pow(10,maxDecimal)
+  }
+
+  let network = "Error";
+  if (window.accountId.slice(-8) === ".testnet") network = "Testnet";
+  if (window.accountId.slice(-5) === ".near") network = "Mainnet";
 
   if (!window.walletConnection.isSignedIn()) {
     return (
@@ -27,7 +34,8 @@ export default function Wallet({setShowWallet, showWallet}) {
             onBlur={() => setShowWallet(false)}
             tabIndex={"0"}
           >
-            * testnet {window.accountId}
+            {network === "Error" ? <span class="dot redDot"></span>  : <span class="dot blueDot"></span> } 
+            {network} {window.accountId}
           </button>
         </div>
 
@@ -40,7 +48,7 @@ export default function Wallet({setShowWallet, showWallet}) {
             
               <div className="accountBalanceBox">
                 Available balance
-                {balance} NEAR
+                {formatNumber(balance, 3)} NEAR
               </div>
               <button onClick={logout} className="mainButton">Disconnect</button>
           </div>

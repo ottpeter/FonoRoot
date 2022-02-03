@@ -7,7 +7,9 @@ export default function Twitter() {
     <>
       <div className="controls">
         <button className="controlsButton">
-          <img src={icon}></img>
+          <a href={"https://twitter.com"} target={"_blank"}>
+            <img src={icon}></img>
+          </a>
         </button>
       </div>
     </>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { buyNFTfromVault } from '../utils';
+import TokenModal from './TokenModal';
 
 
 export default function TokenCard({id, owner, metadata}) {
@@ -7,6 +7,7 @@ export default function TokenCard({id, owner, metadata}) {
   console.log(owner)
   console.log("metadata: ", metadata)
 
+  const [openModal, setOpenModal] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
   const extra = JSON.parse(metadata.extra);
 
@@ -27,23 +28,29 @@ export default function TokenCard({id, owner, metadata}) {
   }
   loadImage();
 
-  function buyNFT() {
-    const badPrice = 100;
-    console.log("Orig.price: ", extra.original_price);
-    //extra.original_price
-    buyNFTfromVault(id, extra.original_price, "100000000");
-  }
   
   return (
     <div>
-      <button onClick={buyNFT}>
+      <button onClick={() => setOpenModal(true)} >
         {id}<br></br>
         {owner}<br></br>
         {metadata.title}<br></br>
         {metadata.description}<br></br>
         generation: {extra.generation}<br></br>
         <img id="nft-image" className="temporaryCARD" src={imageSrc}></img>
+        <audio controls style={{ display: "block" }} >
+          <source src={"https://ipfs.io/ipfs/" + extra.music_cid} type="audio/mpeg" />
+        </audio>
       </button>
+      
+      {openModal && <TokenModal 
+        id={id}
+        owner={owner}
+        metadata={metadata}
+        extra={extra}
+        image={imageSrc}
+        setOpenModal={setOpenModal}
+      />}
     </div>
   )
 }

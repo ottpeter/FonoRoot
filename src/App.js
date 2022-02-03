@@ -8,16 +8,27 @@ import NoPage from './NoPage';
 import Main from './Main/Main';
 import TopMenu from './Frame/TopMenu';
 import Footer from './Frame/Footer';
-import ActivityBox from './Activity/Notifications';
 import Message from './Activity/Message';
 import Pending from './Activity/Pending';
 import Ok from './Activity/Ok';
 import Err from './Activity/Err';
+import MyNFTs from './Main/MyNFTs';
 
 
 export default function App() {
-  const location = window.location.pathname;
-  console.log("location: ", location);
+  const [location, SetLocation] = React.useState("");
+  React.useEffect(() => {
+    SetLocation(window.location.pathname);
+    console.log("location: ", location);
+    return () => {
+      SetLocation("");
+    };
+    // browserHistory.lister
+  }, [window.location.href]);
+  
+  
+  //const location = window.location.pathname;
+  //console.log("location: ", location);
 
   /**STATES */
   const [actionHistory, setActionHistory] = React.useState([]);
@@ -114,6 +125,22 @@ export default function App() {
         <Footer />
       </>
     );
+  } 
+  
+  if (urlParams.includes('my-nfts')) {
+    return (
+      <>
+        <ToastContainer hideProgressBar={true} position="bottom-right" transition={Slide} />
+        <TopMenu 
+          setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} 
+          setShowWallet={setShowWallet} showWallet={showWallet}
+        />
+        <main>
+          <MyNFTs />
+        </main>
+        <Footer />
+      </>
+    );
   } else {
     return (
       <>
@@ -128,7 +155,10 @@ export default function App() {
           draggable
           pauseOnHover
         />
-        <TopMenu />
+        <TopMenu 
+          setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} 
+          setShowWallet={setShowWallet} showWallet={showWallet}
+        />
         <main>
           <Main newAction={newAction} />
         </main>

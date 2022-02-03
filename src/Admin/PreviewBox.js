@@ -1,6 +1,8 @@
 import React from 'react';
+import Price from '../Common/Price';
+import AudioPlayer from './AudioPlayer';
 
-export default function PreviewBox({title, image, price}) {
+export default function PreviewBox({title, image, music, price}) {
   return (
     <div id="preview" className="preview">
       <section id="previewBox" className="previewBox">
@@ -14,7 +16,10 @@ export default function PreviewBox({title, image, price}) {
           {image.name}
         </div>
         <div className="previewBoxItem">
-          <p id="previewBoxPrice" className="previewBoxPrice">{price} N</p>
+          <AudioPlayer music={music} />
+        </div>
+        <div className="previewBoxItem">
+          <Price price={price}/>
         </div>
       </section>
     </div>
