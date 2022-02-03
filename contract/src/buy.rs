@@ -3,8 +3,9 @@ use crate::*;
 #[near_bindgen]
 impl Contract {
     /// Buy an NFT from the Vault (the contract). Only the next highest level NFT can be purchased (e.g. gen-2, not gen-5)
+    /// In the current version, `new_price` is turned off
     #[payable]
-    pub fn buy_nft_from_vault(&mut self, token_id: TokenId, new_price: SalePriceInYoctoNear) {
+    pub fn buy_nft_from_vault(&mut self, token_id: TokenId/*, new_price: SalePriceInYoctoNear*/) {
         env::log_str(&"Start of buy_nft_from_vault".to_string());
 
         let initial_storage_usage = env::storage_usage();                                       // Take note of initial storage usage for refund
@@ -20,7 +21,11 @@ impl Contract {
             "Token must be owned by Vault"
         );
 
-        /*assert_eq!(the_extra.original_price, U128(env::attached_deposit()), "Must send the exact amount");*/
+        /*assert_eq!(
+	        u128::from(the_extra.original_price) + 10000000000, 		// where 10000000000 is ÓriásNagySzám (0.1)
+	        U128(env::attached_deposit()), 
+	        "Must send the exact amount");
+        */
         // This is not good, because we are not taking into consideration storage cost
         if u128::from(price.clone()) > env::attached_deposit().into() {
             env::panic_str("Must send enough NEAR");
@@ -45,7 +50,7 @@ impl Contract {
         self.create_children(
             root_id, 
             token_id, 
-            new_price, 
+            price, 
             None
         );
 

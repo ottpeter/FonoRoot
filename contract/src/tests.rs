@@ -120,7 +120,7 @@ mod tests {
         test_vec.push(json_token);
 
         contract.mint_root(token_metadata, to_valid_account("carol.near"), U128(100), None);  // fono-root-0, fono-root-0-0, fono-root-0-1 should exist at this point
-        contract.buy_nft_from_vault("fono-root-0-0".to_string(), U128(100));                  // should buy fono-root-0-0
+        contract.buy_nft_from_vault("fono-root-0-0".to_string());                             // should buy fono-root-0-0
         
         //log!("For Alice: {:?}", contract.nft_tokens_for_owner(to_valid_account("alice.near"), None, Some(10)));
 
@@ -142,8 +142,8 @@ mod tests {
         let token_metadata = test_token_metadata();
 
         contract.mint_root(token_metadata, to_valid_account("carol.near"), U128(100), None);  // fono-root-0, fono-root-0-0, fono-root-0-1 should exist at this point
-        contract.buy_nft_from_vault("fono-root-0-0".to_string(), U128(100));                  // should buy fono-root-0-0. fono-root-0-2 should exist
-        contract.buy_nft_from_vault("fono-root-0-2".to_string(), U128(100));
+        contract.buy_nft_from_vault("fono-root-0-0".to_string());                             // should buy fono-root-0-0. fono-root-0-2 should exist
+        contract.buy_nft_from_vault("fono-root-0-2".to_string());
         log!("This operation should have paniced! (Buy token that is not the current generation)");
     }
   
@@ -157,7 +157,7 @@ mod tests {
         let token_metadata = test_token_metadata();
 
         contract.mint_root(token_metadata, to_valid_account("carol.near"), U128(100), None);  // fono-root-0, fono-root-0-0, fono-root-0-1 should exist at this point
-        contract.buy_nft_from_vault("fono-root-0-0".to_string(), U128(100));
+        contract.buy_nft_from_vault("fono-root-0-0".to_string());
         log!("This operation should have paniced! (Attached deposit is too low)")
     }
 
@@ -171,8 +171,8 @@ mod tests {
         let token_metadata = test_token_metadata();
 
         contract.mint_root(token_metadata, to_valid_account("carol.near"), U128(100), None);  // fono-root-0, fono-root-0-0, fono-root-0-1 should exist at this point
-        contract.buy_nft_from_vault("fono-root-0-0".to_string(), U128(100));
-        contract.buy_nft_from_vault("fono-root-0-0".to_string(), U128(100));
+        contract.buy_nft_from_vault("fono-root-0-0".to_string());
+        contract.buy_nft_from_vault("fono-root-0-0".to_string());
         
     }
     
@@ -185,8 +185,8 @@ mod tests {
         let token_metadata = test_token_metadata();
 
         contract.mint_root(token_metadata, to_valid_account("carol.near"), U128(100), None);  // should create 3 NFTs
-        contract.buy_nft_from_vault("fono-root-0-0".to_string(), U128(100));                  // should create 2 NFTs
-        contract.buy_nft_from_vault("fono-root-0-1".to_string(), U128(100));                  // should create 2 NFTs
+        contract.buy_nft_from_vault("fono-root-0-0".to_string());                             // should create 2 NFTs
+        contract.buy_nft_from_vault("fono-root-0-1".to_string());                             // should create 2 NFTs
 
         assert_eq!(
             contract.nft_tokens(None, Some(500)).len(),
@@ -229,8 +229,8 @@ mod tests {
         let token_metadata = test_token_metadata();
 
         contract.mint_root(token_metadata, to_valid_account("carol.near"), U128(100), None);  // Carol should have 1 NFT
-        contract.buy_nft_from_vault("fono-root-0-0".to_string(), U128(100));                  // Alice bought 1 NFT
-        contract.buy_nft_from_vault("fono-root-0-1".to_string(), U128(100));                  // Alice bought 1 more NFT
+        contract.buy_nft_from_vault("fono-root-0-0".to_string());                             // Alice bought 1 NFT
+        contract.buy_nft_from_vault("fono-root-0-1".to_string());                             // Alice bought 1 more NFT
 
         assert_eq!(
             contract.nft_supply_for_owner(to_valid_account("carol.near")),
@@ -289,12 +289,12 @@ mod tests {
         let next_buyable = contract.get_next_buyable("fono-root-0".to_string());
         assert_eq!(next_buyable, "fono-root-0-0", "Next buyable item should be fono-root-0-0!");
 
-        contract.buy_nft_from_vault("fono-root-0-0".to_string(), U128(100));                  // There is still one gen-1 token to buy after this
+        contract.buy_nft_from_vault("fono-root-0-0".to_string());                             // There is still one gen-1 token to buy after this
         let next_buyable = contract.get_next_buyable("fono-root-0".to_string());
         assert_eq!(next_buyable, "fono-root-0-1", "Next buyable item should be fono-root-0-1!");
 
 
-        contract.buy_nft_from_vault("fono-root-0-1".to_string(), U128(100));                  // Now gen-1 is out, gen-2 is next
+        contract.buy_nft_from_vault("fono-root-0-1".to_string());                             // Now gen-1 is out, gen-2 is next
         let next_buyable = contract.get_next_buyable("fono-root-0".to_string());
         assert_eq!(next_buyable, "fono-root-0-2", "Next buyable item should be fono-root-0-2!");
     }
