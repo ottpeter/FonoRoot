@@ -21,16 +21,11 @@ impl Contract {
             "Token must be owned by Vault"
         );
 
-        /*assert_eq!(
-	        u128::from(the_extra.original_price) + 10000000000, 		// where 10000000000 is ÓriásNagySzám (0.1)
-	        U128(env::attached_deposit()), 
-	        "Must send the exact amount");
-        */
-        // This is not good, because we are not taking into consideration storage cost
-        if u128::from(price.clone()) > env::attached_deposit().into() {
-            env::panic_str("Must send enough NEAR");
-        }
-        
+        assert_eq!(                                               // This big number is 0.1 NEAR. Most of the time 0.075 NEAR will be refunded
+	        u128::from(the_extra.original_price) + 100000000000000000000000,
+	        u128::from(env::attached_deposit()), 
+	        "Must send the exact amount"
+        );
         
         let root_id = self.get_root(token_id.clone());            // root could be calculated with string manipulation as well.
         assert_eq!(                                               // Assert that this is the next one in line

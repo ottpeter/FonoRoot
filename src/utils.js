@@ -95,7 +95,8 @@ export async function buyNFTfromVault(tokenId, price) {
   //const gas = 100_000_000_000_000;
   const gas = 200_000_000_000_000;
   const formattedPrice = utils.format.formatNearAmount(price);    // Human readable
-  const amount = utils.format.parseNearAmount(formattedPrice) + utils.format.parseNearAmount("0.1");
+  const nearAmount = parseFloat(formattedPrice) + 0.1;
+  const amount = utils.format.parseNearAmount(nearAmount.toString());
   //const price = 50000000000000000000000 + parseInt(price);
   
   await window.contract.buy_nft_from_vault(args, gas, amount)

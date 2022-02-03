@@ -8,7 +8,6 @@ export default function TokenModal({id, owner, metadata, extra, image, setOpenMo
   function buyNFT() {
     const badPrice = 100;
     console.log("Orig.price: ", extra.original_price);
-    //extra.original_price
     buyNFTfromVault(id, extra.original_price);
   }
 

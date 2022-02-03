@@ -110,7 +110,7 @@ mod tests {
 
     #[test]
     fn buy_from_vault_works() {
-        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        let context = get_context(600_000_000_000_000_000_000_000);                           // Alice sends 0.6 NEAR
         testing_env!(context.build());
         let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
       
@@ -119,12 +119,9 @@ mod tests {
         let mut test_vec = Vec::new();
         test_vec.push(json_token);
 
-        contract.mint_root(token_metadata, to_valid_account("carol.near"), U128(100), None);  // fono-root-0, fono-root-0-0, fono-root-0-1 should exist at this point
-        contract.buy_nft_from_vault("fono-root-0-0".to_string());                             // should buy fono-root-0-0
+        contract.mint_root(token_metadata, to_valid_account("carol.near"), U128(500_000_000_000_000_000_000_000), None);    // fono-root-0, fono-root-0-0, fono-root-0-1 should exist at this point. The NFT will cost 0.5 NEAR
+        contract.buy_nft_from_vault("fono-root-0-0".to_string());                                                           // should buy fono-root-0-0
         
-        //log!("For Alice: {:?}", contract.nft_tokens_for_owner(to_valid_account("alice.near"), None, Some(10)));
-
-        // Test if Alice has the NFT that he bought
         assert_eq!(
             contract.nft_tokens_for_owner(to_valid_account("alice.near"), None, Some(10))[0].token_id,
             test_vec[0].token_id,
@@ -178,15 +175,15 @@ mod tests {
     
     #[test]
     fn buy_from_vault_exact_exist() {
-        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        let context = get_context(600_000_000_000_000_000_000_000);                           // Alice sends 0.6 NEAR
         testing_env!(context.build());
         let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
       
         let token_metadata = test_token_metadata();
 
-        contract.mint_root(token_metadata, to_valid_account("carol.near"), U128(100), None);  // should create 3 NFTs
-        contract.buy_nft_from_vault("fono-root-0-0".to_string());                             // should create 2 NFTs
-        contract.buy_nft_from_vault("fono-root-0-1".to_string());                             // should create 2 NFTs
+        contract.mint_root(token_metadata, to_valid_account("carol.near"), U128(500_000_000_000_000_000_000_000), None);  // should create 3 NFTs
+        contract.buy_nft_from_vault("fono-root-0-0".to_string());                                                         // should create 2 NFTs
+        contract.buy_nft_from_vault("fono-root-0-1".to_string());                                                         // should create 2 NFTs
 
         assert_eq!(
             contract.nft_tokens(None, Some(500)).len(),
@@ -222,15 +219,15 @@ mod tests {
 
     #[test]
     fn enumeration_nft_supply_for_owner_works() {
-        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        let context = get_context(600_000_000_000_000_000_000_000);                            // Alice sends 0.6 NEAR
         testing_env!(context.build());
         let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
       
         let token_metadata = test_token_metadata();
 
-        contract.mint_root(token_metadata, to_valid_account("carol.near"), U128(100), None);  // Carol should have 1 NFT
-        contract.buy_nft_from_vault("fono-root-0-0".to_string());                             // Alice bought 1 NFT
-        contract.buy_nft_from_vault("fono-root-0-1".to_string());                             // Alice bought 1 more NFT
+        contract.mint_root(token_metadata, to_valid_account("carol.near"), U128(500_000_000_000_000_000_000_000), None);  // Carol should have 1 NFT
+        contract.buy_nft_from_vault("fono-root-0-0".to_string());                                                         // Alice bought 1 NFT
+        contract.buy_nft_from_vault("fono-root-0-1".to_string());                                                         // Alice bought 1 more NFT
 
         assert_eq!(
             contract.nft_supply_for_owner(to_valid_account("carol.near")),
@@ -279,22 +276,22 @@ mod tests {
 
     #[test]
     fn can_calculate_next_buyable() {
-        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        let context = get_context(600_000_000_000_000_000_000_000);                           // Alice is person who interacts
         testing_env!(context.build());
         let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
       
         let token_metadata = test_token_metadata();
 
-        contract.mint_root(token_metadata, to_valid_account("carol.near"), U128(100), None);  // First generation created
+        contract.mint_root(token_metadata, to_valid_account("carol.near"), U128(500_000_000_000_000_000_000_000), None);  // First generation created, price is 0.5 NEAR
         let next_buyable = contract.get_next_buyable("fono-root-0".to_string());
         assert_eq!(next_buyable, "fono-root-0-0", "Next buyable item should be fono-root-0-0!");
 
-        contract.buy_nft_from_vault("fono-root-0-0".to_string());                             // There is still one gen-1 token to buy after this
+        contract.buy_nft_from_vault("fono-root-0-0".to_string());                                                         // There is still one gen-1 token to buy after this
         let next_buyable = contract.get_next_buyable("fono-root-0".to_string());
         assert_eq!(next_buyable, "fono-root-0-1", "Next buyable item should be fono-root-0-1!");
 
 
-        contract.buy_nft_from_vault("fono-root-0-1".to_string());                             // Now gen-1 is out, gen-2 is next
+        contract.buy_nft_from_vault("fono-root-0-1".to_string());                                                         // Now gen-1 is out, gen-2 is next
         let next_buyable = contract.get_next_buyable("fono-root-0".to_string());
         assert_eq!(next_buyable, "fono-root-0-2", "Next buyable item should be fono-root-0-2!");
     }
@@ -348,14 +345,20 @@ mod tests {
 
     #[test]
     fn refund_deposit_after_mint_works() {
-        let context = get_context(50_000_000_000_000_000_000_000);                            // Alice is person who interacts
+        let context = get_context(600_000_000_000_000_000_000_000);                            // Alice sends 0.6 NEAR. ~0.075 NEAR should be refunded.
         testing_env!(context.build());
         let mut contract = Contract::new_default_meta(to_valid_account("vault.near"));        // Vault is owner
 
+        let before_refund = env::account_balance();
         log!("{:?}", env::account_balance());
-        contract.mint_root(test_token_metadata(), to_valid_account("alice.near"), U128(100), None);
+        contract.mint_root(test_token_metadata(), to_valid_account("alice.near"), U128(500_000_000_000_000_000_000_000), None);     // This is 0.5 NEAR
         log!("{:?}", env::account_balance());
-        assert_eq!(1,2, "this does not work");
+        assert_eq!(
+            before_refund,
+            before_refund - 723800000000000000000000, 
+            "0.07238 NEAR should have been refunded"
+        );
+        
         
         /*
         50000000000000000000000
