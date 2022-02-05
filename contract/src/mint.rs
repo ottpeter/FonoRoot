@@ -14,6 +14,13 @@ impl Contract {
         perpetual_royalties: Option<HashMap<AccountId, u32>>,
     ) {
         log!("Starting MintRoot...");
+
+        assert_eq!(
+            self.admin, 
+            env::predecessor_account_id(),
+            "Only admin can mint new Root-NFTs!"
+        );
+
         let initial_storage_usage = env::storage_usage();                                       // Take note of initial storage usage for refund
         let mut royalty = HashMap::new();                                                       // Create royalty map to store in the token
 

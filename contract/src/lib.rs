@@ -40,7 +40,8 @@ pub type SalePriceInYoctoNear = U128;                                           
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
 pub struct Contract {    
-    pub owner_id: AccountId,                                                               // Contract owner. Maybe we will create an admin as well
+    pub owner_id: AccountId,                                                               // Contract owner. This is the Vault
+    pub admin: AccountId,                                                                  // Account that can create new RootNFTs and withdraw funds
     pub root_nounce: u128,                                                                 // We will use this for the creation of the `token_id`
     pub tokens_per_owner: LookupMap<AccountId, UnorderedSet<TokenId>>,                     // Keeps track of all the token IDs for a given account
     pub tokens_by_id: LookupMap<TokenId, Token>,                                           // Keeps track of the token struct for a given token ID
@@ -65,10 +66,11 @@ pub enum StorageKey {
 #[near_bindgen]
 impl Contract {
     #[init]
-    pub fn new_default_meta(owner_id: AccountId) -> Self {
+    pub fn new_default_meta(owner_id: AccountId, admin: AccountId) -> Self {
         log!("Default initialization function called.");
         Self::new(
             owner_id,
+            admin,
             NFTContractMetadata {
                 spec: "nft-1.0.0".to_string(),
                 name: "NFT Tutorial Contract Default Name For Development".to_string(),
@@ -82,7 +84,7 @@ impl Contract {
     }
 
     #[init]
-    pub fn new(owner_id: AccountId, metadata: NFTContractMetadata) -> Self {
+    pub fn new(owner_id: AccountId, admin: AccountId, metadata: NFTContractMetadata) -> Self {
         log!("Initializing contract instance...");
         let this = Self {
             // Storage keys are simply the prefixes used for the collections. This helps avoid data collision
@@ -93,6 +95,7 @@ impl Contract {
             ),
             // Set the owner_id field equal to the passed in owner_id. 
             owner_id,
+            admin,
             root_nounce: 0,
             metadata: LazyOption::new(
                 StorageKey::NFTContractMetadata.try_to_vec().unwrap(),
