@@ -16,6 +16,9 @@ export default function PreviewBox({title, image, music, price}) {
           {image.name}
         </div>
         <div className="previewBoxItem">
+          {music.name}
+        </div>
+        <div className="previewBoxItem">
           <AudioPlayer music={music} />
         </div>
         <div className="previewBoxItem">

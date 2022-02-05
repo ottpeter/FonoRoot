@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { getBuyableTokens, login, logout } from '../utils';
 import { utils } from 'near-api-js';
 import Map from "../Map";
@@ -8,13 +8,14 @@ import SmallUploader from '../Admin/SmallUploader';
 
 
 import getConfig from '../config'
-import TokenCard from './TokenCard';
+import TokenModal from './TokenModal';
 import { getNextBuyableInstance } from '../utils';
 const { networkId } = getConfig(process.env.NODE_ENV || 'development')
 
 export default function Main() {
   const [nftList, setNftList] = React.useState([]);
-
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedNFT, setSelectedNFT] = useState(null);
   const [center, setCenter] = React.useState([0, 0]);
 
   // Color test
@@ -83,6 +84,11 @@ const loadClick = React.useCallback(async (acceptedFiles) => {
   }
 });
 
+function nftClicked(nftIndex) {
+  setSelectedNFT(nftIndex);
+  changeCenter(coordList[nftIndex]);
+  setOpenModal(true);
+}
 
 function stringifyColorsData() {
   const obj = {
@@ -152,34 +158,60 @@ function stringifyColorsData() {
       {"Budapest"}
     </button>
   </div>
-  <Map 
-    center={center} 
-    waterColor={waterColor} 
-    colors={countryColors} 
-    lineColor={lineColor} 
-    markerSize={markerSize} 
-    markerColor={markerColor}
-    globeSize={zoom}
-    setLastClicked={setLastClicked}
-    pushColor={pushColor}
-    selectCountry={selectCountry}
-  />
-</div>
+  </div>
+  
+  */
 
-*/
-    
-  return (
-    <>
-    
+  //setTimeout(() => {
+    //setCenter((prev) => {
+      //const newCenter = [prev[0] + 0.2, prev[1] + 0.2];
+//      return [...newCenter];
+//    })
+  //}, 200)
 
-      {nftList.map((nft) => (
-        <TokenCard 
-          key={nft.token_id}
-          id={nft.token_id}
-          owner={nft.owner_id}
-          metadata={nft.metadata}
+
+  const coordList = [
+    [-73.9808, 40.7648],
+    [-9.13333, 38.71667],
+    [19.03991, 47.49801]
+  ]
+
+ 
+ return (
+   <>
+      {openModal && (
+        <TokenModal 
+          openModal={openModal}
+          id={nftList[selectedNFT].token_id}
+          owner={nftList[selectedNFT].owner}
+          metadata={nftList[selectedNFT].metadata}
+          setOpenModal={setOpenModal}
         />
-      ))}
+      )}
+      <div id="globeContainer">
+        <Map
+          center={center} 
+          waterColor={waterColor} 
+          colors={countryColors} 
+          lineColor={lineColor} 
+          markerSize={markerSize} 
+          markerColor={markerColor}
+          globeSize={140}
+          width={500}
+          height={300}
+          setLastClicked={setLastClicked}
+          pushColor={pushColor}
+          selectCountry={selectCountry}
+        />
+      </div>
+
+      <div id="nftButtonsList" className="nftButtonsList">
+        {nftList.map((nft, i) => (
+          <button className="nftButton" onClick={() => nftClicked(i)} >
+            {nft.metadata.title}<br></br>
+          </button>
+        ))}
+      </div>
 
     </>
   )

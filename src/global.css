@@ -116,10 +116,24 @@ nav {
   margin-bottom: 16px;
 }
 .accountBalanceBox {
-  margin-top: 16px;
+  width: 80%;
+  margin: auto;
+  margin-top: 32px;
   margin-bottom: 16px;
-  color: red;
+  color: #4d00b4;
   text-align: center;
+  background: #fbf9fe;
+}
+.accountBalanceBoxUpper {
+  padding-top: 16px;
+  padding-bottom: 4px;
+  margin: 0px;
+}
+.accountBalanceBoxDowner {
+  padding-bottom: 16px;
+  margin: 0px;
+  font-size: 22px;
+  font-weight: bold;
 }
 .dot {
   height: 5px;
@@ -263,8 +277,17 @@ input[type=number] {
   margin-top: var(--spacing-3);
   margin-bottom: var(--spacing-2);
 }
-.previewBoxPrice {
-  margin-top: 48px;
+.price {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: flex-end;
+  height: var(--spacing-4);
+}
+.priceP {
+  font-size: 22px;
+  font-weight: bold;
+  margin-right: 10px;
 }
 .previewBoxItem {
   grid-column-start: 1;
@@ -328,6 +351,10 @@ input[type=number] {
 .mainButton:disabled {
   background: #C4C4C4;
 }
+#disconnectButton {
+  margin-top: 0px;
+  margin-bottom: 32px;
+}
 .buttonContainer {
   text-align: center;
 }
@@ -344,6 +371,17 @@ input[type=number] {
   width: 30%;
 }
 
+#nftButtonsList {
+  position: absolute;
+  z-index: 3;
+  top: 20%;
+}
+.nftButton {
+  display: block;
+}
+#globeContainer {
+  background-color: #090909;
+}
 
 .temporaryCARD {
   width: 300px;
@@ -357,14 +395,17 @@ input[type=number] {
   box-shadow: 0 0 6px rgba(35, 173, 278, 1);
   z-index: 9998;
 }
+#wallet {
+  text-align: center;
+}
 
 .nftDetailsModal {
   position: absolute;
   width: 80%;
   height: 80%;
   top: 100px;
-  left: 100px;
-  background-color: rgba(0, 0, 0, 0.90);
+  left: 16%;
+  background-color: rgba(255, 255, 255, 0.90);
 }
 
 /* Toast messages*/
@@ -401,8 +442,11 @@ input[type=number] {
 }
 
 .dropdownLine {
-  color: #828282;
+  /*color: #828282;*/
   width: 80%;
+  border: none;
+  border-top: 1px #f2f2f2 solid;
+  height: 1px;
 }
 
 .notificationList {

@@ -36,6 +36,7 @@
     "@crustio/crust-pin": "^1.0.0",
     "crypto-js": "^4.1.1",
     "cuid": "^2.1.8",
+    "debounce": "^1.2.1",
     "ipfs-core": "^0.12.2",
     "it-all": "^1.0.4",
     "near-api-js": "~0.43.1",

@@ -9,8 +9,8 @@ export default function Price({price}) {
   const formatedPrice = formatNumber(price, 3)
 
   return (
-    <div>
-      <p id="previewBoxPrice" className="previewBoxPrice">
+    <div id="previewBoxPrice" className="price">
+      <p  className="priceP">
         {formatedPrice}
       </p>
       <img src={nearLogo} width={"32px"}></img>

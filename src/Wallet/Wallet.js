@@ -34,23 +34,23 @@ export default function Wallet({setShowWallet, showWallet}) {
             onBlur={() => setShowWallet(false)}
             tabIndex={"0"}
           >
-            {network === "Error" ? <span class="dot redDot"></span>  : <span class="dot blueDot"></span> } 
+            {network === "Error" ? <span className="dot redDot"></span>  : <span className="dot blueDot"></span> } 
             {network} {window.accountId}
           </button>
         </div>
 
         {showWallet && (
           <div id="wallet" className="dropdownContainer">
-            <h3 id="walletTitle" className="dropdownTitle">The Wallet</h3>
+            <h3 id="walletTitle" className="dropdownTitle">Wallet</h3>
               <p className="upperWalletLine">testline</p>
               <p className="upperWalletLine">{window.accountId}</p>
             <hr id="walletLine" className="dropdownLine" />
             
               <div className="accountBalanceBox">
-                Available balance
-                {formatNumber(balance, 3)} NEAR
+                <p className="accountBalanceBoxUpper">Available balance</p>
+                <p className="accountBalanceBoxDowner">{formatNumber(balance, 3)} NEAR</p>
               </div>
-              <button onClick={logout} className="mainButton">Disconnect</button>
+              <button onClick={logout} id="disconnectButton" className="mainButton">Disconnect</button>
           </div>
         )}
       </>

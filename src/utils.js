@@ -22,7 +22,9 @@ export async function initContract() {
   })
 }
 
-export function mintRootNFT(title, desc, imageCID, imageHash, musicCID, musicHash, price) {
+export async function mintRootNFT(title, desc, imageCID, imageHash, musicCID, musicHash, price) {
+  let success = false;
+
   const root_args = {
     receiver_id: window.accountId,
     metadata: {
@@ -52,10 +54,12 @@ export function mintRootNFT(title, desc, imageCID, imageHash, musicCID, musicHas
   const gas = 100_000_000_000_000;
   const amount = utils.format.parseNearAmount("0.1");
 
-  window.contract.mint_root(root_args, gas, amount)
-    .then((msg) => console.log("Success! (mint root)", msg))
+  await window.contract.mint_root(root_args, gas, amount)
+    .then((msg) => { console.log("Success! (mint root)", msg); success = true; })
     .catch((err) => console.log("error: ", err))
     .finally(() => console.log("finally()"));
+
+  return success;
 }
 
 export async function setSeed(seed) {
@@ -97,7 +101,6 @@ export async function buyNFTfromVault(tokenId, price) {
   const formattedPrice = utils.format.formatNearAmount(price);    // Human readable
   const nearAmount = parseFloat(formattedPrice) + 0.1;
   const amount = utils.format.parseNearAmount(nearAmount.toString());
-  //const price = 50000000000000000000000 + parseInt(price);
   
   await window.contract.buy_nft_from_vault(args, gas, amount)
     .then((result) => console.log("Buy-result: ", result))
@@ -149,8 +152,33 @@ export async function getNextBuyableInstance(rootId) {
   return nextId;
 }
 
-export async function getBalance() {
+export async function getListForAccount() {
+  let result = null;
+  
+  const options = {
+    account_id: window.accountId,
+    limit: 10000,
+  }
+
+  await window.contract.nft_tokens_for_owner(options)
+    .then((response) => {
+      console.log("Response: ", response);
+      result = response;
+    })
+    .catch((err) => console.error("Error while fetching list of NFTs for connected user!"));
+
+  return result;
+}
+
+export async function checkIfAccountExists() {
   const near = await connect(Object.assign({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() } }, nearConfig))
+  const account = await near.account("account-ain9ahzair.testnet");
+  const result = await account.getAccountDetails();
+  return result;
+}
+
+export async function getBalance() {
+  const near = await connect(Object.assign({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() } }, nearConfig));
   const account = await near.account(window.accountId);
   const yocto =  await account.getAccountBalance();
   return utils.format.formatNearAmount(yocto.available);

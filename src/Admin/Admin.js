@@ -18,7 +18,7 @@ export default function Admin({newAction}) {
   
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState("0");
   
   // For the image
   const [image, setPreview] = useState({name: "empty", src: "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D"});                     // This will store actual data
@@ -33,12 +33,28 @@ export default function Admin({newAction}) {
   const [musicHash, setMusicHash] = useState("");
 
   const [mnemonic, setMnemonic] = useState("");
+
+  const urlParams = window.location.search;
+
   function saveMnemonic() {
     if (mnemonic.length === 0) return;
     setSeed(mnemonic);
   }
 
   useEffect(async () => {
+    let href = window.location.href;
+    href = href.slice(0, href.indexOf("?"));
+    history.pushState(null, "Admin", href + "?admin=1");
+    if (urlParams.includes('errorCode')) {
+      newAction({
+        errorMsg: "There was an error while minting the NFT!", errorMsgDesc: "errorCode",
+      }); 
+    } else if (urlParams.includes('transactionHashes')) {
+      newAction({
+        successMsg: "NFT Minted!", successMsgDesc: "The new RootNFT was successfully minted",
+      });
+    }
+
     //setPageSwitch(1);return;
     const seedBoolean = await getSeed() && true;
     if (seedBoolean) setPageSwitch(2);                        // Key is already set
@@ -134,29 +150,40 @@ export default function Admin({newAction}) {
 
   function createNFT() {
     if (!(imageReady && musicReady)) {
-      console.error("IMAGE OR MUSIC IS NOT READY");
+      newAction({
+        errorMsg: "The image or the music is not ready!", errorDesc: ""
+      });
       return;
     }
     if (title.length === 0) {
-      console.error("TITLE CAN NOT BE EMPTY");
+      newAction({
+        errorMsg: "The title can not be empty!", errorDesc: ""
+      });
       return;
     }
     if (desc.length === 0) {
-      console.error("DESC CAN NOT BE EMPTY");
+      newAction({
+        errorMsg: "The description can not be empty!", errorDesc: ""
+      });
       return;
-    }      // or maybe that could be optional
-    // we should set some error message before return
-    mintRootNFT(title, desc, imageCID, imageHash, musicCID, musicHash, price);
+    }
+    
+    const mintPromise = new Promise(async (resolve, reject) => {
+      const mintResult = await mintRootNFT(title, desc, imageCID, imageHash, musicCID, musicHash, price);
+      if (mintResult) {
+        resolve("The mint was successfull (message from promise)");
+      } else {
+        reject("The mint was not successfull (message from promise)");
+      }
+    });
+    newAction({
+      thePromise: mintPromise, 
+      pendingPromiseTitle: "Prepairing transaction...", pendingPromiseDesc: "plase wait",
+      successPromiseTitle: "Redirecting to transaction", successPromiseDesc: "Please sign the transaction in the next screen!",
+      errorPromiseTitle: "Redirecting to transaction", errorPromiseDesc: "Please sign the transaction in the next screen!"
+    });
   }
-/*
-      <button onClick={() => setSeed(testingOnly)}>AES Set</button>
-      <button onClick={testwrapper}>AES Get</button><br></br>
-      <p>ImageCID: {imageCID}</p>
-      <p>ImageHash: {imageHash}</p>
-      <p>MusicCID: {musicCID}</p>
-      <p>MusicHash: {musicHash}</p>
 
-*/
 
   if (!window.walletConnection.isSignedIn()) return <ConnectWallet />
   if (pageSwitch === 0) return <Loading />

@@ -83,7 +83,10 @@ export default function App() {
           return [...prevArray];
         }))
     } else {
-      toast("hello");
+      if (actionObj.errorMsg) toast.warn(actionObj.errorMsg);
+      if (actionObj.successMsg) toast.success(actionObj.successMsg);
+      if (actionObj.infoMsg) toast.info(actionObj.infoMsg);
+
       setActionHistory((prevArray) => {
         prevArray.push(actionObj);
         return [...prevArray];

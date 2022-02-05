@@ -16,7 +16,7 @@ const mapStyles = {
 };
 
 //const globeSize = 250;
-const width = 500;
+//const width = 500;
 
 // Coordinates are reversed!
 const markers = [
@@ -34,7 +34,7 @@ function RandomColor() {
   return `#${randColor.toUpperCase()}`;
 }
 
-const Map = ({ center, waterColor, colors, lineColor, markerSize, markerColor, selectCountry, globeSize }) => (
+const Map = ({ center, waterColor, colors, lineColor, markerSize, markerColor, selectCountry, width, height, globeSize }) => (
   <div id="testWrapper">
     <Motion
       defaultStyle={{
@@ -49,7 +49,7 @@ const Map = ({ center, waterColor, colors, lineColor, markerSize, markerColor, s
       {({ x, y }) => (
         <ComposableMap
           width={width}
-          height={width}
+          height={height}
           projection="orthographic"
           projectionConfig={{ scale: globeSize }}
           style={mapStyles}
@@ -57,7 +57,7 @@ const Map = ({ center, waterColor, colors, lineColor, markerSize, markerColor, s
           <ZoomableGlobe center={[x, y]}>
             <circle
               cx={width/2}
-              cy={width/2}
+              cy={height/2}
               r={globeSize}
               fill={waterColor}
               stroke="#CFD8DC"
@@ -77,8 +77,11 @@ const Map = ({ center, waterColor, colors, lineColor, markerSize, markerColor, s
                         console.log(geos.length);
                         selectCountry(i);
                       }}
+                      
                       style={{
-                        default: { fill: colors[i], stroke: lineColor }
+                        default: { fill: colors[i], stroke: lineColor },
+                        hover: { fill: colors[i], stroke: lineColor },
+                        pressed: { fill: colors[i], stroke: lineColor },
                       }}
                     />  
                 ))
