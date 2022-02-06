@@ -15,6 +15,7 @@ pub use crate::royalty::*;
 pub use crate::events::*;
 pub use crate::crust::*;
 pub use crate::buy::*;
+pub use crate::transfer::*;
 
 mod internal;
 mod approval; 
@@ -26,6 +27,7 @@ mod royalty;
 mod events;
 mod crust;
 mod buy;
+mod transfer;
 
 #[cfg(all(test, not(target_arch = "wasm32")))]
 mod tests;
