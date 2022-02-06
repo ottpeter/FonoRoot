@@ -38,9 +38,14 @@ export default function App() {
   
 
   function initContract() {
+
+    const args = {
+      owner_id: process.env.CONTRACT_NAME,// || 'dev-1643218536025-85404878099863',
+      admin: "optr.testnet"
+    }
+    
     // This could be 'new' for user provided init
-    // WE WILL HAVE TO CHANGE THIS TO THE OWNER (or create admin user in lib.rs), BUT NOW THE ASSERT IS TURNED OFF INSTEAD!!
-    window.contract.new_default_meta({owner_id: process.env.CONTRACT_NAME || 'dev-1643218536025-85404878099863'})
+    window.contract.new_default_meta(args)
       .then((msg) => console.log("Initialized! ", msg))
       .catch((err) => console.error(err))
       .finally(() => console.log("end."));
@@ -95,25 +100,21 @@ export default function App() {
   }
 
   console.log("actionHistory: ", actionHistory);
+  const urlParams = window.location.search;  
+  //new URLSearchParams(location.search);
 
 
-  const urlParams = window.location.search;  function initContract() {
-    // This could be 'new' for user provided init
-    // WE WILL HAVE TO CHANGE THIS TO THE OWNER (or create admin user in lib.rs), BUT NOW THE ASSERT IS TURNED OFF INSTEAD!!
-    window.contract.new_default_meta({owner_id: process.env.CONTRACT_NAME || 'dev-1643108238965-30590107738953'})
-      .then((msg) => console.log("Initialized! ", msg))
-      .catch((err) => console.error(err))
-      .finally(() => console.log("end."));
-  }//new URLSearchParams(location.search);
+  
+  
+  /*
+  
+  <ActivityBox setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} />
+  */
   if (urlParams.includes('init')) {
     initContract();
     return;
   }
-  /*
-
-  <ActivityBox setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} />
-  */
-
+ 
   if (urlParams.includes('admin')) {
     return (
       <>

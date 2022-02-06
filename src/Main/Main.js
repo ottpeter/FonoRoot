@@ -12,7 +12,7 @@ import TokenModal from './TokenModal';
 import { getNextBuyableInstance } from '../utils';
 const { networkId } = getConfig(process.env.NODE_ENV || 'development')
 
-export default function Main() {
+export default function Main({newAction}) {
   const [nftList, setNftList] = React.useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedNFT, setSelectedNFT] = useState(null);
@@ -32,6 +32,20 @@ export default function Main() {
   }
 
   React.useEffect(async () => {
+    const urlParams = window.location.search;
+    let href = window.location.href;
+    href = href.slice(0, href.indexOf("?"));
+    history.pushState(null, "Admin", href + "");
+    if (urlParams.includes('errorCode')) {
+      newAction({
+        errorMsg: "There was an error while processing the transaction!", errorMsgDesc: "errorCode",
+      }); 
+    } else if (urlParams.includes('transactionHashes')) {
+      newAction({
+        successMsg: "Success!", successMsgDesc: "You bought a new NFT!",
+      });
+    }
+
     const buyable = await getBuyableTokens();
     console.log("NEXT NFTs: ", buyable);
     setNftList(buyable);
@@ -185,6 +199,7 @@ function stringifyColorsData() {
           id={nftList[selectedNFT].token_id}
           owner={nftList[selectedNFT].owner}
           metadata={nftList[selectedNFT].metadata}
+          newAction={newAction}
           setOpenModal={setOpenModal}
         />
       )}

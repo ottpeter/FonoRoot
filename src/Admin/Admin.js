@@ -34,14 +34,14 @@ export default function Admin({newAction}) {
 
   const [mnemonic, setMnemonic] = useState("");
 
-  const urlParams = window.location.search;
-
+  
   function saveMnemonic() {
     if (mnemonic.length === 0) return;
     setSeed(mnemonic);
   }
-
+  
   useEffect(async () => {
+    const urlParams = window.location.search;
     let href = window.location.href;
     href = href.slice(0, href.indexOf("?"));
     history.pushState(null, "Admin", href + "?admin=1");

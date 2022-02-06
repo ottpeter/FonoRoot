@@ -1,18 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { buyNFTfromVault } from '../utils';
 import PreviewBox from '../Admin/PreviewBox';
 import { utils } from 'near-api-js';
 
 
-export default function TokenModal({id, owner, metadata, openModal, setOpenModal}) {
+export default function TokenModal({id, metadata, newAction, openModal, setOpenModal}) {
   const [music, setMusic] = useState(null);
   const [image, setImage] = useState(null);
   const extra = JSON.parse(metadata.extra);
 
   function buyNFT() {
-    const badPrice = 100;
     console.log("Orig.price: ", extra.original_price);
-    buyNFTfromVault(id, extra.original_price);
+    const buyPromise = new Promise(async (resolve, reject) => {
+      const mintResult = await buyNFTfromVault(id, extra.original_price);
+      if (mintResult) {
+        resolve("Buying the NFT was successull (message from promise)");
+      } else {
+        reject("Buying the NFT was not successull (message from promise)");
+      }
+    });
+    newAction({
+      thePromise: buyPromise, 
+      pendingPromiseTitle: "Prepairing transaction...", pendingPromiseDesc: "plase wait",
+      successPromiseTitle: "Redirecting to transaction", successPromiseDesc: "Please sign the transaction in the next screen!",
+      errorPromiseTitle: "Redirecting to transaction", errorPromiseDesc: "Please sign the transaction in the next screen!"
+    });
   }
 
   function loadImage() {
