@@ -13,34 +13,46 @@ import Pending from './Activity/Pending';
 import Ok from './Activity/Ok';
 import Err from './Activity/Err';
 import MyNFTs from './Main/MyNFTs';
+import all from 'it-all';
 
 
 export default function App() {
   const [location, SetLocation] = React.useState("");
+  const [urlParams, setUrlParams] = React.useState(window.location.search);
+  const [configObj, setConfigObj] = React.useState({});
+  const [actionHistory, setActionHistory] = React.useState([]);
+  const [showActivity, setShowActivity] = React.useState(false);
+  const [showWallet, setShowWallet] = React.useState(false);
+
   React.useEffect(() => {
     SetLocation(window.location.pathname);
     console.log("location: ", location);
+    setUrlParams(window.location.search);
+    console.log("urlParams: ", urlParams);
     return () => {
       SetLocation("");
     };
-    // browserHistory.lister
-  }, [window.location.href]);
+
+  }, [window.location.search]);
+
+  React.useEffect(async () => {
+    const fetchObj = await fetch(window.location.origin + window.location.pathname + '/' + 'projectConfig.json')
+    .then((response) => response.json())
+    .catch((err) => console.error("Error while fetching projectConfig.json: ", err));
+    setConfigObj(fetchObj);
+  }, [])
   
   
   //const location = window.location.pathname;
   //console.log("location: ", location);
 
   /**STATES */
-  const [actionHistory, setActionHistory] = React.useState([]);
-  const [showActivity, setShowActivity] = React.useState(false);
-  const [showWallet, setShowWallet] = React.useState(false);
 
   
 
   function initContract() {
-
     const args = {
-      owner_id: process.env.CONTRACT_NAME,// || 'dev-1643218536025-85404878099863',
+      owner_id: process.env.CONTRACT_NAME || configObj.contractName,
       admin: "optr.testnet"
     }
     
@@ -50,7 +62,7 @@ export default function App() {
       .catch((err) => console.error(err))
       .finally(() => console.log("end."));
   }
-
+  
   function newAction(actionObj) {
     //FireToast conditionally
     if (actionObj.thePromise) {
@@ -100,16 +112,17 @@ export default function App() {
   }
 
   console.log("actionHistory: ", actionHistory);
-  const urlParams = window.location.search;  
+  //const urlParams = ;  
   //new URLSearchParams(location.search);
 
 
-  
-  
   /*
   
   <ActivityBox setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} />
   */
+
+  
+  /** We use url params instead of routes, because the IPFS gateways would think that we are looking for a file */
   if (urlParams.includes('init')) {
     initContract();
     return;
@@ -140,7 +153,7 @@ export default function App() {
           setShowWallet={setShowWallet} showWallet={showWallet}
         />
         <main>
-          <MyNFTs />
+          <MyNFTs newAction={newAction} />
         </main>
         <Footer />
       </>
@@ -158,12 +171,13 @@ export default function App() {
           pauseOnFocusLoss
           draggable
           pauseOnHover
-        />
+          />
         <TopMenu 
           setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} 
           setShowWallet={setShowWallet} showWallet={showWallet}
-        />
+          />
         <main>
+          <p>Test Value: {configObj.test}</p>
           <Main newAction={newAction} />
         </main>
         <Footer />

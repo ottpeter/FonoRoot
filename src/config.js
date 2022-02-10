@@ -1,4 +1,19 @@
-const CONTRACT_NAME = process.env.CONTRACT_NAME || 'dev-1643218536025-85404878099863';
+//import configObj from './projectConfig.json';
+//const configJSONFile = require('./main.configFile');
+
+/*async function getContractName() {
+  if (typeof window === 'undefined') return;
+  console.log("configJSONFile: ", configJSONFile);
+  return;
+  const fetchObj = await fetch(window.location.origin + window.location.pathname + '/' + configJSONFile)
+  .then((response) => response.json())
+  .catch((err) => console.error(err));
+  console.log("fetchObj: ", fetchObj)
+  return fetchObj.contractName;
+}*/
+
+const CONTRACT_NAME = process.env.CONTRACT_NAME;
+
 
 function getConfig(env) {
   switch (env) {

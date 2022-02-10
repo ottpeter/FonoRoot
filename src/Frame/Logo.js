@@ -6,6 +6,7 @@ export default function Logo() {
     if (href.includes("?")) {
       href = href.slice(0, href.indexOf("?"));
     }
+    //window.location = href;
     history.replaceState(null, "Home", href);
   }
 

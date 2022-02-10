@@ -8,7 +8,7 @@ import Settings from './Settings';
 import Help from './Help';
 
 
-export default function TopMenu({setShowActivity, showActivity, actionHistory, setShowWallet, showWallet}) {
+export default function TopMenu({setShowActivity, showActivity, actionHistory, setShowWallet, showWallet, testJSON}) {
   return (
     <nav>
       <Logo />
@@ -21,7 +21,7 @@ export default function TopMenu({setShowActivity, showActivity, actionHistory, s
         showActivity={showActivity}
         actionHistory={actionHistory} 
       />
-      <Settings />
+      <Settings settingsOpen={false}/>
       <Help />      
     </nav>
   )

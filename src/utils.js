@@ -1,24 +1,70 @@
-import { connect, Contract, keyStores, WalletConnection, utils } from 'near-api-js';
-const CryptoJS = require('crypto-js');;
-import getConfig from './config';
+import { connect, Contract, keyStores, WalletConnection, utils, KeyPair } from 'near-api-js';
+import * as nearAPI from "near-api-js";
+const CryptoJS = require('crypto-js');
 
-const nearConfig = getConfig(process.env.NODE_ENV || 'development');
-const contractAccount = process.env.CONTRACT_NAME || 'dev-1643218536025-85404878099863';
+/** Real config */
+async function getRealConfig(env) {
+  let contractName;
+  try {
+    contractName = await getContractName();
+    console.log("IMPORTED: ", contractName)
+  } catch (error) {
+    console.error(error) 
+  }
+  const { keyStores } = nearAPI;
+  const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+
+  switch (env) {
+    case 'development':
+      return {
+        networkId: 'testnet',
+        nodeUrl: 'https://rpc.testnet.near.org',
+        keyStore,
+        contractName: contractName,
+        walletUrl: 'https://wallet.testnet.near.org',
+        helperUrl: 'https://helper.testnet.near.org',
+        explorerUrl: 'https://explorer.testnet.near.org',
+      }
+    case 'testnet':
+      return {
+        networkId: 'testnet',
+        nodeUrl: 'https://rpc.testnet.near.org',
+        keyStore,
+        contractName: contractName,
+        walletUrl: 'https://wallet.testnet.near.org',
+        helperUrl: 'https://helper.testnet.near.org',
+        explorerUrl: 'https://explorer.testnet.near.org',
+      }
+    default:
+      throw Error(`env is needed`);
+  }
+}
+
+async function getContractName() {
+  const fetchObj = await fetch(window.location.origin + window.location.pathname + '/projectConfig.json')
+  .then((response) => response.json())
+  .catch((err) => console.error(err));
+  console.log("fetchObj: ", fetchObj)
+  return fetchObj.contractName;
+}
+//const nearConfig = getConfig(process.env.NODE_ENV || 'development');    // THIS IS NOT INSIDE ASYNC
+
 
 // Initialize contract & set global variables
 export async function initContract() {
   // Initialize connection to the NEAR testnet
+  const nearConfig = await getRealConfig('development');
+  console.log("getRealConfig: ", nearConfig);
+  console.log("process.env.NODE_ENV: ", process.env.NODE_ENV)
   const near = await connect(Object.assign({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() } }, nearConfig))
 
   window.walletConnection = new WalletConnection(near)  
   window.accountId = /*'exp1.' +*/  window.walletConnection.getAccountId()                                // Getting the Account ID. If still unauthorized, it's just empty string
 
   // Initializing our contract APIs by contract name and configuration
-  window.contract = await new Contract(window.walletConnection.account(), nearConfig.contractName, {
-    // View methods are read only. They don't modify the state, but usually return some value.
+  window.contract = new Contract(window.walletConnection.account(), nearConfig.contractName, {
     viewMethods: ['nft_metadata', 'nft_token', 'nft_tokens_for_owner', 'nft_tokens', 'get_crust_key', 'get_next_buyable'],
-    // Change methods can modify the state. But you don't receive the returned value when called.
-    changeMethods: ['new_default_meta', 'new', 'mint_root', 'set_crust_key', 'buy_nft_from_vault'],
+    changeMethods: ['new_default_meta', 'new', 'mint_root', 'set_crust_key', 'buy_nft_from_vault', 'transfer_nft'],
   })
 }
 
@@ -55,7 +101,10 @@ export async function mintRootNFT(title, desc, imageCID, imageHash, musicCID, mu
   const amount = utils.format.parseNearAmount("0.1");
 
   await window.contract.mint_root(root_args, gas, amount)
-    .then((msg) => { console.log("Success! (mint root)", msg); success = true; })
+    .then((msg) => { 
+      console.log("Success! (mint root)", msg); 
+      success = true; 
+    })
     .catch((err) => console.log("error: ", err))
     .finally(() => console.log("finally()"));
 
@@ -69,7 +118,7 @@ export async function setSeed(seed) {
 
   const encryptedKey = CryptoJS.AES.encrypt(seed, keyPair.secretKey).toString();
 
-  window.contract.set_crust_key({encrypted_key: encryptedKey})
+  await window.contract.set_crust_key({encrypted_key: encryptedKey})
     .then((msg) => console.log("The Contract says ", msg))
     .catch((err) => console.error("Error occured while uploading encrypted key:", err));
 }
@@ -83,7 +132,7 @@ export async function getSeed() {
 
   await window.contract.get_crust_key()
     .then((result) => encryptedKey = result)
-    .catch((err) => console.log("Error occured while fetching encrypted key: ", err))
+    .catch((err) => {console.log("Error occured while fetching encrypted key: ", err); console.log(err)})
   if (encryptedKey) {
     return CryptoJS.AES.decrypt(encryptedKey, keyPair.secretKey).toString(CryptoJS.enc.Utf8);
   } else {
@@ -92,7 +141,6 @@ export async function getSeed() {
 }
 
 export async function buyNFTfromVault(tokenId, price) {
-  const accountId = window.accountId;
   const args = {
     token_id: tokenId,
   };
@@ -170,15 +218,63 @@ export async function getListForAccount() {
   return result;
 }
 
+export async function transferNft(tokenId, receiverId) {
+  let success = false;
+  const args = {
+    token_id: tokenId,
+    receiver_id: receiverId
+  }
+  const gas = 100_000_000_000_000;
+  const amount = utils.format.parseNearAmount("0.1");
+
+  await window.contract.transfer_nft(args, gas, amount)
+    .then((msg) => { 
+      console.log("Success! (mint root)", msg); 
+      success = true; 
+    })
+    .catch((err) => console.error("There was an error while transfering the token: ", err));
+  
+  return success;
+}
+
+export async function deployContract() {
+  /*const account = await near.account(window.accountId);
+  const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+  const keyPair = await keyStore.getKey("testnet", window.accountId);
+  await account.addKey(keyPair.publicKey);*/
+  
+  
+  // create wallet connection
+  const near = await connect(Object.assign({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() } }, await getRealConfig('development')));
+  const wallet = new WalletConnection(near);
+  // returns account object for transaction signing
+  const walletAccountObj = wallet.account();
+
+  const getObj = await fetch(window.location.origin + window.location.pathname + '/main.wasm')
+  .then((resp) => resp.arrayBuffer())
+  .catch((err) => console.error("Error while fetching .wasm file: ", err));
+  const contract = new Uint8Array(getObj);
+  const newPub = utils.KeyPairEd25519.fromRandom().publicKey
+  console.log("newPub: ", newPub.toString())
+  const newAcc = await walletAccountObj.createAccount(
+    "cexp.optr.testnet", // new account name
+    newPub, // public key for new account
+    "5000000000000000000000" // initial balance for new account in yoctoNEAR
+    );
+  const thePubKey = KeyPair.fromString("")
+  const response = await walletAccountObj.deployContract("cexp.optr.testnet", newPub, contract, "0");
+  console.log(response);
+}
+
 export async function checkIfAccountExists() {
-  const near = await connect(Object.assign({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() } }, nearConfig))
+  const near = await connect(Object.assign({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() } }, await getRealConfig('development')));
   const account = await near.account("account-ain9ahzair.testnet");
   const result = await account.getAccountDetails();
   return result;
 }
 
 export async function getBalance() {
-  const near = await connect(Object.assign({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() } }, nearConfig));
+  const near = await connect(Object.assign({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() } }, await getRealConfig('development')));
   const account = await near.account(window.accountId);
   const yocto =  await account.getAccountBalance();
   return utils.format.formatNearAmount(yocto.available);
@@ -189,7 +285,7 @@ export function logout() {
   window.location.replace(window.location.origin + window.location.pathname)               // reload page
 }
 
-export function login() {
-  window.walletConnection.requestSignIn(nearConfig.contractName)
+export async function login() {
+  window.walletConnection.requestSignIn((await getRealConfig('development')).contractName)
 }
 

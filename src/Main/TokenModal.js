@@ -12,8 +12,8 @@ export default function TokenModal({id, metadata, newAction, openModal, setOpenM
   function buyNFT() {
     console.log("Orig.price: ", extra.original_price);
     const buyPromise = new Promise(async (resolve, reject) => {
-      const mintResult = await buyNFTfromVault(id, extra.original_price);
-      if (mintResult) {
+      const buyResult = await buyNFTfromVault(id, extra.original_price);
+      if (buyResult) {
         resolve("Buying the NFT was successull (message from promise)");
       } else {
         reject("Buying the NFT was not successull (message from promise)");

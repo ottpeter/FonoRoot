@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { getBuyableTokens, login, logout } from '../utils';
 import { utils } from 'near-api-js';
 import Map from "../Map";
 import 'regenerator-runtime/runtime';
 import Globe from 'react-globe.gl';
 import SmallUploader from '../Admin/SmallUploader';
+import * as THREE from "three";
+import countriesGeo from "../assets/countries.json";
 
 
-import getConfig from '../config'
 import TokenModal from './TokenModal';
-import { getNextBuyableInstance } from '../utils';
-const { networkId } = getConfig(process.env.NODE_ENV || 'development')
 
 export default function Main({newAction}) {
   const [nftList, setNftList] = React.useState([]);
@@ -45,6 +44,13 @@ export default function Main({newAction}) {
         successMsg: "Success!", successMsgDesc: "You bought a new NFT!",
       });
     }
+    
+    console.log("geo: ", countriesGeo)
+    const jsonified = JSON.parse(countriesGeo);
+    console.log("jsoonified: ", jsonified);
+    fetch(countriesGeo)
+      .then(res => { console.log(res); return res.json()})
+      .then((json) => setCountries(json));
 
     const buyable = await getBuyableTokens();
     console.log("NEXT NFTs: ", buyable);
@@ -53,6 +59,7 @@ export default function Main({newAction}) {
 
 
   /* DEMO */
+const [countries, setCountries] = React.useState([]);
 const [countryColors, setCountryColors] = React.useState(Array(177).fill("#FFFFFF"));
 const [colorHistory, setColorHistory] = React.useState(["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"]);
 const [lastClicked, setLastClicked] = React.useState(0);
@@ -115,84 +122,31 @@ function stringifyColorsData() {
 
   return JSON.stringify(obj, null, 2);
 }
-/*
-<SmallUploader onDrop={(files) => loadClick(files)} accept={"application/json"} />
-<a href={ URL.createObjectURL(new Blob([stringifyColorsData()], { type: "application/json" }) )} download={"colors.json"}>SAVE</a>
-<div>
-  <button style={{ backgroundColor: colorHistory[0], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[0])} ></button>
-  <button style={{ backgroundColor: colorHistory[1], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[1])} ></button>
-  <button style={{ backgroundColor: colorHistory[2], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[2])} ></button>
-  <button style={{ backgroundColor: colorHistory[3], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[3])} ></button>
-  <button style={{ backgroundColor: colorHistory[4], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[4])} ></button>
-  <button style={{ backgroundColor: colorHistory[5], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[5])} ></button>
-  <button style={{ backgroundColor: colorHistory[6], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[6])} ></button>
-  <button style={{ backgroundColor: colorHistory[7], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[7])} ></button>
-  <button style={{ backgroundColor: colorHistory[8], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[8])} ></button>
-  <button style={{ backgroundColor: colorHistory[9], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[9])} ></button>
-  <button style={{ backgroundColor: colorHistory[10], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[10])} ></button>
-  <button style={{ backgroundColor: colorHistory[11], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[11])} ></button>
-  <button style={{ backgroundColor: colorHistory[12], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[12])} ></button>
-  <button style={{ backgroundColor: colorHistory[13], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[13])} ></button>
-  <button style={{ backgroundColor: colorHistory[14], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[14])} ></button>
-  <button style={{ backgroundColor: colorHistory[15], width: "100px", height: "50px" }} onClick={() => setColorForLastClicked(colorHistory[15])} ></button>
-</div>
-<input type="color" id="waterColor" name="waterColor" value={waterColor} onChange={(e) => setWaterColor(e.target.value)}/> 
-<input type="color" id="lineColor" name="lineColor" value={lineColor} onChange={(e) => setLineColor(e.target.value)}/> 
-<input type="range" id="markerSize" name="markerSize" min="1" max="50" value={markerSize} onChange={(e) => setMarkerSize(e.target.value)}/> 
-<input type="color" id="markerColor" name="markerColor" value={markerColor} onChange={(e) => setMarkerColor(e.target.value)}/>
-<input type="range" id="globeZoom" name="globeZoom" value={zoom} onChange={(e) => setZoom(e.target.value)} min={"20"} max={"900"} />
-
-<label>SELECTED: </label>
-<input 
-  type="color" 
-  id="countryColor" 
-  name="countryColor" 
-  value={countryColors[lastClicked]} 
-  onChange={(e) => setColor(e.target.value, lastClicked)}
-/>
-
-<div style={{ textAlign: "center" }}>
-  <div style={{ padding: "1rem 0" }}>
-    <button
-      className="btn"
-      onClick={() => changeCenter([-73.9808, 40.7648])}
-    >
-      {"New York"}
-    </button>
-    <button
-      className="btn"
-      onClick={() => changeCenter([-9.13333, 38.71667])}
-    >
-      {"Lisbon"}
-    </button>
-    <button
-      className="btn"
-      onClick={() => changeCenter([19.03991, 47.49801])}
-    >
-      {"Budapest"}
-    </button>
-  </div>
-  </div>
-  
-  */
-
-  //setTimeout(() => {
-    //setCenter((prev) => {
-      //const newCenter = [prev[0] + 0.2, prev[1] + 0.2];
-//      return [...newCenter];
-//    })
-  //}, 200)
 
 
   const coordList = [
     [-73.9808, 40.7648],
     [-9.13333, 38.71667],
     [19.03991, 47.49801]
-  ]
+  ];
 
+  const globeEl = useRef();  
+  const [autoRotateSpeed, setAutoRotateSpeed] = useState(1);
+  
+  React.useEffect(() => {
+    if (globeEl.current) {
+      console.log("globeEl.current", globeEl.current.controls());
+      globeEl.current.controls().autoRotate = true;
+      globeEl.current.controls().autoRotateSpeed = autoRotateSpeed;
+    }
+  }, [globeEl.current])
  
- return (
+  return (
    <>
+      <input type="range" min={0.0} step={0.1} max={100} value={autoRotateSpeed} onChange={(e) => {
+        globeEl.current.controls().autoRotateSpeed = e.target.value;
+        setAutoRotateSpeed(e.target.value);
+      }}></input><p style={{display: "inline", paddingLeft: "10px"}}>{autoRotateSpeed}</p>
       {openModal && (
         <TokenModal 
           openModal={openModal}
@@ -204,19 +158,14 @@ function stringifyColorsData() {
         />
       )}
       <div id="globeContainer">
-        <Map
-          center={center} 
-          waterColor={waterColor} 
-          colors={countryColors} 
-          lineColor={lineColor} 
-          markerSize={markerSize} 
-          markerColor={markerColor}
-          globeSize={140}
-          width={500}
-          height={300}
-          setLastClicked={setLastClicked}
-          pushColor={pushColor}
-          selectCountry={selectCountry}
+        <Globe 
+          ref={globeEl}
+          globeImageUrl={"//unpkg.com/three-globe/example/img/earth-dark.jpg"}
+          hexPolygonsData={countriesGeo.features}
+          hexPolygonResolution={3}
+          hexPolygonMargin={0.3}
+          hexPolygonColor={() => `#${Math.round(Math.random() * Math.pow(2, 24)).toString(16).padStart(6, '0')}`}
+        
         />
       </div>
 
