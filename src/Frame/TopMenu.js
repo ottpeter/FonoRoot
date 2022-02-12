@@ -1,5 +1,4 @@
 import React from 'react';
-import { utils } from 'near-api-js';
 import 'regenerator-runtime/runtime';
 import Logo from './Logo';
 import Notifications from '../Activity/Notifications';

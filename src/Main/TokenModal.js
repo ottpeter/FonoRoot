@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { buyNFTfromVault } from '../utils';
 import PreviewBox from '../Admin/PreviewBox';
 import { utils } from 'near-api-js';
+import AudioPlayer from '../Common/AudioPlayer';
 
 
 export default function TokenModal({id, metadata, newAction, openModal, setOpenModal}) {
@@ -63,22 +64,47 @@ export default function TokenModal({id, metadata, newAction, openModal, setOpenM
 
   console.log("metadata: ", metadata);
   console.log("extra: ", extra);
-
-  return (
-    <>
-      {openModal && (
-        <div className="nftDetailsModal" onBlur={() => setOpenModal(false)} tabIndex={"0"} >
-          <PreviewBox 
-            title={metadata.title}
-            image={{name: metadata.description, src: image}}
-            music={{name: "Generation: " + extra.generation, src: music}}
-            price={utils.format.formatNearAmount(extra.original_price)}
-          />
-          
-          <button onClick={buyNFT}>BUY</button>
-          <button onClick={() => setOpenModal(false)}>CLOSE</button>
+  /*
+  + put aside
+  <PreviewBox 
+    title={metadata.title}
+    image={{name: metadata.description, src: image}}
+    music={{name: "Generation: " + extra.generation, src: music}}
+    price={utils.format.formatNearAmount(extra.original_price)}
+  />
+  onBlur={() => setOpenModal(false)} tabIndex={"0"}
+  
+  */
+ 
+ return (
+   <>
+      <div className="nftDetailsModal"  >
+        <div id="nftDetailsModalBar">
+          <p>{metadata.title}</p>
+          <button onClick={() => setOpenModal(false)}>X</button>
         </div>
-      )}
+        <div id="nftDetailsModalContent">
+          <div id="nftDetailsModalPicture">
+            <img src={image} alt={metadata.title}></img>
+          </div>
+          <div id="nftDetailsModalRightSide">
+            {metadata.description}
+          </div>
+          <div id="nftDetailsModalAudio">
+            {music && <AudioPlayer music={music}/>}
+          </div>
+          <div id="nftDetailsModalButtons">
+            GEN {extra.generation}
+            <button onClick={buyNFT} id="nftBuyButton"></button>
+          </div>
+        </div>
+        
+        
+        
+        
+        
+        
+      </div>
     </>
   );
 }

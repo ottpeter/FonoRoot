@@ -1,17 +1,4 @@
-//import configObj from './projectConfig.json';
-//const configJSONFile = require('./main.configFile');
-
-/*async function getContractName() {
-  if (typeof window === 'undefined') return;
-  console.log("configJSONFile: ", configJSONFile);
-  return;
-  const fetchObj = await fetch(window.location.origin + window.location.pathname + '/' + configJSONFile)
-  .then((response) => response.json())
-  .catch((err) => console.error(err));
-  console.log("fetchObj: ", fetchObj)
-  return fetchObj.contractName;
-}*/
-
+/** We don't use this for config. We use getRealConfig for config */
 const CONTRACT_NAME = process.env.CONTRACT_NAME;
 
 

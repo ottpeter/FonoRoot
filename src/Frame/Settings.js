@@ -9,7 +9,7 @@ export default function Settings({settingsOpen}) {
   function buyMoreCopies() {
     console.log(`I would like to buy ${copies} more storage copies for ${years} years.`);
   }
-
+  // Crust does not have an API that we would need for this to work.
 
   return (
     <>

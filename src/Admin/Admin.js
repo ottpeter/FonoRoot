@@ -4,7 +4,7 @@ const all = require('it-all')
 const CryptoJS = require('crypto-js');
 const crustPin = require('@crustio/crust-pin').default;
 import MediaDropzone from './MediaDropzone';
-import { getSeed, mintRootNFT, setSeed, deployContract } from '../utils';
+import { getSeed, mintRootNFT, setSeed, createAccount, deployContract } from '../utils';
 import PreviewBox from './PreviewBox';
 import Loading from './Loading';
 import SmallUploader from './SmallUploader';
@@ -14,20 +14,20 @@ import ConnectWallet from './ConnectWallet';
 
 export default function Admin({newAction}) {
   const [ipfsNode, setIpfsNode] = useState(null);
-  const [pageSwitch, setPageSwitch] = useState(0);              // If no Crust seed is set yet, the user has to provide one
+  const [pageSwitch, setPageSwitch] = useState(0);                               // If no Crust seed is set yet, the user has to provide one
   
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [price, setPrice] = useState("0");
   
   // For the image
-  const [image, setPreview] = useState({name: "empty", src: "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D"});                     // This will store actual data
+  const [image, setPreview] = useState({name: "", src: null});                   // This will store actual data
   const [imageReady, setImageReady] = useState(false);
   const [imageCID, setImageCID] = useState("");
   const [imageHash, setImageHash] = useState("");
   
   // For the music
-  const [music, setMusic] = useState({name: "empty", src: null});                     // This will store actual data
+  const [music, setMusic] = useState({name: "", src: null});                     // This will store actual data
   const [musicReady, setMusicReady] = useState(false);
   const [musicCID, setMusicCID] = useState("");
   const [musicHash, setMusicHash] = useState("");
@@ -57,9 +57,10 @@ export default function Admin({newAction}) {
     let href = window.location.href;
     href = href.slice(0, href.indexOf("?"));
     history.pushState(null, "Admin", href + "?admin=1");
+    
     if (urlParams.includes('errorCode')) {
       newAction({
-        errorMsg: "There was an error during the transaction!", errorMsgDesc: "errorCode",
+        errorMsg: "There was an error during the transaction!", errorMsgDesc: URLSearchParams.get('errorCode'),
       }); 
     } else if (urlParams.includes('transactionHashes') && urlParams.includes('setseed')) {
       newAction({
@@ -71,7 +72,6 @@ export default function Admin({newAction}) {
       });
     }
 
-    //setPageSwitch(1);return;
     const seedBoolean = await getSeed() && true;
     if (seedBoolean) setPageSwitch(2);                        // Key is already set
     else setPageSwitch(1);                                    // Need to set key
@@ -79,11 +79,13 @@ export default function Admin({newAction}) {
     setIpfsNode(tempIpfsNode);
   }, [])
 
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   async function crustPin3Times(ipfsFile) {
   console.log("ipfsFile: ", ipfsFile);
   console.log("ipfsFile.cid.toString(): ", ipfsFile.cid.toString())
-    const crust_seed = await getSeed();                     // Get the seed from the blockchain
-    const crust = new crustPin(`${crust_seed}`);            // Crust will pin the file on it's IPFS nodes
     
     const redundancyCount = 3;
     const tolerance = 2;                                    // Minimum success number
@@ -94,9 +96,12 @@ export default function Admin({newAction}) {
       let success = false;
       let tryCount = 0;
       do {
+        const crust_seed = await getSeed();                     // Get the seed from the blockchain
+        const crust = new crustPin(`${crust_seed}`);            // Crust will pin the file on it's IPFS nodes
         success = await crust.pin(await ipfsFile.cid.toString());
         console.log("success inside loop: ", success);
         if (success) successNum++;
+        await sleep(1000);
         tryCount++;
       } while (tryCount < maxTry && success === false);
     }
@@ -182,12 +187,6 @@ export default function Admin({newAction}) {
     };
   });
 
-
-  async function testwrapper() {
-    const plaintext = await getSeed();
-    console.log("the key is: ", plaintext)
-  }
-
   function createNFT() {
     if (!(imageReady && musicReady)) {
       newAction({
@@ -204,6 +203,12 @@ export default function Admin({newAction}) {
     if (desc.length === 0) {
       newAction({
         errorMsg: "The description can not be empty!", errorDesc: ""
+      });
+      return;
+    }
+    if (price === "0") {
+      newAction({
+        errorMsg: "You have to set a price!", errorDesc: ""
       });
       return;
     }
@@ -227,7 +232,7 @@ export default function Admin({newAction}) {
   async function folderExperiment() {
     if (!ipfsNode) { console.log("The IPFS node is not ready."); return; }
 
-    await deployContract();
+    //await deployContract();
     return
 
     const configObj = {
@@ -276,7 +281,7 @@ export default function Admin({newAction}) {
   if (pageSwitch === 0) return <Loading />
 
   return (
-    <>
+    <main id="adminMain">
       {pageSwitch === 1 && <div id="keyInput" className="keyInput">
         <p>Enter CRUST Key</p>
         <input onChange={(e) => setMnemonic(e.target.value)}></input>
@@ -327,8 +332,11 @@ export default function Admin({newAction}) {
           <button onClick={createNFT} className="mainButton">Mint</button>
         </div>
         <button onClick={folderExperiment}>CLONE</button>
+        <button onClick={createAccount}>Create Account</button>
+        <button onClick={deployContract}>Deploy Contract</button>
+        <button></button>
       </div>
     
-    </>
+    </main>
   )
 }

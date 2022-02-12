@@ -4,6 +4,7 @@ import TopMenu from "./TopMenu";
 import Footer from "./Footer";
 
 export default function Layout() {
+  // We are not using this 
   return(
     <>
       <TopMenu />

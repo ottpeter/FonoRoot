@@ -1,0 +1,23 @@
+<svg width="120" height="37" viewBox="0 0 120 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="3" y="1" width="2" height="2" fill="#333333"/>
+<rect x="2" y="2" width="1" height="3" fill="#333333"/>
+<rect x="1" y="3" width="1" height="3" fill="#333333"/>
+<rect y="5" width="2" height="1" fill="#333333"/>
+<rect width="2" height="2" transform="matrix(-1 0 0 1 117 1)" fill="#333333"/>
+<rect width="1" height="3" transform="matrix(-1 0 0 1 118 2)" fill="#333333"/>
+<rect width="1" height="3" transform="matrix(-1 0 0 1 119 3)" fill="#333333"/>
+<rect width="2" height="1" transform="matrix(-1 0 0 1 120 5)" fill="#333333"/>
+<rect x="3" y="34" width="2" height="2" fill="#333333"/>
+<rect x="2" y="32" width="1" height="3" fill="#333333"/>
+<rect width="1" height="3" transform="matrix(1 0 0 -1 1 34)" fill="#333333"/>
+<rect width="2" height="1" transform="matrix(1 0 0 -1 0 32)" fill="#333333"/>
+<rect width="2" height="2" transform="matrix(-1 0 0 1 117 34)" fill="#333333"/>
+<rect width="1" height="3" transform="matrix(-1 0 0 1 118 32)" fill="#333333"/>
+<rect x="119" y="34" width="1" height="3" transform="rotate(180 119 34)" fill="#333333"/>
+<rect x="120" y="32" width="2" height="1" transform="rotate(180 120 32)" fill="#333333"/>
+<rect x="5" width="110" height="2" fill="#333333"/>
+<rect x="5" y="35" width="110" height="2" fill="#333333"/>
+<path d="M48.0238 17.9688H51.9301V17.1875H52.7113V15.625H51.9301V14.8438H48.0238V17.9688ZM46.4613 24.2188V13.2812H52.7113V14.0625H53.4926V14.8438H54.2738V17.9688H53.4926V19.5312H54.2738V22.6562H53.4926V23.4375H52.7113V24.2188H46.4613ZM48.0238 22.6562H51.9301V21.875H52.7113V20.3125H51.9301V19.5312H48.0238V22.6562ZM56.6176 22.6562H55.8363V13.2812H57.3988V21.875H58.1801V22.6562H61.3051V21.875H62.0863V13.2812H63.6488V22.6562H62.8676V23.4375H62.0863V24.2188H57.3988V23.4375H56.6176V22.6562ZM69.8988 24.2188H68.3363V20.3125H67.5551V19.5312H66.7738V18.75H65.9926V17.9688H65.2113V13.2812H66.7738V17.1875H67.5551V17.9688H68.3363V18.75H69.8988V17.9688H70.6801V17.1875H71.4613V13.2812H73.0238V17.9688H72.2426V18.75H71.4613V19.5312H70.6801V20.3125H69.8988V24.2188Z" fill="#333333"/>
+<rect y="6" width="2" height="25" fill="#333333"/>
+<rect width="2" height="25" transform="matrix(-1 0 0 1 120 6)" fill="#333333"/>
+</svg>

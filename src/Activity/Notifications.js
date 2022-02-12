@@ -4,13 +4,6 @@ import icon from '../assets/bell_with_dot.svg'
 
 
 export default function ActivityBox({setShowActivity, showActivity, actionHistory}) {
-  /* This probably does not exist
-  if (listItem.infoMsg) return <li className="infoNotification"><Message title={listItem.infoMsg} desc={listItem.infoMsgDesc} /></li>
-  className="errorNotification" not used yet
-   
-  
-  
-  */
  let lastFive = [];
  if (actionHistory) lastFive = actionHistory.slice(-5).reverse();
  

@@ -35,7 +35,7 @@ export default function MyNFTs({newAction}) {
 
 
   return (
-    <>
+    <main>
       <div>
         List
         <ul>
@@ -55,6 +55,6 @@ export default function MyNFTs({newAction}) {
           newAction={newAction} 
         />
       }
-    </>
+    </main>
   );
 }

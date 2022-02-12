@@ -1,6 +1,6 @@
 import React from 'react';
 import Price from '../Common/Price';
-import AudioPlayer from './AudioPlayer';
+import AudioPlayer from '../Common/AudioPlayer';
 
 export default function PreviewBox({title, image, music, price}) {
   return (
@@ -19,7 +19,7 @@ export default function PreviewBox({title, image, music, price}) {
           {music.name}
         </div>
         <div className="previewBoxItem">
-          <AudioPlayer music={music} />
+          <AudioPlayer music={music.src} />
         </div>
         <div className="previewBoxItem">
           <Price price={price}/>

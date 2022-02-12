@@ -3,6 +3,8 @@
   --footer-bg: #dfdbe6;
   --main-bg: #E5E5E5;
   --box-color: white;
+  --control-grey: #333333;
+  --modal-grey: #e7e7e7;
   --nav-size: 64px;
   --footer-size: 64px;
   
@@ -38,6 +40,16 @@
   src: url('./assets/skPrimo.ttf');
 }
 
+@font-face {
+  font-family: VCR;
+  src: url('./assets/VCR_OSD_MONO_1.001.ttf');
+}
+
+@font-face {
+  font-family: IBM;
+  src: url('./assets/IBMPlexMono-Regular.ttf');
+}
+
 body {
   padding: 0;
   margin: 0;
@@ -53,6 +65,9 @@ nav {
   height: var(--nav-size);
   width: 100%;
   background-color: var(--nav-bg);
+}
+#mainNav {
+  background: transparent;
 }
 .logo {
   flex-grow: 1;
@@ -160,11 +175,20 @@ footer {
   background-color: var(--footer-bg);
   align-items: center;
 }
+#mainFooter {
+  background: transparent;
+}
 
 main {
-  padding-top: var(--nav-size);
-  padding-bottom: var(--footer-size);
   background-color: var(--main-bg);
+  background: url('./assets/background_small.png');
+  height: 100vh;
+  background-size: cover;
+  overflow: hidden;
+  background-repeat: no-repeat;
+}
+#adminMain {
+  overflow: scroll;
 }
 
 .adminMain {
@@ -292,6 +316,8 @@ input[type=number] {
 .previewBoxItem {
   grid-column-start: 1;
   grid-column-end: 4;
+  display: flex;
+  align-items: center;
 }
 
 .imageDropZone {
@@ -371,6 +397,44 @@ input[type=number] {
   width: 30%;
 }
 
+.musicControlsButton {
+  flex-shrink: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+.musicControlsSlider {
+  flex-grow: 1;
+  width: 100%;
+  height: 2px;
+  margin-left: 20px;
+  margin-right: 20px;
+  background-color: var(--control-grey);
+}
+.musicControlsSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 8px;
+  width: 20px;
+  border: 9px solid var(--control-grey);
+  border-top: none;
+  border-bottom: none;
+  background-color: var(--control-grey);
+  margin-top: -5px;
+  border-radius: 8px;
+}
+.musicControlsSlider::-moz-range-thumb {
+  -webkit-appearance: none;
+  height: 8px;
+  width: 20x;
+  border: 9px solid var(--control-grey);
+  border-top: none;
+  border-bottom: none;
+  background-color: var(--control-grey);
+  margin-top: -5px;
+  border-radius: 8px;
+}
+
 #nftButtonsList {
   position: absolute;
   z-index: 3;
@@ -401,11 +465,97 @@ input[type=number] {
 
 .nftDetailsModal {
   position: absolute;
-  width: 80%;
-  height: 80%;
+  display: grid;
+  grid-template-areas: 
+    'bar'
+    'content';
   top: 100px;
   left: 16%;
-  background-color: rgba(255, 255, 255, 0.90);
+  width: 1000px;
+  /*background-color: rgba(255, 255, 255, 0.90);*/
+  border: 2px solid #2275ac;
+  box-shadow: 0px 1px 4px rgba(0,0,0, 0.2);
+  background-color: var(--modal-grey);
+}
+#nftDetailsModalBar {
+  grid-area: bar;
+  font-family: VCR;
+  font-size: 16px;
+  height: var(--spacing-3);
+  border-bottom: 1px solid #333;
+  
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+#nftDetailsModalBar p {
+  margin: -10px 0;
+  flex-grow: 1;
+  text-align: center;
+}
+#nftDetailsModalBar button {
+  margin: -10px 10px;
+  border: 1px solid var(--control-grey);
+  background: transparent;
+  font-family: VCR;
+  font-size: 16px;
+}
+#nftDetailsModalContent {
+  grid-area: content;
+
+  padding: var(--spacing-5) var(--spacing-5) var(--spacing-2) var(--spacing-3);
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  grid-template-areas: 
+  'picture right'
+  'audio buttons';
+}
+#nftDetailsModalPicture {
+  grid-area: picture;
+  padding-right: 25px;
+}
+#nftDetailsModalPicture img {
+  width: 100%;
+}
+#nftDetailsModalRightSide {
+  grid-area: right;
+
+  padding: var(--spacing-1);
+  font-family: IBM;
+  font-size: 14px;
+  border: solid 1px var(--control-grey);
+}
+#nftDetailsModalAudio {
+  grid-area: audio;
+  height: 100px;
+  padding-right: 25px;
+  
+  display: flex;
+  align-items: center;
+}
+#nftDetailsModalButtons {
+  grid-area: buttons;
+  height: 100px;
+  font-family: VCR;
+  font-size: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+#nftBuyButton {
+  background-image: url('./assets/buy.svg');
+  width: 120px;
+  height: 37px;
+  background-repeat: no-repeat;
+  border: none;
+  background-color: var(--modal-grey);
+  border-radius: 2px;
+  margin-left: var(--spacing-3);
+}
+#nftBuyButton:hover {
+  background-image: url('./assets/buyHover.svg');
 }
 
 /* Toast messages*/

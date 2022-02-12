@@ -7,7 +7,9 @@ import Admin from './Admin/Admin';
 import NoPage from './NoPage';
 import Main from './Main/Main';
 import TopMenu from './Frame/TopMenu';
+import MainTopMenu from './Main/TopMenu';
 import Footer from './Frame/Footer';
+import MainFooter from './Main/Footer';
 import Message from './Activity/Message';
 import Pending from './Activity/Pending';
 import Ok from './Activity/Ok';
@@ -42,20 +44,11 @@ export default function App() {
     setConfigObj(fetchObj);
   }, [])
   
-  
-  //const location = window.location.pathname;
-  //console.log("location: ", location);
-
-  /**STATES */
-
-  
-
   function initContract() {
     const args = {
       owner_id: process.env.CONTRACT_NAME || configObj.contractName,
       admin: "optr.testnet"
     }
-    
     // This could be 'new' for user provided init
     window.contract.new_default_meta(args)
       .then((msg) => console.log("Initialized! ", msg))
@@ -111,76 +104,41 @@ export default function App() {
     }
   }
 
-  console.log("actionHistory: ", actionHistory);
-  //const urlParams = ;  
-  //new URLSearchParams(location.search);
-
-
-  /*
-  
-  <ActivityBox setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} />
-  */
-
   
   /** We use url params instead of routes, because the IPFS gateways would think that we are looking for a file */
   if (urlParams.includes('init')) {
     initContract();
-    return;
+    return <p>init...</p>;
   }
- 
   if (urlParams.includes('admin')) {
     return (
       <>
         <ToastContainer hideProgressBar={true} position="bottom-right" transition={Slide} />
-        <TopMenu 
-          setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} 
-          setShowWallet={setShowWallet} showWallet={showWallet}
-        />
-        <main>
-          <Admin newAction={newAction} />
-        </main>
+        <TopMenu setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} 
+          setShowWallet={setShowWallet} showWallet={showWallet} />
+        <Admin newAction={newAction} />
         <Footer />
       </>
     );
   } 
-  
   if (urlParams.includes('my-nfts')) {
     return (
       <>
         <ToastContainer hideProgressBar={true} position="bottom-right" transition={Slide} />
-        <TopMenu 
-          setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} 
-          setShowWallet={setShowWallet} showWallet={showWallet}
-        />
-        <main>
-          <MyNFTs newAction={newAction} />
-        </main>
-        <Footer />
+        <MainTopMenu setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} 
+          setShowWallet={setShowWallet} showWallet={showWallet} />
+        <MyNFTs newAction={newAction} />
+        <MainFooter />
       </>
     );
   } else {
     return (
       <>
-        <ToastContainer
-          position="bottom-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          />
-        <TopMenu 
-          setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} 
-          setShowWallet={setShowWallet} showWallet={showWallet}
-          />
-        <main>
-          <p>Test Value: {configObj.test}</p>
-          <Main newAction={newAction} />
-        </main>
-        <Footer />
+        <ToastContainer position="bottom-right" autoClose={5000} />
+        <MainTopMenu setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} 
+          setShowWallet={setShowWallet} showWallet={showWallet} />
+        <Main newAction={newAction} configObj={configObj} />
+        <MainFooter />
       </>
     );    
   }

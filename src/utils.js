@@ -44,10 +44,8 @@ async function getContractName() {
   const fetchObj = await fetch(window.location.origin + window.location.pathname + '/projectConfig.json')
   .then((response) => response.json())
   .catch((err) => console.error(err));
-  console.log("fetchObj: ", fetchObj)
   return fetchObj.contractName;
 }
-//const nearConfig = getConfig(process.env.NODE_ENV || 'development');    // THIS IS NOT INSIDE ASYNC
 
 
 // Initialize contract & set global variables
@@ -158,6 +156,7 @@ export async function buyNFTfromVault(tokenId, price) {
 export async function getBuyableTokens() {
   let rootIDs = null;
   let inVault = null;
+  const contractAccount = (await getRealConfig('development')).contractName
 
   console.log(window.accountId)
   console.log(contractAccount)
@@ -237,32 +236,42 @@ export async function transferNft(tokenId, receiverId) {
   return success;
 }
 
-export async function deployContract() {
-  /*const account = await near.account(window.accountId);
-  const keyStore = new keyStores.BrowserLocalStorageKeyStore();
-  const keyPair = await keyStore.getKey("testnet", window.accountId);
-  await account.addKey(keyPair.publicKey);*/
-  
-  
+/*exp1 */
+export async function createAccount() {
+  const near = await connect(Object.assign({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() } }, await getRealConfig('development')));
+  const wallet = new WalletConnection(near);
+  const walletAccountObj = wallet.account();
+
+  const keyPair = utils.KeyPairEd25519.fromRandom();
+  const newPub = keyPair.publicKey;
+  const newPriv = keyPair.secretKey;
+  console.log("newPub: ", newPub.toString())
+  console.log("privKey: ", newPriv.toString())
+  const newAcc = await walletAccountObj.createAccount(
+    "cexp.optr.testnet", // new account name
+    newPub, // public key for new account
+    "5000000000000000000000" // initial balance for new account in yoctoNEAR
+  );
+}
+/*exp2 */
+export async function deployContract() {  
   // create wallet connection
   const near = await connect(Object.assign({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() } }, await getRealConfig('development')));
   const wallet = new WalletConnection(near);
-  // returns account object for transaction signing
   const walletAccountObj = wallet.account();
+  const theKeyPair = KeyPair.fromString("29YxHipZA1rCN4zpjEhhm1u98HuqCb16WffZ5wPDKRz894PaypeztGuFKPVq3Bji1bvQsPF3Fb3G5iECHYAiBVci");
+  const thePubKey = null;
+  const thePrivKey = KeyPair.fromString();
+  const account = await near.account("cexp.optr.testnet");
+  account.addKey(theKeyPair.getPublicKey());
 
   const getObj = await fetch(window.location.origin + window.location.pathname + '/main.wasm')
   .then((resp) => resp.arrayBuffer())
   .catch((err) => console.error("Error while fetching .wasm file: ", err));
   const contract = new Uint8Array(getObj);
-  const newPub = utils.KeyPairEd25519.fromRandom().publicKey
-  console.log("newPub: ", newPub.toString())
-  const newAcc = await walletAccountObj.createAccount(
-    "cexp.optr.testnet", // new account name
-    newPub, // public key for new account
-    "5000000000000000000000" // initial balance for new account in yoctoNEAR
-    );
-  const thePubKey = KeyPair.fromString("")
-  const response = await walletAccountObj.deployContract("cexp.optr.testnet", newPub, contract, "0");
+  const result = account.deployContract(contract);
+  
+  //const response = await walletAccountObj.deployContract("cexp.optr.testnet", newPub, contract, "0");
   console.log(response);
 }
 

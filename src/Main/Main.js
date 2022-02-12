@@ -1,27 +1,21 @@
 import React, { useState, useRef } from 'react';
 import { getBuyableTokens, login, logout } from '../utils';
-import { utils } from 'near-api-js';
-import Map from "../Map";
 import 'regenerator-runtime/runtime';
 import Globe from 'react-globe.gl';
-import SmallUploader from '../Admin/SmallUploader';
-import * as THREE from "three";
 import countriesGeo from "../assets/countries.json";
+const IPFS = require('ipfs-core');
 
 
 import TokenModal from './TokenModal';
+import ChatTest from './ChatTest';
 
-export default function Main({newAction}) {
+export default function Main({newAction, configObj}) {
+  const [ipfsNode, setIpfsNode] = useState(null);
+  const [orbitDB, setOrbitDB] = useState(null);
   const [nftList, setNftList] = React.useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedNFT, setSelectedNFT] = useState(null);
   const [center, setCenter] = React.useState([0, 0]);
-
-  // Color test
-  const [waterColor, setWaterColor] = React.useState("#072A6C");
-  const [lineColor, setLineColor] = React.useState("#0000FF");
-  const [markerSize, setMarkerSize] = React.useState(6);
-  const [markerColor, setMarkerColor] = React.useState("#FFFF00");
 
   function changeCenter([x, y]) {
     console.log("changeCenter called");
@@ -31,26 +25,37 @@ export default function Main({newAction}) {
   }
 
   React.useEffect(async () => {
+    const ipfsOptions = { repo : './ipfs-chat', };
+    const tempIpfsNode = await IPFS.create(ipfsOptions);
+    setIpfsNode(tempIpfsNode);
+    /*setOrbitDB(tempOrbitdb);
+    // Only run this once
+    if (true) {
+      const options = {
+        // Give write access to everyone
+        accessController: {
+          write: ['*']
+        }
+      }
+      const db = await tempOrbitdb.log('chat-db', options);
+      console.log("db: ", db);
+      console.log("addr: ", db.address.toString());
+    }*/
+
+    
     const urlParams = window.location.search;
     let href = window.location.href;
     href = href.slice(0, href.indexOf("?"));
     history.pushState(null, "Admin", href + "");
     if (urlParams.includes('errorCode')) {
       newAction({
-        errorMsg: "There was an error while processing the transaction!", errorMsgDesc: "errorCode",
+        errorMsg: "There was an error while processing the transaction!", errorMsgDesc: URLSearchParams.get('errorCode'),
       }); 
     } else if (urlParams.includes('transactionHashes')) {
       newAction({
         successMsg: "Success!", successMsgDesc: "You bought a new NFT!",
       });
     }
-    
-    console.log("geo: ", countriesGeo)
-    const jsonified = JSON.parse(countriesGeo);
-    console.log("jsoonified: ", jsonified);
-    fetch(countriesGeo)
-      .then(res => { console.log(res); return res.json()})
-      .then((json) => setCountries(json));
 
     const buyable = await getBuyableTokens();
     console.log("NEXT NFTs: ", buyable);
@@ -58,70 +63,11 @@ export default function Main({newAction}) {
   }, [])
 
 
-  /* DEMO */
-const [countries, setCountries] = React.useState([]);
-const [countryColors, setCountryColors] = React.useState(Array(177).fill("#FFFFFF"));
-const [colorHistory, setColorHistory] = React.useState(["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"]);
-const [lastClicked, setLastClicked] = React.useState(0);
-const [zoom, setZoom] = React.useState(250);
-
-function pushColor(color) {
-  setColorHistory((state) => {
-    state.push(color);
-    state = state.slice(1, undefined);
-    return [...state];
-  });
-}
-
-function selectCountry(index) {
-  pushColor(countryColors[lastClicked]);
-  setLastClicked(index);
-}
-
-function setColor(color, index) {
-  setCountryColors((state) => {
-    state[index] = color;
-    return [...state];
-  });
-}
-
-function setColorForLastClicked(color) {
-  setColor(color, lastClicked);
-}
-
-const loadClick = React.useCallback(async (acceptedFiles) => {
-  const file = acceptedFiles[0];
-  console.log(file);
-  console.log(acceptedFiles)
-  const reader = new FileReader();
-  reader.readAsText(file);
-  reader.onload = function (e) {
-    const saved = JSON.parse(e.target.result)
-    setCountryColors(saved.countryColors);
-    setLineColor(saved.lineColor);
-    setWaterColor(saved.waterColor);
-    setMarkerColor(saved.markerColor);
-    setMarkerSize(saved.markerSize);
+  function nftClicked(nftIndex) {
+    setSelectedNFT(nftIndex);
+    changeCenter(coordList[nftIndex]);
+    setOpenModal(true);
   }
-});
-
-function nftClicked(nftIndex) {
-  setSelectedNFT(nftIndex);
-  changeCenter(coordList[nftIndex]);
-  setOpenModal(true);
-}
-
-function stringifyColorsData() {
-  const obj = {
-    countryColors: countryColors,
-    lineColor: lineColor,
-    waterColor: waterColor,
-    markerColor: markerColor,
-    markerSize: markerSize
-  }
-
-  return JSON.stringify(obj, null, 2);
-}
 
 
   const coordList = [
@@ -142,7 +88,8 @@ function stringifyColorsData() {
   }, [globeEl.current])
  
   return (
-   <>
+    <main>
+      <p>Test Value: {configObj.test}</p>
       <input type="range" min={0.0} step={0.1} max={100} value={autoRotateSpeed} onChange={(e) => {
         globeEl.current.controls().autoRotateSpeed = e.target.value;
         setAutoRotateSpeed(e.target.value);
@@ -157,16 +104,21 @@ function stringifyColorsData() {
           setOpenModal={setOpenModal}
         />
       )}
+
+      {ipfsNode && orbitDB && <ChatTest ipfs={ipfsNode} orbitDB={orbitDB} />}
+
       <div id="globeContainer">
-        <Globe 
+        {false && <Globe 
           ref={globeEl}
           globeImageUrl={"//unpkg.com/three-globe/example/img/earth-dark.jpg"}
           hexPolygonsData={countriesGeo.features}
           hexPolygonResolution={3}
           hexPolygonMargin={0.3}
+          hexPolygonAltitude={0.05}
+          
           hexPolygonColor={() => `#${Math.round(Math.random() * Math.pow(2, 24)).toString(16).padStart(6, '0')}`}
         
-        />
+        />}
       </div>
 
       <div id="nftButtonsList" className="nftButtonsList">
@@ -177,6 +129,6 @@ function stringifyColorsData() {
         ))}
       </div>
 
-    </>
+    </main>
   )
 }
