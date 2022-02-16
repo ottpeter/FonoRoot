@@ -89,11 +89,6 @@ export default function Main({newAction, configObj}) {
  
   return (
     <main>
-      <p>Test Value: {configObj.test}</p>
-      <input type="range" min={0.0} step={0.1} max={100} value={autoRotateSpeed} onChange={(e) => {
-        globeEl.current.controls().autoRotateSpeed = e.target.value;
-        setAutoRotateSpeed(e.target.value);
-      }}></input><p style={{display: "inline", paddingLeft: "10px"}}>{autoRotateSpeed}</p>
       {openModal && (
         <TokenModal 
           openModal={openModal}
@@ -124,7 +119,7 @@ export default function Main({newAction, configObj}) {
       <div id="nftButtonsList" className="nftButtonsList">
         {nftList.map((nft, i) => (
           <button className="nftButton" onClick={() => nftClicked(i)} >
-            {nft.metadata.title}<br></br>
+            {nft.metadata.title}
           </button>
         ))}
       </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import 'regenerator-runtime/runtime';
 import Logo from './Logo';
 import Notifications from '../Activity/Notifications';
-import Wallet from '../Wallet/Wallet';
+import Wallet from '../Admin/Wallet';
 import Settings from './Settings';
 import Help from './Help';
 

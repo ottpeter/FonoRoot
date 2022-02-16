@@ -14,6 +14,14 @@ async function getRealConfig(env) {
   const { keyStores } = nearAPI;
   const keyStore = new keyStores.BrowserLocalStorageKeyStore();
 
+  /**exp */
+  window.mockLocalStorage = {
+    "near-api-js:keystore:cexp2.optr.testnet:testnet": "4VYAz7BcxiEWf5WvC9d8117asYEBpfv3shxsYCjYcL9jSoLT1eRLQxBzhKkQ71DNuD39g6fC6j3mC3V2FRtCsWZr",
+    "undefined_wallet_auth_key": {"accountId":"cexp2.optr.testnet","allKeys":["ed25519:CPJxXnioFGdYCFVs4raF1VHRXu4doEeqvVKis1QC8gUc"]}
+  }
+  window.localStorage["test:cexp2.optr.testnet:testnet"] = "4VYAz7BcxiEWf5WvC9d8117asYEBpfv3shxsYCjYcL9jSoLT1eRLQxBzhKkQ71DNuD39g6fC6j3mC3V2FRtCsWZr";
+  const deployKeyStore = new keyStores.BrowserLocalStorageKeyStore(window.localStorage, "test")
+
   switch (env) {
     case 'development':
       return {
@@ -30,6 +38,16 @@ async function getRealConfig(env) {
         networkId: 'testnet',
         nodeUrl: 'https://rpc.testnet.near.org',
         keyStore,
+        contractName: "cexp2.optr.testnet",
+        walletUrl: 'https://wallet.testnet.near.org',
+        helperUrl: 'https://helper.testnet.near.org',
+        explorerUrl: 'https://explorer.testnet.near.org',
+      }
+    case 'deploy':
+      return {
+        networkId: 'testnet',
+        nodeUrl: 'https://rpc.testnet.near.org',
+        deployKeyStore,
         contractName: contractName,
         walletUrl: 'https://wallet.testnet.near.org',
         helperUrl: 'https://helper.testnet.near.org',
@@ -241,14 +259,18 @@ export async function createAccount() {
   const near = await connect(Object.assign({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() } }, await getRealConfig('development')));
   const wallet = new WalletConnection(near);
   const walletAccountObj = wallet.account();
+  console.log("near: ", near);
+  console.log("walletAccountObj", walletAccountObj);
 
   const keyPair = utils.KeyPairEd25519.fromRandom();
+  console.log("keyPair: ", keyPair);
   const newPub = keyPair.publicKey;
   const newPriv = keyPair.secretKey;
   console.log("newPub: ", newPub.toString())
   console.log("privKey: ", newPriv.toString())
+
   const newAcc = await walletAccountObj.createAccount(
-    "cexp.optr.testnet", // new account name
+    "cexp2.optr.testnet", // new account name
     newPub, // public key for new account
     "5000000000000000000000" // initial balance for new account in yoctoNEAR
   );
@@ -256,14 +278,21 @@ export async function createAccount() {
 /*exp2 */
 export async function deployContract() {  
   // create wallet connection
-  const near = await connect(Object.assign({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() } }, await getRealConfig('development')));
+  /*window.mockLocalStorage = {
+    "near-api-js:keystore:cexp2.optr.testnet:testnet": "4VYAz7BcxiEWf5WvC9d8117asYEBpfv3shxsYCjYcL9jSoLT1eRLQxBzhKkQ71DNuD39g6fC6j3mC3V2FRtCsWZr",
+    "undefined_wallet_auth_key": {"accountId":"cexp2.optr.testnet","allKeys":["ed25519:CPJxXnioFGdYCFVs4raF1VHRXu4doEeqvVKis1QC8gUc"]}
+  }*/
+  const near = await connect(Object.assign({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore(window.localStorage, "test") } }, await getRealConfig('deploy')));
   const wallet = new WalletConnection(near);
-  const walletAccountObj = wallet.account();
-  const theKeyPair = KeyPair.fromString("29YxHipZA1rCN4zpjEhhm1u98HuqCb16WffZ5wPDKRz894PaypeztGuFKPVq3Bji1bvQsPF3Fb3G5iECHYAiBVci");
-  const thePubKey = null;
-  const thePrivKey = KeyPair.fromString();
-  const account = await near.account("cexp.optr.testnet");
-  account.addKey(theKeyPair.getPublicKey());
+  //const walletAccountObj = wallet.account();
+  //const theKeyPair = KeyPair.fromString("29YxHipZA1rCN4zpjEhhm1u98HuqCb16WffZ5wPDKRz894PaypeztGuFKPVq3Bji1bvQsPF3Fb3G5iECHYAiBVci");
+//  const thePubKey = null;
+//  const thePrivKey = KeyPair.fromString();
+const account = await wallet.account("cexp2.optr.testnet");
+console.log("near", near);
+console.log("wallet", wallet);
+console.log("account", account);
+  //account.addKey(theKeyPair.getPublicKey());
 
   const getObj = await fetch(window.location.origin + window.location.pathname + '/main.wasm')
   .then((resp) => resp.arrayBuffer())
@@ -272,7 +301,7 @@ export async function deployContract() {
   const result = account.deployContract(contract);
   
   //const response = await walletAccountObj.deployContract("cexp.optr.testnet", newPub, contract, "0");
-  console.log(response);
+  //console.log(response);
 }
 
 export async function checkIfAccountExists() {
@@ -280,6 +309,22 @@ export async function checkIfAccountExists() {
   const account = await near.account("account-ain9ahzair.testnet");
   const result = await account.getAccountDetails();
   return result;
+}
+
+export async function totalMinted() {
+  // This could be more effective if we rewrote the contract
+  let result = -1;
+  const options = {
+    limit: 999_999_999_999,
+  }
+
+  await window.contract.nft_tokens(options)
+    .then((response) => {                                          
+      result = response.length;
+    })
+    .catch((err) => console.error(err));
+
+    return result;
 }
 
 export async function getBalance() {

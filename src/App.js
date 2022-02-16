@@ -19,6 +19,7 @@ import all from 'it-all';
 
 
 export default function App() {
+  const [currentPage, setCurrentPage] = React.useState('main');
   const [location, SetLocation] = React.useState("");
   const [urlParams, setUrlParams] = React.useState(window.location.search);
   const [configObj, setConfigObj] = React.useState({});
@@ -27,10 +28,7 @@ export default function App() {
   const [showWallet, setShowWallet] = React.useState(false);
 
   React.useEffect(() => {
-    SetLocation(window.location.pathname);
-    console.log("location: ", location);
-    setUrlParams(window.location.search);
-    console.log("urlParams: ", urlParams);
+    doUrlParamsParsing();
     return () => {
       SetLocation("");
     };
@@ -44,6 +42,13 @@ export default function App() {
     setConfigObj(fetchObj);
   }, [])
   
+  function doUrlParamsParsing() {
+    SetLocation(window.location.pathname);
+    console.log("location: ", location);
+    setUrlParams(window.location.search);
+    console.log("urlParams: ", urlParams);
+  }
+
   function initContract() {
     const args = {
       owner_id: process.env.CONTRACT_NAME || configObj.contractName,

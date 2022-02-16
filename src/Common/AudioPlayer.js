@@ -2,7 +2,7 @@ import React from 'react';
 import pauseIcon from '../assets/pause.svg';
 import playIcon from '../assets/play.svg';
 import noVolumeIcon from '../assets/no-volume.svg';
-import volumeIcon from '../assets/volume.svg';
+//import volumeIcon from '../assets/volume.svg';
 
 export default function AudioPlayer({music}) {
   const playerRef = React.useRef();
@@ -10,12 +10,26 @@ export default function AudioPlayer({music}) {
   const [time, setTime] = React.useState("0");
   const [playing, setPlaying] = React.useState(false);
   const [mute, setMute] = React.useState(false);
+  const [icons, setIcons] = React.useState({
+    volume: null,
+    noVolume: null,
+    play: null,
+    pause: null
+  });
+  const [test, setTest] = React.useState(null);
   
   function timeoutFunc() {
     setTime(playerRef.current.currentTime);
   }
   
-  React.useEffect(() => {
+  React.useEffect(async () => {
+    const volumeIcon = await import('../assets/volume.svg');
+    console.log(volumeIcon);
+    setIcons((state) => {
+      state.volume = volumeIcon;
+      return Object.assign({}, state);
+    });
+
     return () => {
       clearTimeout(timeoutId)
     };
@@ -65,9 +79,9 @@ export default function AudioPlayer({music}) {
         />
       }
       {mute?
-        <button className="musicControlsButton" onClick={giveBackAudio}><img src={noVolumeIcon} /></button>
+        <button className="musicControlsButton" onClick={giveBackAudio}><img src={test} /></button>
       :
-        <button className="musicControlsButton" onClick={muteAudio}><img src={volumeIcon} /></button>
+        <button className="musicControlsButton" onClick={muteAudio}><img src={icons.volume} /></button>
       }
     </>
   );

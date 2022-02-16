@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { buyNFTfromVault } from '../utils';
-import PreviewBox from '../Admin/PreviewBox';
-import { utils } from 'near-api-js';
+import close from '../assets/close.svg';
 import AudioPlayer from '../Common/AudioPlayer';
 
 
@@ -81,20 +80,28 @@ export default function TokenModal({id, metadata, newAction, openModal, setOpenM
       <div className="nftDetailsModal"  >
         <div id="nftDetailsModalBar">
           <p>{metadata.title}</p>
-          <button onClick={() => setOpenModal(false)}>X</button>
+          <button onClick={() => setOpenModal(false)}><img src={close} alt='X'></img></button>
         </div>
         <div id="nftDetailsModalContent">
           <div id="nftDetailsModalPicture">
+            <div id="placeholderAtImageSide" className="nftDetailsModalMenuLine"></div>
             <img src={image} alt={metadata.title}></img>
           </div>
           <div id="nftDetailsModalRightSide">
-            {metadata.description}
+            <div className="nftDetailsModalMenuLine">
+              Info
+            </div>
+            <div className="nftDetailsModalRightSideContent">
+              {metadata.description}
+            </div>
+            <div className="nftDetailsModalRightSideGenBox">
+              GEN {extra.generation}
+            </div>
           </div>
           <div id="nftDetailsModalAudio">
             {music && <AudioPlayer music={music}/>}
           </div>
           <div id="nftDetailsModalButtons">
-            GEN {extra.generation}
             <button onClick={buyNFT} id="nftBuyButton"></button>
           </div>
         </div>

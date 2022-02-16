@@ -50,6 +50,11 @@
   src: url('./assets/IBMPlexMono-Regular.ttf');
 }
 
+@font-face {
+  font-family: Technology;
+  src: url('./assets/Technology.ttf');
+}
+
 body {
   padding: 0;
   margin: 0;
@@ -67,6 +72,8 @@ nav {
   background-color: var(--nav-bg);
 }
 #mainNav {
+  margin-top: 30px;
+  align-items: flex-start;
   background: transparent;
 }
 .logo {
@@ -78,8 +85,26 @@ nav {
   line-height: 31px;
   letter-spacing: 0.045em;
   text-transform: uppercase;
+  text-align: center;
+  display: inherit;
+  justify-content: center;
   color: #333333;
   padding-left: var(--spacing-2);
+}
+.leftLogo {
+  margin-left: 30px;
+}
+.rightLogo {
+  margin-right: 30px;
+}
+#topLeftImage {
+  width: 138px;
+}
+#bottomLeftImage {
+  width: 80px;
+}
+#bottomRightImage {
+  width: 165px;
 }
 .controls {
   flex-shrink: 0;
@@ -176,6 +201,8 @@ footer {
   align-items: center;
 }
 #mainFooter {
+  margin-bottom: 30px;
+  align-items: flex-end;
   background: transparent;
 }
 
@@ -201,6 +228,93 @@ main {
   font-size: 40px;
   font-weight: bold;
   text-align: center;
+}
+.mainWalletBadge {
+  background: url('./assets/connect_frame.svg') no-repeat;
+  text-transform: uppercase;
+  font-family: VCR;
+  font-size: 16px;
+  width: 179px;
+  height: 39px;
+  margin-right: 32px;
+  border: none;
+}
+.mainWalletContainer {
+  position: absolute;
+  background: url('./assets/connect_frame.svg') no-repeat;
+  font-family: IBM;
+  font-size: 10px;
+  top: 45px;
+  width: 159px;
+  height: 84px;
+  padding: 8px;
+  text-transform: uppercase;
+  background: transparent;
+  border: 2px solid #333;
+  border-radius: 7px;
+  right: var(--spacing-3);
+  z-index: 9998;
+}
+#mainDisconnect {
+  background: url('./assets/disconnect.svg') no-repeat;
+  width: 84px;
+  height: 28px;
+  border: none;
+}
+#mainDisconnect:hover {
+  background: url('./assets/disconnect_hover.svg') no-repeat;
+}
+#mainWalletBalanceFlex {
+  display: flex;
+  align-items: center;
+}
+#mainWalletBalanceFlex>* {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.walletFlexPlaceholder {
+  flex-grow: 1;
+}
+#mainWalletNearLogo {
+  margin-left: 5px;
+}
+#mainWalletDollarFlex {
+  display: flex;
+  margin-top: 8px;
+  margin-bottom: 20px;
+}
+#mainWalletDollarFlex>* {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+#mainWalletButtonContainer {
+  display: flex;
+  justify-content: center;
+}
+
+
+#counter {
+  font-family: Technology;
+  color: #8fff00;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  width: 209px;
+  border-radius: 2px;
+  background-color: #6b7080;
+  font-size: 16px;
+  margin-left: 6px;
+  margin-right: 6px;
+}
+.digitLabel {
+  display: inline-block;
+  margin-right: 12px;
+}
+.digit {
+  display: inline-block;
+  margin: 0 2px;
+  height: 27px;
+  width: 12px;
+  background-color: #585a62;
 }
 
 .darkeningOverlay {
@@ -416,7 +530,7 @@ input[type=number] {
   -webkit-appearance: none;
   height: 8px;
   width: 20px;
-  border: 9px solid var(--control-grey);
+  border: 7px solid var(--control-grey);
   border-top: none;
   border-bottom: none;
   background-color: var(--control-grey);
@@ -427,7 +541,7 @@ input[type=number] {
   -webkit-appearance: none;
   height: 8px;
   width: 20x;
-  border: 9px solid var(--control-grey);
+  border: 7px solid var(--control-grey);
   border-top: none;
   border-bottom: none;
   background-color: var(--control-grey);
@@ -438,11 +552,62 @@ input[type=number] {
 #nftButtonsList {
   position: absolute;
   z-index: 3;
-  top: 20%;
+  top: 200px;
+  left: 30px;
 }
 .nftButton {
   display: block;
+  font-family: IBM;
+  text-transform: uppercase;
+  width: 80px;
+  height: 29px;
+  border: none;
+  margin-top: 20px;
+  background-color: rgba(43, 58, 111, 0.2);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px);
+  border-radius: 4px;
+
+  animation-name: labelFadeOut;
+  animation-timing-function: ease;
+  animation-duration: 1s;
+  transform-origin: left;
+  /*transition-duration: 1s;
+  transform-origin: left;
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  transition: all 1s ease;*/
+
+  /*background-color: #333333;*/
 }
+.nftButton:hover {
+  background: url('./assets/cd.png') no-repeat;
+  background-size: 32px;
+  padding-left: 48px;
+  text-align: left;
+  background-position: 8px 8px;
+  /*transform: scale(3, 1.6);*/
+  animation-name: labelFadeIn;
+  animation-timing-function: ease;
+  animation-duration: 1s;
+  transform-origin: left;
+  width: 161px;
+  height: 50px;
+}
+@keyframes labelFadeIn {
+  0% { transform: scale(0.65); }
+  
+  100% { transform: scale(1); }
+}
+@keyframes labelFadeOut {
+  0% { transform: scale(1.33); }
+  
+  100% { transform: scale(1); }
+}
+
+
 #globeContainer {
   background-color: #090909;
 }
@@ -473,7 +638,7 @@ input[type=number] {
   left: 16%;
   width: 1000px;
   /*background-color: rgba(255, 255, 255, 0.90);*/
-  border: 2px solid #2275ac;
+  border: 2px solid var(--control-grey);
   box-shadow: 0px 1px 4px rgba(0,0,0, 0.2);
   background-color: var(--modal-grey);
 }
@@ -481,7 +646,7 @@ input[type=number] {
   grid-area: bar;
   font-family: VCR;
   font-size: 16px;
-  height: var(--spacing-3);
+  height: 38px;
   border-bottom: 1px solid #333;
   
   display: flex;
@@ -491,11 +656,12 @@ input[type=number] {
 #nftDetailsModalBar p {
   margin: -10px 0;
   flex-grow: 1;
+  text-transform: uppercase;
   text-align: center;
 }
 #nftDetailsModalBar button {
-  margin: -10px 10px;
-  border: 1px solid var(--control-grey);
+  margin: 0px 2px;
+  border: none;
   background: transparent;
   font-family: VCR;
   font-size: 16px;
@@ -503,7 +669,7 @@ input[type=number] {
 #nftDetailsModalContent {
   grid-area: content;
 
-  padding: var(--spacing-5) var(--spacing-5) var(--spacing-2) var(--spacing-3);
+  padding: var(--spacing-3);
   display: grid;
   grid-auto-columns: minmax(0, 1fr);
   grid-auto-flow: column;
@@ -513,7 +679,9 @@ input[type=number] {
 }
 #nftDetailsModalPicture {
   grid-area: picture;
-  padding-right: 25px;
+  padding-right: 20px;
+  display: flex;
+  flex-direction: column;
 }
 #nftDetailsModalPicture img {
   width: 100%;
@@ -521,14 +689,38 @@ input[type=number] {
 #nftDetailsModalRightSide {
   grid-area: right;
 
+  display: flex;
+  flex-direction: column;
+}
+.nftDetailsModalRightSideContent {
   padding: var(--spacing-1);
   font-family: IBM;
   font-size: 14px;
   border: solid 1px var(--control-grey);
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+.nftDetailsModalRightSideGenBox {
+  font-family: IBM;
+  font-weight: bold;
+  height: 45px;
+  font-size: 14px;
+  border: solid 1px var(--control-grey);
+  display: flex;
+  align-items: center;
+  padding-left: 12px;
+}
+.nftDetailsModalMenuLine {
+  height: 10px;
+  margin-bottom: 20px;
+  font-family: IBM;
+  font-size: 12px;
+  text-transform: uppercase;
+  text-decoration: underline;
 }
 #nftDetailsModalAudio {
   grid-area: audio;
-  height: 100px;
+  margin-top: 20px;
   padding-right: 25px;
   
   display: flex;
@@ -536,12 +728,11 @@ input[type=number] {
 }
 #nftDetailsModalButtons {
   grid-area: buttons;
-  height: 100px;
   font-family: VCR;
   font-size: 16px;
 
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: flex-end;
 }
 #nftBuyButton {
