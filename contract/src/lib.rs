@@ -16,6 +16,7 @@ pub use crate::events::*;
 pub use crate::crust::*;
 pub use crate::buy::*;
 pub use crate::transfer::*;
+pub use crate::guestbook::*;
 
 mod internal;
 mod approval; 
@@ -28,6 +29,7 @@ mod events;
 mod crust;
 mod buy;
 mod transfer;
+mod guestbook;
 
 #[cfg(all(test, not(target_arch = "wasm32")))]
 mod tests;
@@ -50,6 +52,7 @@ pub struct Contract {
     pub token_metadata_by_id: UnorderedMap<TokenId, TokenMetadata>,                        // Keeps track of the token metadata for a given token ID
     pub metadata: LazyOption<NFTContractMetadata>,                                         // Keeps track of the metadata for the contract (not metadata for NFT)
     pub crust_key: String,                                                                 // The encrypted private key for the Crust Network
+    pub guestbook: Vec<GuestBookEntry>,                                                    // The Guestbook is an array of entry objects
 }
 
 /// Helper structure for keys of the persistent collections.
@@ -104,6 +107,7 @@ impl Contract {
                 Some(&metadata),
             ),
             crust_key: "".to_string(),
+            guestbook: Vec::new()
         };
 
         this
