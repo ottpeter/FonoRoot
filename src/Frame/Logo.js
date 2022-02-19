@@ -4,7 +4,7 @@ export default function Logo() {
   function goToHome() {
     let href = window.location.href;
     if (href.includes("?")) {
-      href = href.slice(0, href.indexOf("?"));
+      href = href.slice(0, href.indexOf("?")+1);
     }
     //window.location = href;
     history.replaceState(null, "Home", href);

@@ -15,16 +15,18 @@ import Pending from './Activity/Pending';
 import Ok from './Activity/Ok';
 import Err from './Activity/Err';
 import MyNFTs from './Main/MyNFTs';
+import GuestBook from './Main/GuestBook';
 import all from 'it-all';
 
 
 export default function App() {
-  const [currentPage, setCurrentPage] = React.useState('main');
-  const [location, SetLocation] = React.useState("");
+  //const [currentPage, setCurrentPage] = React.useState('main');
+  //const [location, SetLocation] = React.useState("");
   const [urlParams, setUrlParams] = React.useState(window.location.search);
   const [configObj, setConfigObj] = React.useState({});
   const [actionHistory, setActionHistory] = React.useState([]);
   const [showActivity, setShowActivity] = React.useState(false);
+  const [openGuestBook, setGuestBook] = React.useState(false);
   const [showWallet, setShowWallet] = React.useState(false);
 
   React.useEffect(() => {
@@ -43,10 +45,11 @@ export default function App() {
   }, [])
   
   function doUrlParamsParsing() {
-    SetLocation(window.location.pathname);
-    console.log("location: ", location);
+    //SetLocation(window.location.pathname);
+    //console.log("location: ", location);
+    //console.log("urlParams: ", urlParams);
     setUrlParams(window.location.search);
-    console.log("urlParams: ", urlParams);
+    if (urlParams.includes('guestbook')) setGuestBook(true);
   }
 
   function initContract() {
@@ -129,37 +132,24 @@ export default function App() {
   if (urlParams.includes('my-nfts')) {
     return (
       <>
+        {openGuestBook && ( <GuestBook openModal={openGuestBook} newAction={newAction} setOpenModal={setGuestBook} /> )}
         <ToastContainer hideProgressBar={true} position="bottom-right" transition={Slide} />
         <MainTopMenu setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} 
-          setShowWallet={setShowWallet} showWallet={showWallet} />
+          setShowWallet={setShowWallet} showWallet={showWallet} changePage={doUrlParamsParsing} />
         <MyNFTs newAction={newAction} />
-        <MainFooter />
+        <MainFooter openGuestBook={openGuestBook} setGuestBook={setGuestBook} />
       </>
     );
   } else {
     return (
       <>
+        {openGuestBook && ( <GuestBook openModal={openGuestBook} newAction={newAction} setOpenModal={setGuestBook} /> )}
         <ToastContainer position="bottom-right" autoClose={5000} />
         <MainTopMenu setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} 
-          setShowWallet={setShowWallet} showWallet={showWallet} />
-        <Main newAction={newAction} configObj={configObj} />
-        <MainFooter />
+          setShowWallet={setShowWallet} showWallet={showWallet} changePage={doUrlParamsParsing} />
+        <Main newAction={newAction} configObj={configObj} openGuestBook={openGuestBook} setGuestBook={setGuestBook} />
+        <MainFooter openGuestBook={openGuestBook} setGuestBook={setGuestBook} />
       </>
     );    
   }
-
-  console.log(urlParams)
-
-  
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path={location} element={<Layout />}>
-          <Route index element={<Main />} />
-          <Route path={"?admin"} element={<Admin />} />
-          <Route path={"*"} element={<NoPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  );
 }

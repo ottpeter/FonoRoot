@@ -58,7 +58,7 @@ async function getRealConfig(env) {
   }
 }
 
-async function getContractName() {
+export async function getContractName() {
   const fetchObj = await fetch(window.location.origin + window.location.pathname + '/projectConfig.json')
   .then((response) => response.json())
   .catch((err) => console.error(err));
@@ -82,7 +82,7 @@ export async function initContract() {
     // View methods are read only. They don't modify the state, but usually return some value.
     viewMethods: ['nft_metadata', 'nft_token', 'nft_tokens_for_owner', 'nft_tokens', 'get_crust_key', 'get_next_buyable', 'view_guestbook_entries'],
     // Change methods can modify the state. But you don't receive the returned value when called.
-    changeMethods: ['new_default_meta', 'new', 'mint_root', 'set_crust_key', 'buy_nft_from_vault', 'create_guestbook_entry'],
+    changeMethods: ['new_default_meta', 'new', 'mint_root', 'set_crust_key', 'buy_nft_from_vault', 'transfer_nft', 'create_guestbook_entry'],
   })
 }
 
@@ -306,16 +306,17 @@ console.log("account", account);
   //console.log(response);
 }
 
-export async function sendGuestBookEntry() {
+export async function sendGuestBookEntry(text) {
   const newEntry = {
-    message: "Hello World!",
+    sender: "me",
+    message: text,
     date: new Date().toUTCString(),
   }
 
   const gas = 100_000_000_000_000;
   const amount = utils.format.parseNearAmount("0.1");  
 
-  await window.contract.create_guestbook_entry(newEntry, gas, amount)
+  await window.contract.create_guestbook_entry({ new_entry: newEntry }, gas, amount)
     .then((resp) => console.log("Response from create_guestbook_entry: ", resp))
     .catch((err) => console.error("Error from create_guestbook_entry: ", err));
 }
@@ -324,7 +325,7 @@ export async function getGuestBookEntries() {
   let result = null;
   
   const options = {
-    from_index: 0,
+    from_index: "0",
     limit: 1000000,
   }
 
@@ -333,7 +334,7 @@ export async function getGuestBookEntries() {
       console.log("Response: ", response);
       result = response;
     })
-    .catch((err) => console.error("Error while fetching list of NFTs for connected user!"));
+    .catch((err) => console.error("Error while fetching guestbook entries: ", err));
 
   return result;
 }
@@ -343,6 +344,22 @@ export async function checkIfAccountExists() {
   const account = await near.account("account-ain9ahzair.testnet");
   const result = await account.getAccountDetails();
   return result;
+}
+
+// Will give back all children and the root from a given root. (All NFTs with same media, we could call this a collection)
+export async function getAllFromRoot(rootId) {
+  const options = {
+    limit: 999_999,
+  }
+  let nftTree = [];                                                                        // NFTs that belong to the given root
+
+  await window.contract.nft_tokens(options)
+    .then((totalList) => {                                          
+      nftTree = totalList.filter((item) => item.token_id.includes(rootId));
+    })
+    .catch((err) => console.error(err));
+
+    return nftTree;
 }
 
 export async function totalMinted() {
@@ -376,4 +393,3 @@ export function logout() {
 export async function login() {
   window.walletConnection.requestSignIn((await getRealConfig('development')).contractName)
 }
-

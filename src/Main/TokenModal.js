@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import Draggable from 'react-draggable';
 import { buyNFTfromVault } from '../utils';
 import close from '../assets/close.svg';
 import AudioPlayer from '../Common/AudioPlayer';
 
 
-export default function TokenModal({id, metadata, newAction, openModal, setOpenModal}) {
+export default function TokenModal({id, metadata, image, newAction, openModal, setOpenModal, test}) {
   const [music, setMusic] = useState(null);
-  const [image, setImage] = useState(null);
   const extra = JSON.parse(metadata.extra);
 
   function buyNFT() {
-    console.log("Orig.price: ", extra.original_price);
     const buyPromise = new Promise(async (resolve, reject) => {
       const buyResult = await buyNFTfromVault(id, extra.original_price);
       if (buyResult) {
@@ -27,21 +26,6 @@ export default function TokenModal({id, metadata, newAction, openModal, setOpenM
     });
   }
 
-  function loadImage() {
-    // SHA VERIFICATION SHOULD HAPPEN SOMEWHERE
-    let xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://ipfs.io/ipfs/" + metadata.media);
-    xhr.responseType = "blob";
-    xhr.onload = function() {
-      let blob = xhr.response;
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onload = function(e) {
-        setImage(e.target.result);
-      }
-    }
-    xhr.send();
-  }
   function loadMusic() {
     // SHA VERIFICATION SHOULD HAPPEN SOMEWHERE
     let xhr = new XMLHttpRequest();
@@ -59,24 +43,10 @@ export default function TokenModal({id, metadata, newAction, openModal, setOpenM
   }
 
   loadMusic();
-  loadImage();
 
-  console.log("metadata: ", metadata);
-  console.log("extra: ", extra);
-  /*
-  + put aside
-  <PreviewBox 
-    title={metadata.title}
-    image={{name: metadata.description, src: image}}
-    music={{name: "Generation: " + extra.generation, src: music}}
-    price={utils.format.formatNearAmount(extra.original_price)}
-  />
-  onBlur={() => setOpenModal(false)} tabIndex={"0"}
-  
-  */
  
- return (
-   <>
+  return (
+    <Draggable handle={'#nftDetailsModalBar'} bounds={'main'} >
       <div className="nftDetailsModal"  >
         <div id="nftDetailsModalBar">
           <p>{metadata.title}</p>
@@ -89,7 +59,9 @@ export default function TokenModal({id, metadata, newAction, openModal, setOpenM
           </div>
           <div id="nftDetailsModalRightSide">
             <div className="nftDetailsModalMenuLine">
-              Info
+              <button className="nftDetailsModalMenuButton nftDetailsModalMenuSelected">Info</button>
+              <button className="nftDetailsModalMenuButton"></button>
+              <button className="nftDetailsModalMenuButton"></button>
             </div>
             <div className="nftDetailsModalRightSideContent">
               {metadata.description}
@@ -99,19 +71,17 @@ export default function TokenModal({id, metadata, newAction, openModal, setOpenM
             </div>
           </div>
           <div id="nftDetailsModalAudio">
-            {music && <AudioPlayer music={music}/>}
+            {music ? 
+              <AudioPlayer music={music} test={test} />
+            :
+              <p>loading music... </p>
+            }
           </div>
           <div id="nftDetailsModalButtons">
             <button onClick={buyNFT} id="nftBuyButton"></button>
           </div>
         </div>
-        
-        
-        
-        
-        
-        
       </div>
-    </>
+    </Draggable>
   );
 }

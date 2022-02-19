@@ -8,17 +8,21 @@ import guestBookIcon from '../assets/guestbook.png';
 
 
 /** Footer for Main */
-export default function Footer() {
+export default function Footer({openGuestBook, setGuestBook}) {
   return (
     <footer id="mainFooter">
-      <img src={logo} alt='Logo' className="leftLogo" id="bottomLeftImage" />
+      <button className="controlsButton">
+        <img src={logo} alt='Logo' className="leftLogo" id="bottomLeftImage" />
+      </button>
       <div className="logo">        
         <Twitter />
         <Discord />
         <Insta />
         <GitHub />
       </div>
-      <img src={guestBookIcon} alt='Guestbook'  className="rightLogo" id="bottomRightImage" />
+      <button onClick={() => setGuestBook(!openGuestBook)} className="controlsButton">
+        <img src={guestBookIcon} alt='Guestbook' className="rightLogo" id="bottomRightImage" />
+      </button>
     </footer>
   )
 }

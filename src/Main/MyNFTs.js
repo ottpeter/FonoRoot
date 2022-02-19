@@ -5,6 +5,7 @@ import TransferModal from './TransferModal';
 
 export default function MyNFTs({newAction}) {
   const [list, setList] = useState([]);
+  const [images, setImages] = useState(Array(100).fill(null));
   const [showTransfer, setShowTransfer] = useState(false);
   const [selected, setSelected] = useState(null);
 
@@ -26,7 +27,31 @@ export default function MyNFTs({newAction}) {
     const nftList = await getListForAccount();
     console.log("lista: ", nftList);
     setList(nftList);
+    loadImages(nftList);
   }, []);
+
+  function loadImages(nftList) {
+    // SHA VERIFICATION SHOULD HAPPEN SOMEWHERE
+    console.log("https://ipfs.io/ipfs/" + nftList[i].metadata.media);
+
+    for (let i = 0; i < list.length; i++) {
+      let xhr = new XMLHttpRequest();
+      xhr.open("GET", "https://ipfs.io/ipfs/" + nftList[i].metadata.media);
+      xhr.responseType = "blob";
+      xhr.onload = function() {
+        let blob = xhr.response;
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onload = function(e) {
+          setImages((state) => {
+            state[i] = e.target.result;
+            return [...state];
+          });
+        }
+      }
+      xhr.send();
+    }
+  }
 
   function openTransfer(index) {
     setSelected(index);
@@ -36,13 +61,12 @@ export default function MyNFTs({newAction}) {
 
   return (
     <main>
-      <div>
-        List
+      <div id="listContainer">
         <ul>
           {list && list.map((item, i) => (
             <li>
-              <button onClick={() => openTransfer(i)}>
-                <p>{item.token_id}</p>
+              <button onClick={() => openTransfer(i)} className="nftCard">
+                <img src={images[i]} alt={i}></img>
               </button>
             </li>
           ))}
@@ -53,6 +77,7 @@ export default function MyNFTs({newAction}) {
         <TransferModal 
           token={list[selected]} 
           newAction={newAction} 
+          setOpenModal={setShowTransfer}
         />
       }
     </main>

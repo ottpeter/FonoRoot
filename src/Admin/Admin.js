@@ -39,7 +39,7 @@ export default function Admin({newAction}) {
     if (mnemonic.length === 0) return;
     
     let href = window.location.href;
-    href = href.slice(0, href.indexOf("?"));
+    href = href.slice(0, href.indexOf("?")+1);
     history.pushState(null, "SetSeed", href + "?admin=1&setseed=1");
     const setSeedPromise = new Promise(async (resolve, reject) => {
       await setSeed(mnemonic);
@@ -55,7 +55,7 @@ export default function Admin({newAction}) {
   useEffect(async () => {
     const urlParams = window.location.search;
     let href = window.location.href;
-    href = href.slice(0, href.indexOf("?"));
+    href = href.slice(0, href.indexOf("?")+1);
     history.pushState(null, "Admin", href + "?admin=1");
     
     if (urlParams.includes('errorCode')) {

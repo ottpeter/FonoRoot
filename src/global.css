@@ -75,6 +75,8 @@ nav {
   margin-top: 30px;
   align-items: flex-start;
   background: transparent;
+  position: absolute;
+  z-index: 2;
 }
 .logo {
   flex-grow: 1;
@@ -118,6 +120,9 @@ nav {
   outline: none;
   display: block;
   cursor:pointer;
+}
+.menuButton {
+  background-color: yellow;
 }
 .controlsButton img:hover {
   filter: brightness(2.5);
@@ -204,6 +209,8 @@ footer {
   margin-bottom: 30px;
   align-items: flex-end;
   background: transparent;
+  position: absolute;
+  z-index: 2;
 }
 
 main {
@@ -238,6 +245,9 @@ main {
   height: 39px;
   margin-right: 32px;
   border: none;
+}
+.mainWalletBadge:hover {
+  font-weight: bold;
 }
 .mainWalletContainer {
   position: absolute;
@@ -511,6 +521,25 @@ input[type=number] {
   width: 30%;
 }
 
+#listContainer {
+  margin-top: calc(var(--nav-size) + 48px);
+  margin-bottom: calc(var(--footer-size) + 48px);
+}
+#listContainer ul li {
+  list-style: none;
+  display: inline-block;
+  margin: 10px;
+}
+.nftCard {
+  background-color: chartreuse;
+  width: 219px;
+  height: 193px;
+}
+.nftCard img {
+  max-width: 100%;
+  height: 100%;
+}
+
 .musicControlsButton {
   flex-shrink: 1;
   background: transparent;
@@ -551,8 +580,8 @@ input[type=number] {
 
 #nftButtonsList {
   position: absolute;
-  z-index: 3;
-  top: 200px;
+  z-index: 2;
+  top: 110px;
   left: 30px;
 }
 .nftButton {
@@ -609,7 +638,7 @@ input[type=number] {
 
 
 #globeContainer {
-  background-color: #090909;
+  z-index: 2;
 }
 
 .temporaryCARD {
@@ -641,6 +670,7 @@ input[type=number] {
   border: 2px solid var(--control-grey);
   box-shadow: 0px 1px 4px rgba(0,0,0, 0.2);
   background-color: var(--modal-grey);
+  z-index: 3;
 }
 #nftDetailsModalBar {
   grid-area: bar;
@@ -696,26 +726,45 @@ input[type=number] {
   padding: var(--spacing-1);
   font-family: IBM;
   font-size: 14px;
+  background-color: var(--modal-grey);
   border: solid 1px var(--control-grey);
   margin-bottom: 20px;
   flex-grow: 1;
 }
 .nftDetailsModalRightSideGenBox {
   font-family: IBM;
-  font-weight: bold;
+  font-weight: bolder;
   height: 45px;
   font-size: 14px;
+  text-transform: uppercase;
   border: solid 1px var(--control-grey);
   display: flex;
   align-items: center;
   padding-left: 12px;
 }
+.nftDetailsModalRightSideInput {
+  flex-grow: 1;
+  margin-right: 20px;
+  height: 34px;
+  padding-left: 12px;
+  background: #efefef;
+}
 .nftDetailsModalMenuLine {
   height: 10px;
   margin-bottom: 20px;
+  border: none;
+  
+  display: flex;
+}
+.nftDetailsModalMenuButton {
   font-family: IBM;
   font-size: 12px;
   text-transform: uppercase;
+  border: none;
+  background: transparent;
+  flex-grow: 1;
+}
+.nftDetailsModalMenuSelected {
   text-decoration: underline;
 }
 #nftDetailsModalAudio {
@@ -735,6 +784,62 @@ input[type=number] {
   align-items: flex-end;
   justify-content: flex-end;
 }
+.buttonFrame {
+  background: url('./assets/connect_frame.svg') no-repeat;
+  text-transform: uppercase;
+  font-family: VCR;
+  font-size: 16px;
+  width: 179px;
+  height: 39px;
+  border: none;
+}
+.buttonFrame:hover {
+  font-weight: bold;
+}
+.nftDetailsModalRightOwnerDiv {
+  padding: 8px;
+  border: 1px solid var(--control-grey);
+  margin-bottom: 20px;
+  display: flex;
+}
+.nftDetailsModalRightAccount {
+  font-weight: bolder;
+  text-transform: uppercase;
+  margin: 0;
+  flex-grow: 1;
+}
+.nftDetailsModalRightGen {
+  font-weight: bolder;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+#guestbookMessages {
+  border: solid 1px var(--control-grey);
+  padding: 20px;
+  height: 400px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+.guestbookMessage {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-3);
+}
+.guestbookMessageSender {
+  font-weight: bold;
+  flex-grow: 1;
+  margin: 0;
+}
+.guestbookMessageTime {
+  margin: 0;
+}
+.guestbookMessageMessage {
+  margin-top: 20px;
+  width: 100%;
+}
+
+
 #nftBuyButton {
   background-image: url('./assets/buy.svg');
   width: 120px;

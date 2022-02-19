@@ -43,6 +43,7 @@
     "near-api-js": "~0.43.1",
     "react": "~17.0.1",
     "react-dom": "~17.0.1",
+    "react-draggable": "^4.4.4",
     "react-dropzone": "^11.5.1",
     "react-globe.gl": "^2.20.1",
     "react-motion": "0.5.2",
