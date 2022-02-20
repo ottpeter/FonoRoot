@@ -67,7 +67,7 @@ export default function GuestBook({id, metadata, newAction, openModal, setOpenMo
                 <div className="nftDetailsModalRightSideGenBox">
                   {window.accountId}
                 </div>
-                  <textarea onChange={(e) => inputHandler(e.target.value)} value={text} className="nftDetailsModalRightSideContent" >
+                  <textarea onChange={(e) => inputHandler(e.target.value)} value={text} className="nftDetailsModalRightSideContent guestText" >
 
                   </textarea>
               </div>

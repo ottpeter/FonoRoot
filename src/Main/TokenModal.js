@@ -5,7 +5,7 @@ import close from '../assets/close.svg';
 import AudioPlayer from '../Common/AudioPlayer';
 
 
-export default function TokenModal({id, metadata, image, newAction, openModal, setOpenModal, test}) {
+export default function TokenModal({id, metadata, image, newAction, openModal, setOpenModal, fadeOut, test}) {
   const [music, setMusic] = useState(null);
   const extra = JSON.parse(metadata.extra);
 
@@ -47,7 +47,7 @@ export default function TokenModal({id, metadata, image, newAction, openModal, s
  
   return (
     <Draggable handle={'#nftDetailsModalBar'} bounds={'main'} >
-      <div className="nftDetailsModal"  >
+      <div className="nftDetailsModal" >
         <div id="nftDetailsModalBar">
           <p>{metadata.title}</p>
           <button onClick={() => setOpenModal(false)}><img src={close} alt='X'></img></button>

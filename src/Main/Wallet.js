@@ -46,7 +46,7 @@ export default function Wallet({setShowWallet, showWallet}) {
           </button>
         </div>
 
-        {true && (
+        {showWallet && (
           <div id="wallet" className="mainWalletContainer">
             <div id="mainWalletBalanceFlex">
               <p>BALANCE</p>

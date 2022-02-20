@@ -122,7 +122,9 @@ nav {
   cursor:pointer;
 }
 .menuButton {
-  background-color: yellow;
+  margin-right: 32px;
+  margin-top: 7px;
+  font-family: IBM;
 }
 .controlsButton img:hover {
   filter: brightness(2.5);
@@ -300,6 +302,9 @@ main {
 #mainWalletButtonContainer {
   display: flex;
   justify-content: center;
+}
+.guestText {
+  margin-top: 20px;
 }
 
 
@@ -522,8 +527,10 @@ input[type=number] {
 }
 
 #listContainer {
-  margin-top: calc(var(--nav-size) + 48px);
-  margin-bottom: calc(var(--footer-size) + 48px);
+  margin-top: calc(var(--nav-size) + 72px);
+  margin-bottom: calc(var(--footer-size) + 72px);
+  margin-left: 140px;
+  margin-right: 140px;
 }
 #listContainer ul li {
   list-style: none;
@@ -531,7 +538,7 @@ input[type=number] {
   margin: 10px;
 }
 .nftCard {
-  background-color: chartreuse;
+  backdrop-filter: blur(4px);
   width: 219px;
   height: 193px;
 }
@@ -597,7 +604,7 @@ input[type=number] {
   backdrop-filter: blur(4px);
   border-radius: 4px;
 
-  animation-name: labelFadeOut;
+  /*animation-name: labelFadeOut;*/
   animation-timing-function: ease;
   animation-duration: 1s;
   transform-origin: left;
@@ -618,7 +625,7 @@ input[type=number] {
   text-align: left;
   background-position: 8px 8px;
   /*transform: scale(3, 1.6);*/
-  animation-name: labelFadeIn;
+  /*animation-name: labelFadeIn;*/
   animation-timing-function: ease;
   animation-duration: 1s;
   transform-origin: left;

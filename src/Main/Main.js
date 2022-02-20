@@ -5,27 +5,40 @@ import Globe from 'react-globe.gl';
 import countriesGeo from "../assets/countries.json";
 import TokenModal from './TokenModal';
 import test from '../assets/play.svg';
+import clickSoundOne from '../assets/click.mp3';
 
 
 export default function Main({newAction, openGuestBook, setGuestBook, configObj}) {
   const [nftList, setNftList] = React.useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const [fadeOutEffect, setFadeOutEffect] = useState(false);
   const [selectedNFT, setSelectedNFT] = useState(null);
   const [image, setImage] = useState(null);
   const [autoRotateSpeed, setAutoRotateSpeed] = useState(1);
   const globeEl = useRef();  
   const transitionMs = 3000;
+  const clickSound = new Audio(clickSoundOne);
   
   const coordList = [
-    [-73.9808, 40.7648],
-    [-9.13333, 38.71667],
-    [19.03991, 47.49801]
+    [-20.1619400, 57.4988900, "Port Louis"],
+    [43.6529, -79.3849, "Toronto"],
+    [49.2609, -123.1139, "Vancouver"],
+    [-6.173292, 106.841036, "Jakarta"],
+    [1.351616, 103.808053, "Singapore"],
+    [13.75, 100.51667, "Bangkok"],
+    [22.346578, 114.135442, "Hong Kong"],
+    [3.1412000, 101.6865300, "Kuala Lumpur"],
+    [12.97194, 77.59369, "Bangalore"],
+    [39.905, 116.39139, "Beijing"],
+    [51.50722, -0.1275, "London"],
+    [47.90771, 106.88324, "Ulaanbaatar"],
+    [-18.91368, 47.53613, "Antananarivo"]
   ];
   
   function changeCenter([x, y]) {
     globeEl.current.pointOfView({
-      lat: y,
-      lng: x,
+      lat: x,
+      lng: y,
       altitude: 2,
     }, transitionMs)
   }
@@ -50,8 +63,11 @@ export default function Main({newAction, openGuestBook, setGuestBook, configObj}
     setNftList(buyable);
   }, [])
 
-
-  function nftClicked(nftIndex) {
+  async function nftClicked(nftIndex) {
+    if (openModal) {
+      setOpenModal(false);
+    }
+    clickSound.play();
     setSelectedNFT(nftIndex);
     changeCenter(coordList[nftIndex]);
     loadImage(nftList[nftIndex].metadata);
@@ -103,7 +119,7 @@ export default function Main({newAction, openGuestBook, setGuestBook, configObj}
     }, {
       labelLat: 10,
       labelLng: 0,
-      labelText: "X"
+      labelLabel: "<p>Hello World!:)</p>"
     }
   ]
  
@@ -119,6 +135,8 @@ export default function Main({newAction, openGuestBook, setGuestBook, configObj}
           image={image}
           setOpenModal={setOpenModal}
           test={test}
+          key={selectedNFT}
+          fadeOut={fadeOutEffect}
         />
       )}
 
@@ -130,9 +148,14 @@ export default function Main({newAction, openGuestBook, setGuestBook, configObj}
           hexPolygonResolution={3}
           hexPolygonMargin={0.3}
           backgroundColor={'rgba(255,255,255, 0.0)'}
-          labelsData={testData}
-          
           hexPolygonColor={() => `#${Math.round(Math.random() * Math.pow(2, 24)).toString(16).padStart(6, '0')}`}
+          labelsData={testData}
+          labelLat={(exampl) => {
+            console.log("example", exampl)
+            return exampl.labelLat
+          }}
+          labelLng={(exampl) => exampl.labelLng}
+          labelText={(exampl) => exampl.labelLabel}
           
         />}
       </div>

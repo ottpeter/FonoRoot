@@ -31,11 +31,7 @@ export default function App() {
 
   React.useEffect(() => {
     doUrlParamsParsing();
-    return () => {
-      SetLocation("");
-    };
-
-  }, [window.location.search]);
+  }, []);
 
   React.useEffect(async () => {
     const fetchObj = await fetch(window.location.origin + window.location.pathname + '/' + 'projectConfig.json')
@@ -55,7 +51,7 @@ export default function App() {
   function initContract() {
     const args = {
       owner_id: process.env.CONTRACT_NAME || configObj.contractName,
-      admin: "optr.testnet"
+      admin: configObj.admin || "lelenmar.testnet"
     }
     // This could be 'new' for user provided init
     window.contract.new_default_meta(args)
@@ -115,8 +111,11 @@ export default function App() {
   
   /** We use url params instead of routes, because the IPFS gateways would think that we are looking for a file */
   if (urlParams.includes('init')) {
-    initContract();
-    return <p>init...</p>;
+    return configObj.admin? 
+      <button onClick={initContract}>INIT</button>
+    :
+      <p>loading...</p>
+    ;
   }
   if (urlParams.includes('admin')) {
     return (

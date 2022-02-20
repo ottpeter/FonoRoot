@@ -25,16 +25,14 @@ export default function MyNFTs({newAction}) {
     }
 
     const nftList = await getListForAccount();
-    console.log("lista: ", nftList);
     setList(nftList);
     loadImages(nftList);
   }, []);
 
   function loadImages(nftList) {
     // SHA VERIFICATION SHOULD HAPPEN SOMEWHERE
-    console.log("https://ipfs.io/ipfs/" + nftList[i].metadata.media);
-
-    for (let i = 0; i < list.length; i++) {
+    
+    for (let i = 0; i < nftList.length; i++) {
       let xhr = new XMLHttpRequest();
       xhr.open("GET", "https://ipfs.io/ipfs/" + nftList[i].metadata.media);
       xhr.responseType = "blob";
@@ -64,7 +62,7 @@ export default function MyNFTs({newAction}) {
       <div id="listContainer">
         <ul>
           {list && list.map((item, i) => (
-            <li>
+            <li key={"image-" + i}>
               <button onClick={() => openTransfer(i)} className="nftCard">
                 <img src={images[i]} alt={i}></img>
               </button>
