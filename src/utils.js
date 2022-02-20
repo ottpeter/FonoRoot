@@ -82,7 +82,7 @@ export async function initContract() {
     // View methods are read only. They don't modify the state, but usually return some value.
     viewMethods: ['nft_metadata', 'nft_token', 'nft_tokens_for_owner', 'nft_tokens', 'get_crust_key', 'get_next_buyable', 'view_guestbook_entries'],
     // Change methods can modify the state. But you don't receive the returned value when called.
-    changeMethods: ['new_default_meta', 'new', 'mint_root', 'set_crust_key', 'buy_nft_from_vault', 'transfer_nft', 'create_guestbook_entry'],
+    changeMethods: ['new_default_meta', 'new', 'mint_root', 'set_crust_key', 'buy_nft_from_vault', 'transfer_nft', 'create_guestbook_entry', 'withdraw'],
   })
 }
 
@@ -372,6 +372,23 @@ export async function totalMinted() {
   await window.contract.nft_tokens(options)
     .then((response) => {                                          
       result = response.length;
+    })
+    .catch((err) => console.error(err));
+
+    return result;
+}
+
+export async function withdrawFunds(amount) {
+  let result = -1;
+  const formattedAmount = utils.format.parseNearAmount(amount);
+  const options = {
+    amount: formattedAmount
+  }
+
+  await window.contract.withdraw(options)
+    .then((response) => {                                          
+      console.log("Success! (withdraw)");
+      result = response;
     })
     .catch((err) => console.error(err));
 

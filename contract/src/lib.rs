@@ -17,6 +17,7 @@ pub use crate::crust::*;
 pub use crate::buy::*;
 pub use crate::transfer::*;
 pub use crate::guestbook::*;
+pub use crate::withdraw::*;
 
 mod internal;
 mod approval; 
@@ -30,6 +31,7 @@ mod crust;
 mod buy;
 mod transfer;
 mod guestbook;
+mod withdraw;
 
 #[cfg(all(test, not(target_arch = "wasm32")))]
 mod tests;

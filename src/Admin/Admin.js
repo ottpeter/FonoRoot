@@ -4,7 +4,7 @@ const all = require('it-all')
 const CryptoJS = require('crypto-js');
 const crustPin = require('@crustio/crust-pin').default;
 import MediaDropzone from './MediaDropzone';
-import { getSeed, mintRootNFT, setSeed, createAccount, deployContract } from '../utils';
+import { getSeed, mintRootNFT, setSeed, createAccount, deployContract, withdrawFunds } from '../utils';
 import PreviewBox from './PreviewBox';
 import Loading from './Loading';
 import SmallUploader from './SmallUploader';
@@ -34,7 +34,6 @@ export default function Admin({newAction}) {
 
   const [mnemonic, setMnemonic] = useState("");
 
-  
   function saveMnemonic() {
     if (mnemonic.length === 0) return;
     
@@ -289,7 +288,7 @@ export default function Admin({newAction}) {
       </div>}
       <div id="adminMain" className={pageSwitch === 1 ? "adminMain blurred" : "adminMain"}>
         {pageSwitch === 1 && <div id="darkeningOverlay" className="darkeningOverlay"></div>}
-        <h1 className="title">Create NFT</h1>
+        <h1 className="title">Mint NFT</h1>
 
 
         <div id="adminFlexBox" className="adminFlexBox">
@@ -331,10 +330,6 @@ export default function Admin({newAction}) {
         <div className="buttonContainer">
           <button onClick={createNFT} className="mainButton">Mint</button>
         </div>
-        <button onClick={folderExperiment}>CLONE</button>
-        <button onClick={createAccount}>Create Account</button>
-        <button onClick={deployContract}>Deploy Contract</button>
-        <button></button>
       </div>
     
     </main>

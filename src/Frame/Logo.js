@@ -11,7 +11,7 @@ export default function Logo() {
   }
 
   return (
-    <div className="logo">
+    <div id="adminLogo" className="logo">
       <button onClick={() => goToHome()} className="logo controlsButton">
         TROACO
       </button>

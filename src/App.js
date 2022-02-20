@@ -17,6 +17,7 @@ import Err from './Activity/Err';
 import MyNFTs from './Main/MyNFTs';
 import GuestBook from './Main/GuestBook';
 import all from 'it-all';
+import Withdraw from './Admin/Withdraw';
 
 
 export default function App() {
@@ -116,6 +117,17 @@ export default function App() {
     :
       <p>loading...</p>
     ;
+  }
+  if (urlParams.includes('withdraw')) {
+    return (
+      <>
+        <ToastContainer hideProgressBar={true} position="bottom-right" transition={Slide} />
+        <TopMenu setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} 
+          setShowWallet={setShowWallet} showWallet={showWallet} />
+        <Withdraw />
+        <Footer />
+      </>
+    );
   }
   if (urlParams.includes('admin')) {
     return (

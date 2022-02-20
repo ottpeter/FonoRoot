@@ -223,8 +223,12 @@ main {
   overflow: hidden;
   background-repeat: no-repeat;
 }
+#adminLogo {
+  display: block;
+}
 #adminMain {
   overflow: scroll;
+  background: var(--main-bg);
 }
 
 .adminMain {
@@ -372,6 +376,7 @@ main {
 
 .title {
   margin: auto;
+  margin-top: 48px;
   text-align: center;
   font-style: normal;
   font-weight: bold;
