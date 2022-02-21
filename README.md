@@ -2,11 +2,11 @@
 
 Audio NFT with a tree-like minting process 
 
-__Live version:__ [rarevandal.com](www.rarevandal.com)
+__Live version:__ [rarevandal.com](http://rarevandal.com)
 
 ## Description
 
-The admin user can create new root NFTs on the admin page. The admin page can be reached by appending `?admin` to the url. The front-end is coming from the IPFS network, so the URL will contain the CID. [rarevandal.com](www.rarevandal.com) will redirect to an ipfs gateway (ipfs.io). Normal routing would cause problems, that's why we are using url params instead. These are the possible routes:
+The admin user can create new root NFTs on the admin page. The admin page can be reached by appending `?admin` to the url. The front-end is coming from the IPFS network, so the URL will contain the CID. [rarevandal.com](http://rarevandal.com) will redirect to an ipfs gateway (ipfs.io). Normal routing would cause problems, that's why we are using url params instead. These are the possible routes:
  * ?admin: The person who is set as `admin` in the smart contract can create new root NFTs here
  * ?my-nfts: List of NFTs the user owns. Possible to transfer NFT, but we are not verifying yet if the account name is a valid and existing account
  * ?init: Here is a button that will initialize the contract. It will set `admin` according to `projectConfig.json`
@@ -39,5 +39,5 @@ NodeJS version should be `v16.13.2`
 Now admin will be able to set a Crust key and start uploading new content.
 
 
-__Designer__: Lena ([website](https://www.lenamarakova.com/), [LinkedIn](https://www.linkedin.com/in/elenamarakova/))
+__Designer__: Lena ([website](https://www.lenamarakova.com/), [LinkedIn](https://www.linkedin.com/in/elenamarakova/))  
 __Idea and Project Owner__: Vandal ([website](https://linktr.ee/vandigital), [Twitter](https://twitter.com/vandigital), [LinkedIn](https://www.linkedin.com/in/vandigital/))

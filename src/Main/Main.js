@@ -17,19 +17,19 @@ export default function Main({newAction}) {
   const clickSound = new Audio(clickSoundOne);
   
   const coordList = [
-    [-20.1619400, 57.4988900, "Port Louis"],
-    [43.6529, -79.3849, "Toronto"],
-    [49.2609, -123.1139, "Vancouver"],
-    [-6.173292, 106.841036, "Jakarta"],
-    [1.351616, 103.808053, "Singapore"],
-    [13.75, 100.51667, "Bangkok"],
-    [22.346578, 114.135442, "Hong Kong"],
-    [3.1412000, 101.6865300, "Kuala Lumpur"],
-    [12.97194, 77.59369, "Bangalore"],
-    [39.905, 116.39139, "Beijing"],
-    [51.50722, -0.1275, "London"],
-    [47.90771, 106.88324, "Ulaanbaatar"],
-    [-18.91368, 47.53613, "Antananarivo"]
+    [-20.1619400, 57.4988900, "Port Louis", 0],
+    [43.6529, -79.3849, "Toronto", 1],
+    [49.2609, -123.1139, "Vancouver", 2],
+    [-6.173292, 106.841036, "Jakarta", 3],
+    [1.351616, 103.808053, "Singapore", 4],
+    [13.75, 100.51667, "Bangkok", 5],
+    [22.346578, 114.135442, "Hong Kong", 6],
+    [3.1412000, 101.6865300, "Kuala Lumpur", 7],
+    [12.97194, 77.59369, "Bangalore", 8],
+    [39.905, 116.39139, "Beijing", 9],
+    [51.50722, -0.1275, "London", 10],
+    [47.90771, 106.88324, "Ulaanbaatar", 11],
+    [-18.91368, 47.53613, "Antananarivo", 12]
   ];
   
   function changeCenter([x, y]) {
@@ -116,13 +116,19 @@ export default function Main({newAction}) {
           backgroundColor={'rgba(255,255,255, 0.0)'}
           hexPolygonColor={() => `#${Math.round(Math.random() * Math.pow(2, 24)).toString(16).padStart(6, '0')}`}
           labelsData={coordList}
-          labelLat={(exampl) => {
-            console.log("example", exampl)
-            return exampl[0]
+          labelLat={(entry) => entry[0]}
+          labelLng={(entry) => entry[1]}
+          labelLabel={(entry) => {
+            if (nftList.length > entry[3]) {
+              return (
+                <button className="nftButton" onClick={() => nftClicked(entry[3])} >
+                  {entry[2]}
+                </button>
+              )
+            } else {
+              return null;
+            }
           }}
-          labelLng={(exampl) => exampl[1]}
-          labelText={(exampl) => exampl[2]}
-          
         />}
       </div>
 

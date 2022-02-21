@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import 'regenerator-runtime/runtime';
 import Wallet from './Wallet';
 import { totalMinted } from '../utils';
 import logo from '../assets/TopLeftLogo.png'

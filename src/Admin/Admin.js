@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import 'regenerator-runtime/runtime';
 const IPFS = require('ipfs-core')
 const all = require('it-all')
 const CryptoJS = require('crypto-js');

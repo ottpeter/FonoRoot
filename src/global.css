@@ -543,7 +543,8 @@ input[type=number] {
   margin: 10px;
 }
 .nftCard {
-  backdrop-filter: blur(4px);
+  background: transparent;
+  border: none;
   width: 219px;
   height: 193px;
 }
