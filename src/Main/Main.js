@@ -1,20 +1,17 @@
 import React, { useState, useRef } from 'react';
-import { getBuyableTokens, login, logout } from '../utils';
+import { getBuyableTokens, verify_sha256 } from '../utils';
 import 'regenerator-runtime/runtime';
 import Globe from 'react-globe.gl';
 import countriesGeo from "../assets/countries.json";
 import TokenModal from './TokenModal';
-import test from '../assets/play.svg';
 import clickSoundOne from '../assets/click.mp3';
 
 
-export default function Main({newAction, openGuestBook, setGuestBook, configObj}) {
+export default function Main({newAction}) {
   const [nftList, setNftList] = React.useState([]);
   const [openModal, setOpenModal] = useState(false);
-  const [fadeOutEffect, setFadeOutEffect] = useState(false);
   const [selectedNFT, setSelectedNFT] = useState(null);
   const [image, setImage] = useState(null);
-  const [autoRotateSpeed, setAutoRotateSpeed] = useState(1);
   const globeEl = useRef();  
   const transitionMs = 3000;
   const clickSound = new Audio(clickSoundOne);
@@ -59,7 +56,6 @@ export default function Main({newAction, openGuestBook, setGuestBook, configObj}
     }
 
     const buyable = await getBuyableTokens();
-    console.log("NEXT NFTs: ", buyable);
     setNftList(buyable);
   }, [])
 
@@ -76,67 +72,37 @@ export default function Main({newAction, openGuestBook, setGuestBook, configObj}
 
   // We are prefetching the image for faster loading
   function loadImage(metadata) {
-    // SHA VERIFICATION SHOULD HAPPEN SOMEWHERE
     let xhr = new XMLHttpRequest();
     xhr.open("GET", "https://ipfs.io/ipfs/" + metadata.media);
     xhr.responseType = "blob";
     xhr.onload = function() {
       let blob = xhr.response;
       const reader = new FileReader();
+      const verifier = new FileReader();
       reader.readAsDataURL(blob);
-      reader.onload = function(e) {
-        setImage(e.target.result);
+      
+      reader.onload = async function(e) {
+        const hash_correct = await verify_sha256(blob, metadata.media_hash);
+        if (hash_correct) setImage(e.target.result);
+        else newAction({
+          errorMsg: "There was an error while loading the image!", errorMsgDesc: "The image hash is incorrect.",
+        }); 
       }
     }
     xhr.send();
   }
 
-  /** For globe rotation, we are not using it because it will slow it down
-  React.useEffect(() => {
-    if (globeEl.current) {
-      console.log("globeEl.current", globeEl.current.controls());
-      globeEl.current.controls().autoRotate = true;
-      globeEl.current.controls().autoRotateSpeed = autoRotateSpeed;
-      console.log("globeEl: ", globeEl)
-      console.log("current: ", globeEl.current.pointOfView())
-    }
-  }, [globeEl.current])
-   */
 
-  const testData = [
-    {
-      labelLat: coordList[0][0],
-      labelLng: coordList[0][1],
-      labelText: "Hello"
-    }, {
-      labelLat: coordList[1][0],
-      labelLng: coordList[1][1],
-      labelText: "World"
-    }, {
-      labelLat: coordList[2][0],
-      labelLng: coordList[2][1],
-      labelText: ":)"
-    }, {
-      labelLat: 10,
-      labelLng: 0,
-      labelLabel: "<p>Hello World!:)</p>"
-    }
-  ]
- 
   return (
     <main>
       {openModal && (
         <TokenModal 
-          openModal={openModal}
-          id={nftList[selectedNFT].token_id}
-          owner={nftList[selectedNFT].owner}
-          metadata={nftList[selectedNFT].metadata}
-          newAction={newAction}
-          image={image}
-          setOpenModal={setOpenModal}
-          test={test}
           key={selectedNFT}
-          fadeOut={fadeOutEffect}
+          id={nftList[selectedNFT].token_id}
+          metadata={nftList[selectedNFT].metadata}
+          image={image}
+          newAction={newAction}
+          setOpenModal={setOpenModal}
         />
       )}
 
@@ -149,13 +115,13 @@ export default function Main({newAction, openGuestBook, setGuestBook, configObj}
           hexPolygonMargin={0.3}
           backgroundColor={'rgba(255,255,255, 0.0)'}
           hexPolygonColor={() => `#${Math.round(Math.random() * Math.pow(2, 24)).toString(16).padStart(6, '0')}`}
-          labelsData={testData}
+          labelsData={coordList}
           labelLat={(exampl) => {
             console.log("example", exampl)
-            return exampl.labelLat
+            return exampl[0]
           }}
-          labelLng={(exampl) => exampl.labelLng}
-          labelText={(exampl) => exampl.labelLabel}
+          labelLng={(exampl) => exampl[1]}
+          labelText={(exampl) => exampl[2]}
           
         />}
       </div>

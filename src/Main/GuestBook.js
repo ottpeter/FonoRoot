@@ -4,7 +4,7 @@ import { getGuestBookEntries, sendGuestBookEntry } from '../utils';
 import close from '../assets/close.svg';
 
 
-export default function GuestBook({id, metadata, newAction, openModal, setOpenModal}) {
+export default function GuestBook({newAction, setOpenModal}) {
   const [entries, setEntries] = useState([]);
   const [text, setText] = useState("");
   
@@ -41,8 +41,8 @@ export default function GuestBook({id, metadata, newAction, openModal, setOpenMo
   }
 
  
- return (
-   <>
+  return (
+    <>
       <Draggable handle={'#nftDetailsModalBar'} bounds={'main'} >
         <div className="nftDetailsModal"  >
           <div id="nftDetailsModalBar">

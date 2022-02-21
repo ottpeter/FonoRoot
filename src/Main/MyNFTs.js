@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getListForAccount } from '../utils';
+import { getListForAccount, verify_sha256 } from '../utils';
 import TransferModal from './TransferModal';
 
 
@@ -30,8 +30,6 @@ export default function MyNFTs({newAction}) {
   }, []);
 
   function loadImages(nftList) {
-    // SHA VERIFICATION SHOULD HAPPEN SOMEWHERE
-    
     for (let i = 0; i < nftList.length; i++) {
       let xhr = new XMLHttpRequest();
       xhr.open("GET", "https://ipfs.io/ipfs/" + nftList[i].metadata.media);
@@ -40,10 +38,14 @@ export default function MyNFTs({newAction}) {
         let blob = xhr.response;
         const reader = new FileReader();
         reader.readAsDataURL(blob);
-        reader.onload = function(e) {
-          setImages((state) => {
+        reader.onload = async function(e) {
+          const hash_correct = await verify_sha256(blob, nftList[i].metadata.media_hash);
+          if (hash_correct) setImages((state) => {
             state[i] = e.target.result;
             return [...state];
+          });
+          else newAction({
+            errorMsg: "There was an error while loading the image!", errorMsgDesc: "The image hash is incorrect.",
           });
         }
       }

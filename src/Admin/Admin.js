@@ -4,7 +4,7 @@ const all = require('it-all')
 const CryptoJS = require('crypto-js');
 const crustPin = require('@crustio/crust-pin').default;
 import MediaDropzone from './MediaDropzone';
-import { getSeed, mintRootNFT, setSeed, createAccount, deployContract, withdrawFunds } from '../utils';
+import { getSeed, mintRootNFT, setSeed } from '../utils';
 import PreviewBox from './PreviewBox';
 import Loading from './Loading';
 import SmallUploader from './SmallUploader';
@@ -39,8 +39,8 @@ export default function Admin({newAction}) {
     
     let href = window.location.href;
     href = href.slice(0, href.indexOf("?")+1);
-    history.pushState(null, "SetSeed", href + "?admin=1&setseed=1");
-    const setSeedPromise = new Promise(async (resolve, reject) => {
+    history.pushState(null, "SetSeed", href + "?admin=1&setseed=1");             // This is important because of the notification we fire 
+    const setSeedPromise = new Promise(async (resolve, reject) => {              // when we got redirected to our page from near.org
       await setSeed(mnemonic);
     })
     newAction({
@@ -54,7 +54,7 @@ export default function Admin({newAction}) {
   useEffect(async () => {
     const urlParams = window.location.search;
     let href = window.location.href;
-    href = href.slice(0, href.indexOf("?")+1);
+    href = href.slice(0, href.indexOf("?"));
     history.pushState(null, "Admin", href + "?admin=1");
     
     if (urlParams.includes('errorCode')) {
@@ -83,22 +83,18 @@ export default function Admin({newAction}) {
   }
 
   async function crustPin3Times(ipfsFile) {
-  console.log("ipfsFile: ", ipfsFile);
-  console.log("ipfsFile.cid.toString(): ", ipfsFile.cid.toString())
-    
     const redundancyCount = 3;
-    const tolerance = 2;                                    // Minimum success number
-    const maxTry = 3;                                       // Max try for each pin
+    const tolerance = 2;                                        // Minimum success number
+    const maxTry = 3;                                           // Max try for each pin
     let successNum = 0;
 
-    for (let i = 1; i <= redundancyCount; i++) {            // We want to pin it 3 times, we will retry 3 times for each if failed
+    for (let i = 1; i <= redundancyCount; i++) {                // We want to pin it 3 times, we will retry 3 times for each if failed
       let success = false;
       let tryCount = 0;
       do {
         const crust_seed = await getSeed();                     // Get the seed from the blockchain
         const crust = new crustPin(`${crust_seed}`);            // Crust will pin the file on it's IPFS nodes
         success = await crust.pin(await ipfsFile.cid.toString());
-        console.log("success inside loop: ", success);
         if (success) successNum++;
         await sleep(1000);
         tryCount++;
@@ -130,10 +126,10 @@ export default function Admin({newAction}) {
       }
     }
 
-    reader.onload = async function (e) {                     // onload callback gets called after the reader reads the file data
+    reader.onload = async function () {                           // onload callback gets called after the reader reads the file data
       let wordArray = CryptoJS.lib.WordArray.create(reader.result);
       
-      const ipfsPromise = ipfs.add({                         // Add the file to IPFS. This won't last, this will be only stored in local node, that is in the browser
+      const ipfsPromise = ipfs.add({                              // Add the file to IPFS. This won't last, this will be only stored in local node, that is in the browser
         path: '.',
         content: reader.result
       });
@@ -145,9 +141,6 @@ export default function Admin({newAction}) {
         errorPromiseTitle: "Upload Failed", errorPromiseDesc: "Error while trying to upload to local IPFS node! Please Try again!",
       });
       const ipfsFile = await ipfsPromise
-
-      const crust_seed = await getSeed();                     // Get the seed from the blockchain
-      const crust = new crustPin(`${crust_seed}`);            // Crust will pin the file on it's IPFS nodes
     
       // This wrapper promise is necesarry, because the Crust API 
       // would resolve the promise even when the pinning fails 
@@ -228,11 +221,18 @@ export default function Admin({newAction}) {
     });
   }
 
+  /**
+   * This is the code that we would be using for the site cloning, 
+   * the IPFS-side of it works, but we couldn't create new contract instance 
+   * from browser, so we don't have this feature. The following code is creating
+   * an almost equal IPFS site, but the `projectConfig.json` can be different.
+   * It would be also possible to add a different background image for example.
+   */
   async function folderExperiment() {
     if (!ipfsNode) { console.log("The IPFS node is not ready."); return; }
 
     //await deployContract();
-    return
+    
 
     const configObj = {
       test: 5,

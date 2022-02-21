@@ -80,8 +80,8 @@ impl Contract {
             admin,
             NFTContractMetadata {
                 spec: "nft-1.0.0".to_string(),
-                name: "NFT Tutorial Contract Default Name For Development".to_string(),
-                symbol: "DEFAULT".to_string(),
+                name: "Fono Root".to_string(),
+                symbol: "FONO".to_string(),
                 icon: None,
                 base_uri: None,
                 reference: None,

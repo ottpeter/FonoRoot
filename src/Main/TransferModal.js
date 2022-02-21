@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import Draggable from 'react-draggable';
 import AudioPlayer from '../Common/AudioPlayer';
 import close from '../assets/close.svg'
-import { debounce } from "debounce";
-import { checkIfAccountExists, getAllFromRoot, getContractName, transferNft } from '../utils'
+import { getAllFromRoot, getContractName, transferNft, verify_sha256 } from '../utils'
 
 
 export default function TransferModal({token, newAction, setOpenModal}) {
@@ -12,9 +11,7 @@ export default function TransferModal({token, newAction, setOpenModal}) {
   const [image, setImage] = useState(null);
   const [selected, setSelected] = useState("info");
   const [all, setAll] = useState([]);                                     // All NFTs that belong to same root. Including root.
-  const [vault, setVaultName] = useState("");
-  const [accountExists, setAccountExists] = useState(false);
-  
+  const [vault, setVaultName] = useState("");  
   
   const title = token.metadata.title;
   const description = token.metadata.description;
@@ -30,19 +27,12 @@ export default function TransferModal({token, newAction, setOpenModal}) {
 
     const FonoRootRegEx = /fono-root-[0-9]{1,9}/;
     const root = token.token_id.match(FonoRootRegEx)[0];
-    console.log("root: ", root)
     const fetchResult = await getAllFromRoot(root);
-    console.log("fetchResult: ", fetchResult)
     setAll(fetchResult);
   }, [])
   
 
   async function handleInputChange(accountName) {
-    //console.log(await checkIfAccountExists());
-    /*debounce(() => {
-      console.log(checkIfAccountExists());
-      setAccountExists(x);
-    }, 200)*/
     setReceiver(accountName);
   }
 
@@ -64,7 +54,6 @@ export default function TransferModal({token, newAction, setOpenModal}) {
   }
 
   function loadImage() {
-    // SHA VERIFICATION SHOULD HAPPEN SOMEWHERE
     let xhr = new XMLHttpRequest();
     xhr.open("GET", "https://ipfs.io/ipfs/" + imageCID);
     xhr.responseType = "blob";
@@ -72,14 +61,17 @@ export default function TransferModal({token, newAction, setOpenModal}) {
       let blob = xhr.response;
       const reader = new FileReader();
       reader.readAsDataURL(blob);
-      reader.onload = function(e) {
-        setImage(e.target.result);
+      reader.onload = async function(e) {
+        const hash_correct = await verify_sha256(blob, imageHash);
+        if (hash_correct) setImage(e.target.result);
+        else newAction({
+          errorMsg: "There was an error while loading the image!", errorMsgDesc: "The image hash is incorrect.",
+        });
       }
     }
     xhr.send();
   }
   function loadMusic() {
-    // SHA VERIFICATION SHOULD HAPPEN SOMEWHERE
     let xhr = new XMLHttpRequest();
     xhr.open("GET", "https://ipfs.io/ipfs/" + musicCID);
     xhr.responseType = "blob";
@@ -87,8 +79,12 @@ export default function TransferModal({token, newAction, setOpenModal}) {
       let blob = xhr.response;
       const reader = new FileReader();
       reader.readAsDataURL(blob);
-      reader.onload = function(e) {
-        setMusic(e.target.result);
+      reader.onload = async function(e) {
+        const hash_correct = await verify_sha256(blob, musicHash);
+        if (hash_correct) setMusic(e.target.result);
+        else newAction({
+          errorMsg: "There was an error while loading the music!", errorMsgDesc: "The music hash is incorrect.",
+        });
       }
     }
     xhr.send();
@@ -158,7 +154,7 @@ export default function TransferModal({token, newAction, setOpenModal}) {
             {music ? 
               <AudioPlayer music={music}/>
               :
-              <p>loading music...</p>
+              <p className="loadingLabel">loading music...</p>
             }
           </div>
           <div id="nftDetailsModalButtons">

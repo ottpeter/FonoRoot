@@ -1,22 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import Notifications from '../Activity/Notifications';
 import Wallet from './Wallet';
-import Settings from '../Frame/Settings';
-import Help from '../Frame/Help';
 import { totalMinted } from '../utils';
 import logo from '../assets/TopLeftLogo.png'
 
 
 /** Top Menu for Main */
-export default function TopMenu({setShowActivity, showActivity, actionHistory, setShowWallet, showWallet, changePage, testJSON}) {
-  const [nftCount, setNftCount] = useState(0);
+export default function TopMenu({setShowWallet, showWallet, changePage}) {
   const [digits, setDigits] = useState([]);
 
   useEffect(async () => {
     let count = await totalMinted();
     if (count === -1) count = 0;
     else {
-      console.log("count: ", count);
       let digitArray = [0, 0, 0, 0, 0, 0];
       let divider = 1000000;
       for (let i = 0; i < digitArray.length; i++) {
@@ -25,7 +20,6 @@ export default function TopMenu({setShowActivity, showActivity, actionHistory, s
         count = count - (digitArray[i] * divider);
       }
       setDigits(digitArray);
-      console.log("digitArray: ", digitArray);
     };
   }, []);
 

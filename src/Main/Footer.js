@@ -1,8 +1,8 @@
 import React from 'react';
-import GitHub from '../Frame/GitHub';
-import Twitter from '../Frame/Twitter';
-import Discord from '../Frame/Discord';
-import Insta from '../Frame/Insta';
+import GitHub from '../FrameElements/GitHub';
+import Twitter from '../FrameElements/Twitter';
+import Discord from '../FrameElements/Discord';
+import Insta from '../FrameElements/Insta';
 import logo from '../assets/BottomLeftLogo.png';
 import guestBookIcon from '../assets/guestbook.png';
 

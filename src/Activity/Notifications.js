@@ -8,9 +8,9 @@ export default function ActivityBox({setShowActivity, showActivity, actionHistor
  if (actionHistory) lastFive = actionHistory.slice(-5).reverse();
  
  
- return (
-   <>
-      <div className="controls">
+  return (
+    <>
+      <div className="controls controlsLast">
         <button
           className="controlsButton"
           onClick={() => setShowActivity(!showActivity)} 

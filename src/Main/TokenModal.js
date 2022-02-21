@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Draggable from 'react-draggable';
-import { buyNFTfromVault } from '../utils';
+import { buyNFTfromVault, verify_sha256 } from '../utils';
 import close from '../assets/close.svg';
 import AudioPlayer from '../Common/AudioPlayer';
 
 
-export default function TokenModal({id, metadata, image, newAction, openModal, setOpenModal, fadeOut, test}) {
+export default function TokenModal({id, metadata, image, newAction, setOpenModal}) {
   const [music, setMusic] = useState(null);
   const extra = JSON.parse(metadata.extra);
 
@@ -13,9 +13,9 @@ export default function TokenModal({id, metadata, image, newAction, openModal, s
     const buyPromise = new Promise(async (resolve, reject) => {
       const buyResult = await buyNFTfromVault(id, extra.original_price);
       if (buyResult) {
-        resolve("Buying the NFT was successull (message from promise)");
+        resolve("Buying the NFT was successul (message from promise)");
       } else {
-        reject("Buying the NFT was not successull (message from promise)");
+        reject("Buying the NFT was not successul (message from promise)");
       }
     });
     newAction({
@@ -27,7 +27,6 @@ export default function TokenModal({id, metadata, image, newAction, openModal, s
   }
 
   function loadMusic() {
-    // SHA VERIFICATION SHOULD HAPPEN SOMEWHERE
     let xhr = new XMLHttpRequest();
     xhr.open("GET", "https://ipfs.io/ipfs/" + extra.music_cid);
     xhr.responseType = "blob";
@@ -35,8 +34,12 @@ export default function TokenModal({id, metadata, image, newAction, openModal, s
       let blob = xhr.response;
       const reader = new FileReader();
       reader.readAsDataURL(blob);
-      reader.onload = function(e) {
-        setMusic(e.target.result);
+      reader.onload = async function(e) {
+        const hash_correct = await verify_sha256(blob, extra.music_hash);
+        if (hash_correct) setMusic(e.target.result);
+        else newAction({
+          errorMsg: "There was an error while loading the music!", errorMsgDesc: "The music hash is incorrect.",
+        });
       }
     }
     xhr.send();
@@ -72,9 +75,9 @@ export default function TokenModal({id, metadata, image, newAction, openModal, s
           </div>
           <div id="nftDetailsModalAudio">
             {music ? 
-              <AudioPlayer music={music} test={test} />
+              <AudioPlayer music={music} />
             :
-              <p>loading music... </p>
+              <p className="loadingLabel">loading music... </p>
             }
           </div>
           <div id="nftDetailsModalButtons">

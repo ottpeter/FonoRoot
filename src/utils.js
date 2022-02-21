@@ -2,25 +2,16 @@ import { connect, Contract, keyStores, WalletConnection, utils, KeyPair } from '
 import * as nearAPI from "near-api-js";
 const CryptoJS = require('crypto-js');
 
-/** Real config */
+/** Real config. It's async. It was important when we tried to clone the site, so the config is not burnt in */
 async function getRealConfig(env) {
   let contractName;
   try {
     contractName = await getContractName();
-    console.log("IMPORTED: ", contractName)
   } catch (error) {
     console.error(error) 
   }
   const { keyStores } = nearAPI;
   const keyStore = new keyStores.BrowserLocalStorageKeyStore();
-
-  /**exp */
-  window.mockLocalStorage = {
-    "near-api-js:keystore:cexp2.optr.testnet:testnet": "4VYAz7BcxiEWf5WvC9d8117asYEBpfv3shxsYCjYcL9jSoLT1eRLQxBzhKkQ71DNuD39g6fC6j3mC3V2FRtCsWZr",
-    "undefined_wallet_auth_key": {"accountId":"cexp2.optr.testnet","allKeys":["ed25519:CPJxXnioFGdYCFVs4raF1VHRXu4doEeqvVKis1QC8gUc"]}
-  }
-  window.localStorage["test:cexp2.optr.testnet:testnet"] = "4VYAz7BcxiEWf5WvC9d8117asYEBpfv3shxsYCjYcL9jSoLT1eRLQxBzhKkQ71DNuD39g6fC6j3mC3V2FRtCsWZr";
-  const deployKeyStore = new keyStores.BrowserLocalStorageKeyStore(window.localStorage, "test")
 
   switch (env) {
     case 'development':
@@ -28,26 +19,6 @@ async function getRealConfig(env) {
         networkId: 'testnet',
         nodeUrl: 'https://rpc.testnet.near.org',
         keyStore,
-        contractName: contractName,
-        walletUrl: 'https://wallet.testnet.near.org',
-        helperUrl: 'https://helper.testnet.near.org',
-        explorerUrl: 'https://explorer.testnet.near.org',
-      }
-    case 'testnet':
-      return {
-        networkId: 'testnet',
-        nodeUrl: 'https://rpc.testnet.near.org',
-        keyStore,
-        contractName: "cexp2.optr.testnet",
-        walletUrl: 'https://wallet.testnet.near.org',
-        helperUrl: 'https://helper.testnet.near.org',
-        explorerUrl: 'https://explorer.testnet.near.org',
-      }
-    case 'deploy':
-      return {
-        networkId: 'testnet',
-        nodeUrl: 'https://rpc.testnet.near.org',
-        deployKeyStore,
         contractName: contractName,
         walletUrl: 'https://wallet.testnet.near.org',
         helperUrl: 'https://helper.testnet.near.org',
@@ -68,20 +39,14 @@ export async function getContractName() {
 
 // Initialize contract & set global variables
 export async function initContract() {
-  // Initialize connection to the NEAR testnet
   const nearConfig = await getRealConfig('development');
-  console.log("getRealConfig: ", nearConfig);
-  console.log("process.env.NODE_ENV: ", process.env.NODE_ENV)
   const near = await connect(Object.assign({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() } }, nearConfig))
 
   window.walletConnection = new WalletConnection(near)  
-  window.accountId = /*'exp1.' +*/  window.walletConnection.getAccountId()                                // Getting the Account ID. If still unauthorized, it's just empty string
+  window.accountId = window.walletConnection.getAccountId()                                // Getting the Account ID. If still unauthorized, it's just empty string
 
-  // Initializing our contract APIs by contract name and configuration
   window.contract = await new Contract(window.walletConnection.account(), nearConfig.contractName, {
-    // View methods are read only. They don't modify the state, but usually return some value.
     viewMethods: ['nft_metadata', 'nft_token', 'nft_tokens_for_owner', 'nft_tokens', 'get_crust_key', 'get_next_buyable', 'view_guestbook_entries'],
-    // Change methods can modify the state. But you don't receive the returned value when called.
     changeMethods: ['new_default_meta', 'new', 'mint_root', 'set_crust_key', 'buy_nft_from_vault', 'transfer_nft', 'create_guestbook_entry', 'withdraw'],
   })
 }
@@ -123,8 +88,7 @@ export async function mintRootNFT(title, desc, imageCID, imageHash, musicCID, mu
       console.log("Success! (mint root)", msg); 
       success = true; 
     })
-    .catch((err) => console.log("error: ", err))
-    .finally(() => console.log("finally()"));
+    .catch((err) => console.log("Error while minting root: ", err))
 
   return success;
 }
@@ -162,7 +126,6 @@ export async function buyNFTfromVault(tokenId, price) {
   const args = {
     token_id: tokenId,
   };
-  //const gas = 100_000_000_000_000;
   const gas = 200_000_000_000_000;
   const formattedPrice = utils.format.formatNearAmount(price);    // Human readable
   const nearAmount = parseFloat(formattedPrice) + 0.1;
@@ -256,56 +219,6 @@ export async function transferNft(tokenId, receiverId) {
   return success;
 }
 
-/*exp1 */
-export async function createAccount() {
-  const near = await connect(Object.assign({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() } }, await getRealConfig('development')));
-  const wallet = new WalletConnection(near);
-  const walletAccountObj = wallet.account();
-  console.log("near: ", near);
-  console.log("walletAccountObj", walletAccountObj);
-
-  const keyPair = utils.KeyPairEd25519.fromRandom();
-  console.log("keyPair: ", keyPair);
-  const newPub = keyPair.publicKey;
-  const newPriv = keyPair.secretKey;
-  console.log("newPub: ", newPub.toString())
-  console.log("privKey: ", newPriv.toString())
-
-  const newAcc = await walletAccountObj.createAccount(
-    "cexp2.optr.testnet", // new account name
-    newPub, // public key for new account
-    "5000000000000000000000" // initial balance for new account in yoctoNEAR
-  );
-}
-/*exp2 */
-export async function deployContract() {  
-  // create wallet connection
-  /*window.mockLocalStorage = {
-    "near-api-js:keystore:cexp2.optr.testnet:testnet": "4VYAz7BcxiEWf5WvC9d8117asYEBpfv3shxsYCjYcL9jSoLT1eRLQxBzhKkQ71DNuD39g6fC6j3mC3V2FRtCsWZr",
-    "undefined_wallet_auth_key": {"accountId":"cexp2.optr.testnet","allKeys":["ed25519:CPJxXnioFGdYCFVs4raF1VHRXu4doEeqvVKis1QC8gUc"]}
-  }*/
-  const near = await connect(Object.assign({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore(window.localStorage, "test") } }, await getRealConfig('deploy')));
-  const wallet = new WalletConnection(near);
-  //const walletAccountObj = wallet.account();
-  //const theKeyPair = KeyPair.fromString("29YxHipZA1rCN4zpjEhhm1u98HuqCb16WffZ5wPDKRz894PaypeztGuFKPVq3Bji1bvQsPF3Fb3G5iECHYAiBVci");
-//  const thePubKey = null;
-//  const thePrivKey = KeyPair.fromString();
-const account = await wallet.account("cexp2.optr.testnet");
-console.log("near", near);
-console.log("wallet", wallet);
-console.log("account", account);
-  //account.addKey(theKeyPair.getPublicKey());
-
-  const getObj = await fetch(window.location.origin + window.location.pathname + '/main.wasm')
-  .then((resp) => resp.arrayBuffer())
-  .catch((err) => console.error("Error while fetching .wasm file: ", err));
-  const contract = new Uint8Array(getObj);
-  const result = account.deployContract(contract);
-  
-  //const response = await walletAccountObj.deployContract("cexp.optr.testnet", newPub, contract, "0");
-  //console.log(response);
-}
-
 export async function sendGuestBookEntry(text) {
   const newEntry = {
     sender: "me",
@@ -339,6 +252,7 @@ export async function getGuestBookEntries() {
   return result;
 }
 
+// does not work
 export async function checkIfAccountExists() {
   const near = await connect(Object.assign({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() } }, await getRealConfig('development')));
   const account = await near.account("account-ain9ahzair.testnet");
@@ -400,6 +314,14 @@ export async function getBalance() {
   const account = await near.account(window.accountId);
   const yocto =  await account.getAccountBalance();
   return utils.format.formatNearAmount(yocto.available);
+}
+
+export async function verify_sha256(blob, hash) {
+  const fileArrayBuffer = await new Response(blob).arrayBuffer();
+  let wordArray = CryptoJS.lib.WordArray.create(fileArrayBuffer);
+  const dataHash = CryptoJS.SHA256(wordArray).toString();
+
+  return btoa(dataHash) === hash;
 }
 
 export function logout() {

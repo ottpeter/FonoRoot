@@ -1,14 +1,11 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom";
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Layout from './Frame/Layout';
 import Admin from './Admin/Admin';
-import NoPage from './NoPage';
 import Main from './Main/Main';
-import TopMenu from './Frame/TopMenu';
+import AdminTopMenu from './Admin/TopMenu';
 import MainTopMenu from './Main/TopMenu';
-import Footer from './Frame/Footer';
+import AdminFooter from './Admin/Footer';
 import MainFooter from './Main/Footer';
 import Message from './Activity/Message';
 import Pending from './Activity/Pending';
@@ -16,16 +13,13 @@ import Ok from './Activity/Ok';
 import Err from './Activity/Err';
 import MyNFTs from './Main/MyNFTs';
 import GuestBook from './Main/GuestBook';
-import all from 'it-all';
 import Withdraw from './Admin/Withdraw';
 
 
 export default function App() {
-  //const [currentPage, setCurrentPage] = React.useState('main');
-  //const [location, SetLocation] = React.useState("");
-  const [urlParams, setUrlParams] = React.useState(window.location.search);
+  const [urlParams, setUrlParams] = React.useState(window.location.search);                             // We use this for routing
   const [configObj, setConfigObj] = React.useState({});
-  const [actionHistory, setActionHistory] = React.useState([]);
+  const [actionHistory, setActionHistory] = React.useState([]);                                         // For the Notifications drop-down. But now we only have this in Admin
   const [showActivity, setShowActivity] = React.useState(false);
   const [openGuestBook, setGuestBook] = React.useState(false);
   const [showWallet, setShowWallet] = React.useState(false);
@@ -42,23 +36,18 @@ export default function App() {
   }, [])
   
   function doUrlParamsParsing() {
-    //SetLocation(window.location.pathname);
-    //console.log("location: ", location);
-    //console.log("urlParams: ", urlParams);
     setUrlParams(window.location.search);
-    if (urlParams.includes('guestbook')) setGuestBook(true);
+    if (urlParams.includes('guestbook')) setGuestBook(true);                                           // This is important when user creates new entry
   }
 
   function initContract() {
     const args = {
       owner_id: process.env.CONTRACT_NAME || configObj.contractName,
-      admin: configObj.admin || "lelenmar.testnet"
+      admin: configObj.admin
     }
-    // This could be 'new' for user provided init
-    window.contract.new_default_meta(args)
+    window.contract.new_default_meta(args)                                                            // This could be 'new' for user provided init, we are using default
       .then((msg) => console.log("Initialized! ", msg))
-      .catch((err) => console.error(err))
-      .finally(() => console.log("end."));
+      .catch((err) => console.error(err));
   }
   
   function newAction(actionObj) {
@@ -122,10 +111,10 @@ export default function App() {
     return (
       <>
         <ToastContainer hideProgressBar={true} position="bottom-right" transition={Slide} />
-        <TopMenu setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} 
+        <AdminTopMenu setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} 
           setShowWallet={setShowWallet} showWallet={showWallet} />
         <Withdraw />
-        <Footer />
+        <AdminFooter />
       </>
     );
   }
@@ -133,10 +122,10 @@ export default function App() {
     return (
       <>
         <ToastContainer hideProgressBar={true} position="bottom-right" transition={Slide} />
-        <TopMenu setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} 
+        <AdminTopMenu setShowActivity={setShowActivity} showActivity={showActivity} actionHistory={actionHistory} 
           setShowWallet={setShowWallet} showWallet={showWallet} />
         <Admin newAction={newAction} />
-        <Footer />
+        <AdminFooter />
       </>
     );
   } 

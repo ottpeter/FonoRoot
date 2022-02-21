@@ -590,6 +590,11 @@ input[type=number] {
   border-radius: 8px;
 }
 
+.loadingLabel {
+  font-family: VCR;
+  text-transform: uppercase;
+}
+
 #nftButtonsList {
   position: absolute;
   z-index: 2;
