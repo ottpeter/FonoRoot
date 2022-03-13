@@ -10,7 +10,7 @@ function uploadHandler(req, res, fileType) {
 
   const file = req.files.myFile;
   const filePath = process.cwd() + "/files/" + file.name;
-  const extensionName = path.extname(file.name);                                    // Fetch the file extension
+  const extensionName = path.extname(file.name);                   // Fetch the file extension
   if (fileType === "image") {
     if(!allowedImage.includes(extensionName)){
       return res.status(422).send("Invalid Image");
@@ -26,8 +26,14 @@ function uploadHandler(req, res, fileType) {
     if (err) {
       return res.status(500).send(err);
     }
-    addFileToIPFS(filePath);                                                        // This function will call pinEverywhere
-    return res.send({ status: "success", path: filePath });
+    addFileToIPFS(filePath, function(cid) {
+      console.log("CID: ", cid)
+      if ( cid !== -1 && cid !== -2) {
+        return res.send({ status: "success", cid: cid });
+      } else {
+        return res.send({ status: cid });                          // Status will be -1 or -2 
+      }
+    });                                                            // This function will call pinEverywhere
   });
 }
 

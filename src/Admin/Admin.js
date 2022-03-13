@@ -2,8 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import 'regenerator-runtime/runtime';
 const IPFS = require('ipfs-core')
 const all = require('it-all')
-const CryptoJS = require('crypto-js');
-const crustPin = require('@crustio/crust-pin').default;
 import MediaDropzone from './MediaDropzone';
 import { getSeed, mintRootNFT, setSeed } from '../utils';
 import PreviewBox from './PreviewBox';
@@ -79,31 +77,7 @@ export default function Admin({newAction}) {
     setIpfsNode(tempIpfsNode);
   }, [])
 
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
 
-  async function crustPin3Times(ipfsFile) {
-    const redundancyCount = 3;
-    const tolerance = 2;                                        // Minimum success number
-    const maxTry = 3;                                           // Max try for each pin
-    let successNum = 0;
-
-    for (let i = 1; i <= redundancyCount; i++) {                // We want to pin it 3 times, we will retry 3 times for each if failed
-      let success = false;
-      let tryCount = 0;
-      do {
-        const crust_seed = await getSeed();                     // Get the seed from the blockchain
-        const crust = new crustPin(`${crust_seed}`);            // Crust will pin the file on it's IPFS nodes
-        success = await crust.pin(await ipfsFile.cid.toString());
-        if (success) successNum++;
-        await sleep(1000);
-        tryCount++;
-      } while (tryCount < maxTry && success === false);
-    }
-    console.log("Success Num: ", successNum);
-    return (successNum >= tolerance);
-  }
 
   const onDropMedia = useCallback(async (acceptedFiles, ipfs) => {
     const file = acceptedFiles[0];                            // We can only accept 1 file
@@ -127,57 +101,7 @@ export default function Admin({newAction}) {
       }
     }
 
-    reader.onload = async function () {                           // onload callback gets called after the reader reads the file data
-      let wordArray = CryptoJS.lib.WordArray.create(reader.result);
-      
-      const ipfsPromise = ipfs.add({                              // Add the file to IPFS. This won't last, this will be only stored in local node, that is in the browser
-        path: '.',
-        content: reader.result
-      });
-      
-      newAction({ 
-        thePromise: ipfsPromise, 
-        pendingPromiseTitle: "Uploading to local (browser) IPFS node...", pendingPromiseDesc: "and this should be empty",
-        successPromiseTitle: "Done!", successPromiseDesc: "The file was uploaded to the local (browser) IPFS node.",
-        errorPromiseTitle: "Upload Failed", errorPromiseDesc: "Error while trying to upload to local IPFS node! Please Try again!",
-      });
-      const ipfsFile = await ipfsPromise
-    
-      // This wrapper promise is necesarry, because the Crust API 
-      // would resolve the promise even when the pinning fails 
-      const uploadPromise = new Promise(async (resolve, reject) => {
-        let successBoolean = false;
-        
-        await crustPin3Times(ipfsFile)
-          .then((pinResult) => {                                  // pinResult is boolean
-            if (pinResult && file.type.includes("image")) {
-              setImageHash(CryptoJS.SHA256(wordArray).toString());
-              setImageCID(ipfsFile.cid.toString());
-              setImageReady(true);
-              successBoolean = true;
-            }
-            if (pinResult && file.type.includes("audio")) {
-              setMusicHash(CryptoJS.SHA256(wordArray).toString());
-              setMusicCID(ipfsFile.cid.toString())
-              setMusicReady(true);
-              successBoolean = true;
-            }
-          })
-          .catch((err) => console.error("Error from Crust: ", err));
-        if(successBoolean) {
-           resolve("Successfully pinned!")
-        } else {
-           reject("Error occured while uploading the file to Crust!");
-        }
-      });
-        
-      newAction({
-        thePromise: uploadPromise, 
-        pendingPromiseTitle: "Uploading file to the Crust network...", pendingPromiseDesc: "",
-        successPromiseTitle: "File uploaded!", successPromiseDesc: "The file was uploaded to the network",
-        errorPromiseTitle: "Couldn't upload file to Crust!", errorPromiseDesc: "Couldn't upload file to Crust! Please check your Crust balance and try again!"
-      });
-    };
+    // Axios
   });
 
   function createNFT() {
