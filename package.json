@@ -6,7 +6,7 @@
     "build": "npm run build:contract && npm run build:web",
     "build:contract": "node contract/compile.js",
     "build:contract:debug": "node contract/compile.js --debug",
-    "build:web": "parcel build src/index.html --no-minify --public-url ./",
+    "build:web": "parcel build src/index.html --public-url ./",
     "dev:deploy:contract": "near dev-deploy",
     "deploy:contract": "near deploy",
     "deploy:pages": "gh-pages -d dist/",
@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@crustio/crust-pin": "^1.0.0",
+    "axios": "^0.26.1",
     "crypto-js": "^4.1.1",
     "cuid": "^2.1.8",
     "debounce": "^1.2.1",
