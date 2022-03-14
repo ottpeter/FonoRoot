@@ -38,3 +38,16 @@ marketplace-contract/target/*
 
 # report
 report.*
+
+# backend node_modules
+/backend/node_modules/
+
+# misc for backend
+/backend/.DS_Store
+/backend/.env
+/backend/.env.local
+/backend/.env.development.local
+/backend/.env.test.local
+/backend/.env.production.local
+/backend/.cache
+

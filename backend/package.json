@@ -1,0 +1,19 @@
+{
+  "name": "fono-root-backend",
+  "version": "1.0.0",
+  "description": "Backend for Fono-Root that is doing file upload and IPFS pinning",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Peter Ott",
+  "license": "MIT",
+  "dependencies": {
+    "@crustio/crust-pin": "^1.0.0",
+    "axios": "^0.26.1",
+    "crypto-js": "^4.1.1",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-fileupload": "^1.3.1"
+  }
+}

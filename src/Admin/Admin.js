@@ -1,22 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import 'regenerator-runtime/runtime';
-const IPFS = require('ipfs-core')
-const all = require('it-all')
-const CryptoJS = require('crypto-js');
-const crustPin = require('@crustio/crust-pin').default;
+const axios = require('axios');
+const CryptoJS = require('crypto-js'); 
 import MediaDropzone from './MediaDropzone';
-import { getSeed, mintRootNFT, setSeed } from '../utils';
+import { mintRootNFT } from '../utils';
 import PreviewBox from './PreviewBox';
-import Loading from './Loading';
 import SmallUploader from './SmallUploader';
 import infoLogo from '../assets/info.svg';
 import ConnectWallet from './ConnectWallet';
 
 
-export default function Admin({newAction}) {
-  const [ipfsNode, setIpfsNode] = useState(null);
-  const [pageSwitch, setPageSwitch] = useState(0);                               // If no Crust seed is set yet, the user has to provide one
-  
+export default function Admin({newAction}) {  
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [price, setPrice] = useState("0");
@@ -32,26 +26,8 @@ export default function Admin({newAction}) {
   const [musicReady, setMusicReady] = useState(false);
   const [musicCID, setMusicCID] = useState("");
   const [musicHash, setMusicHash] = useState("");
-
-  const [mnemonic, setMnemonic] = useState("");
-
-  function saveMnemonic() {
-    if (mnemonic.length === 0) return;
-    
-    let href = window.location.href;
-    href = href.slice(0, href.indexOf("?")+1);
-    history.pushState(null, "SetSeed", href + "?admin=1&setseed=1");             // This is important because of the notification we fire 
-    const setSeedPromise = new Promise(async (resolve, reject) => {              // when we got redirected to our page from near.org
-      await setSeed(mnemonic);
-    })
-    newAction({
-      thePromise: setSeedPromise, 
-      pendingPromiseTitle: "Prepairing transaction...", pendingPromiseDesc: "plase wait",
-      successPromiseTitle: "Redirecting to transaction", successPromiseDesc: "Please sign the transaction in the next screen!",
-      errorPromiseTitle: "Redirecting to transaction", errorPromiseDesc: "Please sign the transaction in the next screen!"
-    });
-  }
   
+
   useEffect(async () => {
     const urlParams = window.location.search;
     let href = window.location.href;
@@ -62,50 +38,14 @@ export default function Admin({newAction}) {
       newAction({
         errorMsg: "There was an error during the transaction!", errorMsgDesc: URLSearchParams.get('errorCode'),
       }); 
-    } else if (urlParams.includes('transactionHashes') && urlParams.includes('setseed')) {
-      newAction({
-        successMsg: "Saved!", successMsgDesc: "The seed was saved.",
-      });
     } else if (urlParams.includes('transactionHashes')) {
       newAction({
         successMsg: "NFT Minted!", successMsgDesc: "The new RootNFT was successfully minted",
       });
     }
-
-    const seedBoolean = await getSeed() && true;
-    if (seedBoolean) setPageSwitch(2);                        // Key is already set
-    else setPageSwitch(1);                                    // Need to set key
-    const tempIpfsNode = await IPFS.create();
-    setIpfsNode(tempIpfsNode);
   }, [])
 
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  async function crustPin3Times(ipfsFile) {
-    const redundancyCount = 3;
-    const tolerance = 2;                                        // Minimum success number
-    const maxTry = 3;                                           // Max try for each pin
-    let successNum = 0;
-
-    for (let i = 1; i <= redundancyCount; i++) {                // We want to pin it 3 times, we will retry 3 times for each if failed
-      let success = false;
-      let tryCount = 0;
-      do {
-        const crust_seed = await getSeed();                     // Get the seed from the blockchain
-        const crust = new crustPin(`${crust_seed}`);            // Crust will pin the file on it's IPFS nodes
-        success = await crust.pin(await ipfsFile.cid.toString());
-        if (success) successNum++;
-        await sleep(1000);
-        tryCount++;
-      } while (tryCount < maxTry && success === false);
-    }
-    console.log("Success Num: ", successNum);
-    return (successNum >= tolerance);
-  }
-
-  const onDropMedia = useCallback(async (acceptedFiles, ipfs) => {
+  const onDropMedia = useCallback(async (acceptedFiles) => {
     const file = acceptedFiles[0];                            // We can only accept 1 file
     const reader = new FileReader();
     reader.readAsArrayBuffer(file);                           // Read as array buffer, because we need that for SHA256
@@ -129,56 +69,55 @@ export default function Admin({newAction}) {
 
     reader.onload = async function () {                           // onload callback gets called after the reader reads the file data
       let wordArray = CryptoJS.lib.WordArray.create(reader.result);
-      
-      const ipfsPromise = ipfs.add({                              // Add the file to IPFS. This won't last, this will be only stored in local node, that is in the browser
-        path: '.',
-        content: reader.result
-      });
-      
-      newAction({ 
-        thePromise: ipfsPromise, 
-        pendingPromiseTitle: "Uploading to local (browser) IPFS node...", pendingPromiseDesc: "and this should be empty",
-        successPromiseTitle: "Done!", successPromiseDesc: "The file was uploaded to the local (browser) IPFS node.",
-        errorPromiseTitle: "Upload Failed", errorPromiseDesc: "Error while trying to upload to local IPFS node! Please Try again!",
-      });
-      const ipfsFile = await ipfsPromise
-    
-      // This wrapper promise is necesarry, because the Crust API 
-      // would resolve the promise even when the pinning fails 
-      const uploadPromise = new Promise(async (resolve, reject) => {
-        let successBoolean = false;
-        
-        await crustPin3Times(ipfsFile)
-          .then((pinResult) => {                                  // pinResult is boolean
-            if (pinResult && file.type.includes("image")) {
-              setImageHash(CryptoJS.SHA256(wordArray).toString());
-              setImageCID(ipfsFile.cid.toString());
-              setImageReady(true);
-              successBoolean = true;
-            }
-            if (pinResult && file.type.includes("audio")) {
-              setMusicHash(CryptoJS.SHA256(wordArray).toString());
-              setMusicCID(ipfsFile.cid.toString())
-              setMusicReady(true);
-              successBoolean = true;
-            }
-          })
-          .catch((err) => console.error("Error from Crust: ", err));
-        if(successBoolean) {
-           resolve("Successfully pinned!")
-        } else {
-           reject("Error occured while uploading the file to Crust!");
-        }
-      });
-        
-      newAction({
-        thePromise: uploadPromise, 
-        pendingPromiseTitle: "Uploading file to the Crust network...", pendingPromiseDesc: "",
-        successPromiseTitle: "File uploaded!", successPromiseDesc: "The file was uploaded to the network",
-        errorPromiseTitle: "Couldn't upload file to Crust!", errorPromiseDesc: "Couldn't upload file to Crust! Please check your Crust balance and try again!"
-      });
-    };
+
+      // Upload the file to our server using Axios
+      if (file.type.includes("audio")) uploadFile(file, wordArray, "music");
+      if (file.type.includes("image")) uploadFile(file, wordArray, "image");
+    }
   });
+
+  /** Upload file to server. The server will do the IPFS pinning */
+  function uploadFile(file, wordArray, fileType) {
+    let successBoolean = false;
+
+    const uploadPromise = new Promise(async (resolve, reject) => {
+      const formData = new FormData();
+      formData.append("myFile", file);
+      const headers = {
+        'Content-Type': 'multipart/form-data',
+      }
+      await axios.post(`http://172.105.246.99:3000/upload/${fileType}`, formData, { headers })
+        .then((response) => {
+          console.log("THE RESPONSE: ", response);
+          if (fileType === "image") {
+            setImageHash(CryptoJS.SHA256(wordArray).toString());
+            setImageCID(response.data.cid);
+            setImageReady(true);
+            successBoolean = true;
+          }
+          if (fileType === "music") {
+            setMusicHash(CryptoJS.SHA256(wordArray).toString());
+            setMusicCID(response.data.cid)
+            setMusicReady(true);
+            successBoolean = true;
+          }
+          console.log("Media was uploaded.")
+        })
+        .catch((err) => console.error("Error while uploading file", err));
+        if(successBoolean) {
+          resolve("(resolve) Successfully uploaded!")
+        } else {
+          reject("(reject) Error occured while uploading the file!");
+        }
+    });
+
+    newAction({
+      thePromise: uploadPromise, 
+      pendingPromiseTitle: "Uploading media...", pendingPromiseDesc: "",
+      successPromiseTitle: "File uploaded!", successPromiseDesc: "The file was successfully uploaded",
+      errorPromiseTitle: "Couldn't upload file!", errorPromiseDesc: "There was an error while uploading the file. Please try again!"
+    });
+  }
 
   function createNFT() {
     if (!(imageReady && musicReady)) {
@@ -222,102 +161,36 @@ export default function Admin({newAction}) {
     });
   }
 
-  /**
-   * This is the code that we would be using for the site cloning, 
-   * the IPFS-side of it works, but we couldn't create new contract instance 
-   * from browser, so we don't have this feature. The following code is creating
-   * an almost equal IPFS site, but the `projectConfig.json` can be different.
-   * It would be also possible to add a different background image for example.
-   */
-  async function folderExperiment() {
-    if (!ipfsNode) { console.log("The IPFS node is not ready."); return; }
-
-    //await deployContract();
-    
-
-    const configObj = {
-      test: 5,
-      "contractName": "dev-1644223381077-49369947423471",
-    }
-    const strConfig = JSON.stringify(configObj);
-    let configFileName = null;
-    
-    const cid = 'QmQ6siYQBGKQKWqPBhCMWKJQZ3MxTSwpk7Ldc5vW1BGop2';
-    const lsResult = await all(ipfsNode.files.ls('/'));
-    lsResult.map(async (line) => await ipfsNode.files.rm('/' + line.name, { recursive: true }));
-    
-    for await (const file of ipfsNode.ls(cid)) {
-      if (file.name.includes('projectConfig')) configFileName = file.name;
-      await ipfsNode.files.cp('/ipfs/' + file.path, '/' + file.name);
-    }
-
-    console.log("configFileName: ", configFileName);
-    const configByteArray = new TextEncoder().encode(strConfig);
-    console.log("configByteArray: ", configByteArray)
-    await ipfsNode.files.rm('/' + configFileName);
-    await ipfsNode.files.write('/' + configFileName, configByteArray, { create: true, flush: true });
-
-    const res = await all(ipfsNode.files.read('/' + configFileName));
-    console.log("TRS", res[0])
-    const decoded = new TextDecoder().decode(res[0]);
-    console.log(decoded)
-
-    const newnewstat = await ipfsNode.files.stat("/");
-    const newnewlsResult = await all(ipfsNode.files.ls('/'));
-    console.log("stat: ", newnewstat);
-    console.log("ls: ", newnewlsResult);
-
-  
-    await crustPin3Times(newnewstat)
-    .then((pinResult) => {                                  // pinResult is boolean
-      if (pinResult) console.log("pinResult is true!");
-      console.log("CID: ", newnewstat.cid.toString());
-    })
-    .catch((err) => console.error("Error from Crust: ", err));
-  }
-
-
   if (!window.walletConnection.isSignedIn()) return <ConnectWallet />
-  if (pageSwitch === 0) return <Loading />
+
 
   return (
     <main id="adminMain">
-      {pageSwitch === 1 && <div id="keyInput" className="keyInput">
-        <p>Enter CRUST Key</p>
-        <input onChange={(e) => setMnemonic(e.target.value)}></input>
-        <button onClick={saveMnemonic}>Enter</button>
-      </div>}
-      <div id="adminMain" className={pageSwitch === 1 ? "adminMain blurred" : "adminMain"}>
-        {pageSwitch === 1 && <div id="darkeningOverlay" className="darkeningOverlay"></div>}
+      <div id="adminMain" className={"adminMain"}>
         <h1 className="title">Mint NFT</h1>
-
 
         <div id="adminFlexBox" className="adminFlexBox">
           <div id="nft-details" className="nft-details">
             <label className="fieldName">Upload Media</label>
-            {ipfsNode && (
-              <>
-                {!(imageReady || musicReady) ? 
-                  <MediaDropzone onDrop={(files) => onDropMedia(files, ipfsNode)} accept={"image/*, audio/*"} />
-                  : (
-                    <>
-                    {imageReady ? 
-                      <p className="smallUploader">{image.name}<button onClick={() => setImageReady(false)}>X</button></p> 
-                    : 
-                      <SmallUploader onDrop={(files) => onDropMedia(files, ipfsNode)} accept={"image/*"} /> }
-                    {musicReady ? 
-                      <p className="smallUploader">{music.name}<button onClick={() => setMusicReady(false)}>X</button></p>
-                    : 
-                      <SmallUploader onDrop={(files) => onDropMedia(files, ipfsNode)} accept={"audio/*"} />}
-                    </>
-                  )
-                }
-                <div className="infoDiv">
-                  <img src={infoLogo}></img>
-                  <p>{"Supported formats .jpg .png and .mp3"}</p>
-                </div>
-              </>
-            )}
+              {!(imageReady || musicReady) ? 
+                <MediaDropzone onDrop={(files) => onDropMedia(files)} accept={"image/*, audio/*"} />
+                : (
+                  <>
+                  {imageReady ? 
+                    <p className="smallUploader">{image.name}<button onClick={() => setImageReady(false)}>X</button></p> 
+                  : 
+                    <SmallUploader onDrop={(files) => onDropMedia(files)} accept={"image/*"} /> }
+                  {musicReady ? 
+                    <p className="smallUploader">{music.name}<button onClick={() => setMusicReady(false)}>X</button></p>
+                  : 
+                    <SmallUploader onDrop={(files) => onDropMedia(files)} accept={"audio/*"} />}
+                  </>
+                )
+              }
+              <div className="infoDiv">
+                <img src={infoLogo}></img>
+                <p>{"Supported formats .jpg .png and .mp3"}</p>
+              </div>
             <label className="fieldName">Title</label>
             <input type={"text"} value={title} className="nftTitleInput" onChange={(e) => setTitle(e.target.value)} />
             <label className="fieldName">Description</label>
@@ -332,7 +205,6 @@ export default function Admin({newAction}) {
           <button onClick={createNFT} className="mainButton">Mint</button>
         </div>
       </div>
-    
     </main>
   )
 }
