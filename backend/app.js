@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-
 const uploadRoutes = require('./routes/upload.js');
 
 // CORS (we allow everything)
@@ -17,5 +16,5 @@ app.get('/', function (req, res) {
 app.use('/upload', uploadRoutes);
 
 app.listen(3000, function () {
-  console.log("Example app listening on port 3000!");
+  console.log("IPFS pinner app listening on port 3000!");
 });

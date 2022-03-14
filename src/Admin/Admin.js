@@ -70,7 +70,7 @@ export default function Admin({newAction}) {
     reader.onload = async function () {                           // onload callback gets called after the reader reads the file data
       let wordArray = CryptoJS.lib.WordArray.create(reader.result);
 
-      // Axios
+      // Upload the file to our server using Axios
       if (file.type.includes("audio")) uploadFile(file, wordArray, "music");
       if (file.type.includes("image")) uploadFile(file, wordArray, "image");
     }
@@ -169,7 +169,6 @@ export default function Admin({newAction}) {
       <div id="adminMain" className={"adminMain"}>
         <h1 className="title">Mint NFT</h1>
 
-
         <div id="adminFlexBox" className="adminFlexBox">
           <div id="nft-details" className="nft-details">
             <label className="fieldName">Upload Media</label>
@@ -206,7 +205,6 @@ export default function Admin({newAction}) {
           <button onClick={createNFT} className="mainButton">Mint</button>
         </div>
       </div>
-    
     </main>
   )
 }
