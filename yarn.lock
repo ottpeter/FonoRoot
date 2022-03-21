@@ -1074,8 +1074,8 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
 
 "@chainsafe/libp2p-noise@^4.0.0":
-  version "4.1.1"
-  resolved "https://registry.npmjs.org/@chainsafe/libp2p-noise/-/libp2p-noise-4.1.1.tgz"
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/@chainsafe/libp2p-noise/-/libp2p-noise-4.1.2.tgz#86856f225c0f683a3967ad34382da72c62635c88"
   dependencies:
     "@stablelib/chacha20poly1305" "^1.0.1"
     "@stablelib/hkdf" "^1.0.1"
@@ -1758,46 +1758,46 @@
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
-  resolved "https://registry.npmjs.org/@protobufjs/aspromise/-/aspromise-1.1.2.tgz"
+  resolved "https://registry.yarnpkg.com/@protobufjs/aspromise/-/aspromise-1.1.2.tgz#9b8b0cc663d669a7d8f6f5d0893a14d348f30fbf"
 
 "@protobufjs/base64@^1.1.2":
   version "1.1.2"
-  resolved "https://registry.npmjs.org/@protobufjs/base64/-/base64-1.1.2.tgz"
+  resolved "https://registry.yarnpkg.com/@protobufjs/base64/-/base64-1.1.2.tgz#4c85730e59b9a1f1f349047dbf24296034bb2735"
 
 "@protobufjs/codegen@^2.0.4":
   version "2.0.4"
-  resolved "https://registry.npmjs.org/@protobufjs/codegen/-/codegen-2.0.4.tgz"
+  resolved "https://registry.yarnpkg.com/@protobufjs/codegen/-/codegen-2.0.4.tgz#7ef37f0d010fb028ad1ad59722e506d9262815cb"
 
 "@protobufjs/eventemitter@^1.1.0":
   version "1.1.0"
-  resolved "https://registry.npmjs.org/@protobufjs/eventemitter/-/eventemitter-1.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/@protobufjs/eventemitter/-/eventemitter-1.1.0.tgz#355cbc98bafad5978f9ed095f397621f1d066b70"
 
 "@protobufjs/fetch@^1.1.0":
   version "1.1.0"
-  resolved "https://registry.npmjs.org/@protobufjs/fetch/-/fetch-1.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/@protobufjs/fetch/-/fetch-1.1.0.tgz#ba99fb598614af65700c1619ff06d454b0d84c45"
   dependencies:
     "@protobufjs/aspromise" "^1.1.1"
     "@protobufjs/inquire" "^1.1.0"
 
 "@protobufjs/float@^1.0.2":
   version "1.0.2"
-  resolved "https://registry.npmjs.org/@protobufjs/float/-/float-1.0.2.tgz"
+  resolved "https://registry.yarnpkg.com/@protobufjs/float/-/float-1.0.2.tgz#5e9e1abdcb73fc0a7cb8b291df78c8cbd97b87d1"
 
 "@protobufjs/inquire@^1.1.0":
   version "1.1.0"
-  resolved "https://registry.npmjs.org/@protobufjs/inquire/-/inquire-1.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/@protobufjs/inquire/-/inquire-1.1.0.tgz#ff200e3e7cf2429e2dcafc1140828e8cc638f089"
 
 "@protobufjs/path@^1.1.2":
   version "1.1.2"
-  resolved "https://registry.npmjs.org/@protobufjs/path/-/path-1.1.2.tgz"
+  resolved "https://registry.yarnpkg.com/@protobufjs/path/-/path-1.1.2.tgz#6cc2b20c5c9ad6ad0dccfd21ca7673d8d7fbf68d"
 
 "@protobufjs/pool@^1.1.0":
   version "1.1.0"
-  resolved "https://registry.npmjs.org/@protobufjs/pool/-/pool-1.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/@protobufjs/pool/-/pool-1.1.0.tgz#09fd15f2d6d3abfa9b65bc366506d6ad7846ff54"
 
 "@protobufjs/utf8@^1.1.0":
   version "1.1.0"
-  resolved "https://registry.npmjs.org/@protobufjs/utf8/-/utf8-1.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
@@ -1827,21 +1827,21 @@
 
 "@stablelib/aead@^1.0.1":
   version "1.0.1"
-  resolved "https://registry.npmjs.org/@stablelib/aead/-/aead-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/@stablelib/aead/-/aead-1.0.1.tgz#c4b1106df9c23d1b867eb9b276d8f42d5fc4c0c3"
 
 "@stablelib/binary@^1.0.1":
   version "1.0.1"
-  resolved "https://registry.npmjs.org/@stablelib/binary/-/binary-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/@stablelib/binary/-/binary-1.0.1.tgz#c5900b94368baf00f811da5bdb1610963dfddf7f"
   dependencies:
     "@stablelib/int" "^1.0.1"
 
 "@stablelib/bytes@^1.0.1":
   version "1.0.1"
-  resolved "https://registry.npmjs.org/@stablelib/bytes/-/bytes-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/@stablelib/bytes/-/bytes-1.0.1.tgz#0f4aa7b03df3080b878c7dea927d01f42d6a20d8"
 
 "@stablelib/chacha20poly1305@^1.0.1":
   version "1.0.1"
-  resolved "https://registry.npmjs.org/@stablelib/chacha20poly1305/-/chacha20poly1305-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/@stablelib/chacha20poly1305/-/chacha20poly1305-1.0.1.tgz#de6b18e283a9cb9b7530d8767f99cde1fec4c2ee"
   dependencies:
     "@stablelib/aead" "^1.0.1"
     "@stablelib/binary" "^1.0.1"
@@ -1852,22 +1852,22 @@
 
 "@stablelib/chacha@^1.0.1":
   version "1.0.1"
-  resolved "https://registry.npmjs.org/@stablelib/chacha/-/chacha-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/@stablelib/chacha/-/chacha-1.0.1.tgz#deccfac95083e30600c3f92803a3a1a4fa761371"
   dependencies:
     "@stablelib/binary" "^1.0.1"
     "@stablelib/wipe" "^1.0.1"
 
 "@stablelib/constant-time@^1.0.1":
   version "1.0.1"
-  resolved "https://registry.npmjs.org/@stablelib/constant-time/-/constant-time-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/@stablelib/constant-time/-/constant-time-1.0.1.tgz#bde361465e1cf7b9753061b77e376b0ca4c77e35"
 
 "@stablelib/hash@^1.0.1":
   version "1.0.1"
-  resolved "https://registry.npmjs.org/@stablelib/hash/-/hash-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/@stablelib/hash/-/hash-1.0.1.tgz#3c944403ff2239fad8ebb9015e33e98444058bc5"
 
 "@stablelib/hkdf@^1.0.1":
   version "1.0.1"
-  resolved "https://registry.npmjs.org/@stablelib/hkdf/-/hkdf-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/@stablelib/hkdf/-/hkdf-1.0.1.tgz#b4efd47fd56fb43c6a13e8775a54b354f028d98d"
   dependencies:
     "@stablelib/hash" "^1.0.1"
     "@stablelib/hmac" "^1.0.1"
@@ -1875,7 +1875,7 @@
 
 "@stablelib/hmac@^1.0.1":
   version "1.0.1"
-  resolved "https://registry.npmjs.org/@stablelib/hmac/-/hmac-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/@stablelib/hmac/-/hmac-1.0.1.tgz#3d4c1b8cf194cb05d28155f0eed8a299620a07ec"
   dependencies:
     "@stablelib/constant-time" "^1.0.1"
     "@stablelib/hash" "^1.0.1"
@@ -1883,31 +1883,31 @@
 
 "@stablelib/int@^1.0.1":
   version "1.0.1"
-  resolved "https://registry.npmjs.org/@stablelib/int/-/int-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/@stablelib/int/-/int-1.0.1.tgz#75928cc25d59d73d75ae361f02128588c15fd008"
 
 "@stablelib/keyagreement@^1.0.1":
   version "1.0.1"
-  resolved "https://registry.npmjs.org/@stablelib/keyagreement/-/keyagreement-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/@stablelib/keyagreement/-/keyagreement-1.0.1.tgz#4612efb0a30989deb437cd352cee637ca41fc50f"
   dependencies:
     "@stablelib/bytes" "^1.0.1"
 
 "@stablelib/poly1305@^1.0.1":
   version "1.0.1"
-  resolved "https://registry.npmjs.org/@stablelib/poly1305/-/poly1305-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/@stablelib/poly1305/-/poly1305-1.0.1.tgz#93bfb836c9384685d33d70080718deae4ddef1dc"
   dependencies:
     "@stablelib/constant-time" "^1.0.1"
     "@stablelib/wipe" "^1.0.1"
 
 "@stablelib/random@^1.0.1":
   version "1.0.1"
-  resolved "https://registry.npmjs.org/@stablelib/random/-/random-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/@stablelib/random/-/random-1.0.1.tgz#4357a00cb1249d484a9a71e6054bc7b8324a7009"
   dependencies:
     "@stablelib/binary" "^1.0.1"
     "@stablelib/wipe" "^1.0.1"
 
 "@stablelib/sha256@^1.0.1":
   version "1.0.1"
-  resolved "https://registry.npmjs.org/@stablelib/sha256/-/sha256-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/@stablelib/sha256/-/sha256-1.0.1.tgz#77b6675b67f9b0ea081d2e31bda4866297a3ae4f"
   dependencies:
     "@stablelib/binary" "^1.0.1"
     "@stablelib/hash" "^1.0.1"
@@ -1915,11 +1915,11 @@
 
 "@stablelib/wipe@^1.0.1":
   version "1.0.1"
-  resolved "https://registry.npmjs.org/@stablelib/wipe/-/wipe-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/@stablelib/wipe/-/wipe-1.0.1.tgz#d21401f1d59ade56a62e139462a97f104ed19a36"
 
 "@stablelib/x25519@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/@stablelib/x25519/-/x25519-1.0.1.tgz"
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@stablelib/x25519/-/x25519-1.0.2.tgz#ae21e2ab668076ec2eb2b4853b82a27fab045fa1"
   dependencies:
     "@stablelib/keyagreement" "^1.0.1"
     "@stablelib/random" "^1.0.1"
@@ -2021,7 +2021,7 @@
 
 "@types/long@^4.0.1":
   version "4.0.1"
-  resolved "https://registry.npmjs.org/@types/long/-/long-4.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/@types/long/-/long-4.0.1.tgz#459c65fa1867dafe6a8f322c4c51695663cc55e9"
 
 "@types/minimatch@^3.0.4":
   version "3.0.5"
@@ -2038,13 +2038,17 @@
     "@types/node" "*"
     form-data "^3.0.0"
 
-"@types/node@*", "@types/node@>=13.7.0":
+"@types/node@*":
   version "17.0.8"
   resolved "https://registry.npmjs.org/@types/node/-/node-17.0.8.tgz"
 
 "@types/node@11.11.6":
   version "11.11.6"
   resolved "https://registry.npmjs.org/@types/node/-/node-11.11.6.tgz"
+
+"@types/node@>=13.7.0":
+  version "17.0.22"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.22.tgz#38b6c4b9b2f3ed9f2e376cce42a298fb2375251e"
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
@@ -2517,7 +2521,7 @@ ascii-table@0.0.9:
 
 asn1.js@^5.0.1, asn1.js@^5.2.0:
   version "5.4.1"
-  resolved "https://registry.npmjs.org/asn1.js/-/asn1.js-5.4.1.tgz"
+  resolved "https://registry.yarnpkg.com/asn1.js/-/asn1.js-5.4.1.tgz#11a980b84ebb91781ce35b0fdc2ee294e3783f07"
   dependencies:
     bn.js "^4.0.0"
     inherits "^2.0.1"
@@ -3493,7 +3497,7 @@ binaryen@100.0.0-nightly.20210413:
 
 bindings@^1.5.0:
   version "1.5.0"
-  resolved "https://registry.npmjs.org/bindings/-/bindings-1.5.0.tgz"
+  resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.5.0.tgz#10353c9e945334bc0511a6d90b38fbc7c9c504df"
   dependencies:
     file-uri-to-path "1.0.0"
 
@@ -3523,7 +3527,7 @@ bl@^4.0.3:
 
 bl@^5.0.0:
   version "5.0.0"
-  resolved "https://registry.npmjs.org/bl/-/bl-5.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/bl/-/bl-5.0.0.tgz#6928804a41e9da9034868e1c50ca88f21f57aea2"
   dependencies:
     buffer "^6.0.3"
     inherits "^2.0.4"
@@ -3580,7 +3584,7 @@ bn.js@5.2.0, bn.js@^5.0.0, bn.js@^5.1.1, bn.js@^5.2.0:
 
 bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.11.9:
   version "4.12.0"
-  resolved "https://registry.npmjs.org/bn.js/-/bn.js-4.12.0.tgz"
+  resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-4.12.0.tgz#775b3f278efbb9718eec7361f483fb36fbbfea88"
 
 body-parser@1.19.1:
   version "1.19.1"
@@ -3707,7 +3711,7 @@ brfs@^1.2.0:
 
 brorand@^1.0.1, brorand@^1.1.0:
   version "1.1.0"
-  resolved "https://registry.npmjs.org/brorand/-/brorand-1.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/brorand/-/brorand-1.1.0.tgz#12c25efe40a45e3c323eb8675a0a0ce57b22371f"
 
 browser-process-hrtime@^1.0.0:
   version "1.0.0"
@@ -4167,7 +4171,7 @@ clap@^1.0.9:
 
 class-is@^1.1.0:
   version "1.1.0"
-  resolved "https://registry.npmjs.org/class-is/-/class-is-1.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/class-is/-/class-is-1.1.0.tgz#9d3c0fba0440d211d843cec3dedfa48055005825"
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -5085,8 +5089,8 @@ debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.0, debug@^2.6.6, debug@^2.6.
     ms "2.0.0"
 
 debug@4, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@^4.2.0, debug@^4.3.0, debug@^4.3.1, debug@~4.3.1, debug@~4.3.2:
-  version "4.3.3"
-  resolved "https://registry.npmjs.org/debug/-/debug-4.3.3.tgz"
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
   dependencies:
     ms "2.1.2"
 
@@ -5527,7 +5531,7 @@ electron-to-chromium@^1.2.7, electron-to-chromium@^1.3.30, electron-to-chromium@
 
 elliptic@^6.5.3, elliptic@^6.5.4:
   version "6.5.4"
-  resolved "https://registry.npmjs.org/elliptic/-/elliptic-6.5.4.tgz"
+  resolved "https://registry.yarnpkg.com/elliptic/-/elliptic-6.5.4.tgz#da37cebd31e79a1367e941b592ed1fbebd58abbb"
   dependencies:
     bn.js "^4.11.9"
     brorand "^1.1.0"
@@ -5650,7 +5654,7 @@ err-code@^2.0.3:
 
 err-code@^3.0.0, err-code@^3.0.1:
   version "3.0.1"
-  resolved "https://registry.npmjs.org/err-code/-/err-code-3.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/err-code/-/err-code-3.0.1.tgz#a444c7b992705f2b120ee320b09972eef331c920"
 
 errno@^0.1.3, errno@~0.1.7:
   version "0.1.8"
@@ -6100,7 +6104,7 @@ eventemitter3@^4.0.0, eventemitter3@^4.0.4, eventemitter3@^4.0.7:
 
 events@^3.0.0, events@^3.3.0:
   version "3.3.0"
-  resolved "https://registry.npmjs.org/events/-/events-3.3.0.tgz"
+  resolved "https://registry.yarnpkg.com/events/-/events-3.3.0.tgz#31a95ad0a924e2d2c419a813aeb2c4e878ea7400"
 
 eventsource@0.1.6:
   version "0.1.6"
@@ -6342,8 +6346,8 @@ fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
   resolved "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz"
 
 fast-fifo@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/fast-fifo/-/fast-fifo-1.0.0.tgz"
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/fast-fifo/-/fast-fifo-1.1.0.tgz#17d1a3646880b9891dfa0c54e69c5fef33cad779"
 
 fast-glob@^2.2.2:
   version "2.2.7"
@@ -6430,7 +6434,7 @@ file-selector@^0.2.2:
 
 file-uri-to-path@1.0.0:
   version "1.0.0"
-  resolved "https://registry.npmjs.org/file-uri-to-path/-/file-uri-to-path-1.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/file-uri-to-path/-/file-uri-to-path-1.0.0.tgz#553a7b8446ff6f684359c445f1e37a05dacc33dd"
 
 filename-regex@^2.0.0:
   version "2.0.1"
@@ -6785,7 +6789,7 @@ get-intrinsic@^1.0.2, get-intrinsic@^1.1.0, get-intrinsic@^1.1.1:
 
 get-iterator@^1.0.2:
   version "1.0.2"
-  resolved "https://registry.npmjs.org/get-iterator/-/get-iterator-1.0.2.tgz"
+  resolved "https://registry.yarnpkg.com/get-iterator/-/get-iterator-1.0.2.tgz#cd747c02b4c084461fac14f48f6b45a80ed25c82"
 
 get-package-type@^0.1.0:
   version "0.1.0"
@@ -7203,7 +7207,7 @@ history@^5.2.0:
 
 hmac-drbg@^1.0.1:
   version "1.0.1"
-  resolved "https://registry.npmjs.org/hmac-drbg/-/hmac-drbg-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/hmac-drbg/-/hmac-drbg-1.0.1.tgz#d2745701025a6c775a6c545793ed502fc0c649a1"
   dependencies:
     hash.js "^1.0.3"
     minimalistic-assert "^1.0.0"
@@ -7454,7 +7458,7 @@ icss-utils@^2.1.0:
 
 ieee754@^1.1.13, ieee754@^1.1.4, ieee754@^1.2.1:
   version "1.2.1"
-  resolved "https://registry.npmjs.org/ieee754/-/ieee754-1.2.1.tgz"
+  resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.2.1.tgz#8eb7a10a63fff25d15a57b001586d177d1b0d352"
 
 ignore-by-default@^1.0.1:
   version "1.0.1"
@@ -7531,7 +7535,7 @@ inflight@^1.0.4:
 
 inherits@2, inherits@2.0.4, inherits@^2.0.1, inherits@^2.0.3, inherits@^2.0.4, inherits@~2.0.0, inherits@~2.0.1, inherits@~2.0.3:
   version "2.0.4"
-  resolved "https://registry.npmjs.org/inherits/-/inherits-2.0.4.tgz"
+  resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
 
 inherits@2.0.1:
   version "2.0.1"
@@ -8026,7 +8030,7 @@ is-buffer@^1.1.5:
 
 is-buffer@^2.0.5:
   version "2.0.5"
-  resolved "https://registry.npmjs.org/is-buffer/-/is-buffer-2.0.5.tgz"
+  resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-2.0.5.tgz#ebc252e400d22ff8d77fa09888821a24a658c191"
 
 is-builtin-module@^1.0.0:
   version "1.0.0"
@@ -8372,7 +8376,7 @@ is-symbol@^1.0.2, is-symbol@^1.0.3:
 
 is-typedarray@^1.0.0, is-typedarray@~1.0.0:
   version "1.0.0"
-  resolved "https://registry.npmjs.org/is-typedarray/-/is-typedarray-1.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/is-typedarray/-/is-typedarray-1.0.0.tgz#e479c80858df0c1b11ddda6940f96011fcda4a9a"
 
 is-url@^1.2.2, is-url@^1.2.4:
   version "1.2.4"
@@ -8436,7 +8440,7 @@ iso-constants@^0.1.2:
 
 iso-random-stream@^2.0.0:
   version "2.0.2"
-  resolved "https://registry.npmjs.org/iso-random-stream/-/iso-random-stream-2.0.2.tgz"
+  resolved "https://registry.yarnpkg.com/iso-random-stream/-/iso-random-stream-2.0.2.tgz#a24f77c34cfdad9d398707d522a6a0cc640ff27d"
   dependencies:
     events "^3.3.0"
     readable-stream "^3.4.0"
@@ -8578,7 +8582,7 @@ it-batch@^1.0.8, it-batch@^1.0.9:
 
 it-buffer@^0.1.2, it-buffer@^0.1.3:
   version "0.1.3"
-  resolved "https://registry.npmjs.org/it-buffer/-/it-buffer-0.1.3.tgz"
+  resolved "https://registry.yarnpkg.com/it-buffer/-/it-buffer-0.1.3.tgz#efebef1cc35a6133cb9558e759345d4f17b3e1d0"
   dependencies:
     bl "^5.0.0"
     buffer "^6.0.3"
@@ -8610,7 +8614,7 @@ it-glob@^1.0.1:
 
 it-handshake@^2.0.0:
   version "2.0.0"
-  resolved "https://registry.npmjs.org/it-handshake/-/it-handshake-2.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/it-handshake/-/it-handshake-2.0.0.tgz#97671f33c13c47218a3df8a8d92de565a075b28c"
   dependencies:
     it-pushable "^1.4.0"
     it-reader "^3.0.0"
@@ -8622,7 +8626,7 @@ it-last@^1.0.4, it-last@^1.0.5:
 
 it-length-prefixed@^5.0.0, it-length-prefixed@^5.0.2, it-length-prefixed@^5.0.3:
   version "5.0.3"
-  resolved "https://registry.npmjs.org/it-length-prefixed/-/it-length-prefixed-5.0.3.tgz"
+  resolved "https://registry.yarnpkg.com/it-length-prefixed/-/it-length-prefixed-5.0.3.tgz#77fbd99b89aa6cdd79fad62c962423b413db7045"
   dependencies:
     bl "^5.0.0"
     buffer "^6.0.3"
@@ -8644,7 +8648,7 @@ it-merge@^1.0.0, it-merge@^1.0.1, it-merge@^1.0.2:
 
 it-pair@^1.0.0:
   version "1.0.0"
-  resolved "https://registry.npmjs.org/it-pair/-/it-pair-1.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/it-pair/-/it-pair-1.0.0.tgz#b1add81f49af16a10b2939dbef7b1974fae87d6a"
   dependencies:
     get-iterator "^1.0.2"
 
@@ -8662,7 +8666,7 @@ it-parallel@^1.0.0:
 
 it-pb-rpc@^0.1.11:
   version "0.1.13"
-  resolved "https://registry.npmjs.org/it-pb-rpc/-/it-pb-rpc-0.1.13.tgz"
+  resolved "https://registry.yarnpkg.com/it-pb-rpc/-/it-pb-rpc-0.1.13.tgz#594cdb91285b45f205800a643f49db86d7461421"
   dependencies:
     is-buffer "^2.0.5"
     it-handshake "^2.0.0"
@@ -8674,7 +8678,7 @@ it-peekable@^1.0.2:
 
 it-pipe@^1.0.1, it-pipe@^1.1.0:
   version "1.1.0"
-  resolved "https://registry.npmjs.org/it-pipe/-/it-pipe-1.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/it-pipe/-/it-pipe-1.1.0.tgz#f5964c6bb785dd776f11a62d1e75964787ab95ce"
 
 it-pushable@^1.4.0, it-pushable@^1.4.1, it-pushable@^1.4.2:
   version "1.4.2"
@@ -8684,7 +8688,7 @@ it-pushable@^1.4.0, it-pushable@^1.4.1, it-pushable@^1.4.2:
 
 it-reader@^3.0.0:
   version "3.0.0"
-  resolved "https://registry.npmjs.org/it-reader/-/it-reader-3.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/it-reader/-/it-reader-3.0.0.tgz#56596c7742ec7c63b7f7998f6bfa3f712e333d0e"
   dependencies:
     bl "^5.0.0"
 
@@ -9617,7 +9621,7 @@ kapsule@^1.13:
 
 keypair@^1.0.1, keypair@^1.0.4:
   version "1.0.4"
-  resolved "https://registry.npmjs.org/keypair/-/keypair-1.0.4.tgz"
+  resolved "https://registry.yarnpkg.com/keypair/-/keypair-1.0.4.tgz#a749a45f388593f3950f18b3757d32a93bd8ce83"
 
 keyv@^3.0.0:
   version "3.1.0"
@@ -9785,7 +9789,7 @@ libp2p-bootstrap@^0.13.0:
 
 libp2p-crypto@^0.19.4, libp2p-crypto@^0.19.5, libp2p-crypto@^0.19.7:
   version "0.19.7"
-  resolved "https://registry.npmjs.org/libp2p-crypto/-/libp2p-crypto-0.19.7.tgz"
+  resolved "https://registry.yarnpkg.com/libp2p-crypto/-/libp2p-crypto-0.19.7.tgz#e96a95bd430e672a695209fe0fbd2bcbd348bc35"
   dependencies:
     err-code "^3.0.1"
     is-typedarray "^1.0.0"
@@ -9801,7 +9805,7 @@ libp2p-crypto@^0.19.4, libp2p-crypto@^0.19.5, libp2p-crypto@^0.19.7:
 
 libp2p-crypto@^0.20.0:
   version "0.20.0"
-  resolved "https://registry.npmjs.org/libp2p-crypto/-/libp2p-crypto-0.20.0.tgz"
+  resolved "https://registry.yarnpkg.com/libp2p-crypto/-/libp2p-crypto-0.20.0.tgz#3881ccff5f1f51f48c74050d685535fb1a728488"
   dependencies:
     err-code "^3.0.1"
     iso-random-stream "^2.0.0"
@@ -10231,7 +10235,7 @@ loglevel@^1.4.1:
 
 long@^4.0.0:
   version "4.0.0"
-  resolved "https://registry.npmjs.org/long/-/long-4.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/long/-/long-4.0.0.tgz#9a7b71cfb7d361a194ea555241c92f7468d5bf28"
 
 longest@^1.0.1:
   version "1.0.1"
@@ -10503,11 +10507,11 @@ mimic-response@^2.0.0:
 
 minimalistic-assert@^1.0.0, minimalistic-assert@^1.0.1:
   version "1.0.1"
-  resolved "https://registry.npmjs.org/minimalistic-assert/-/minimalistic-assert-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/minimalistic-assert/-/minimalistic-assert-1.0.1.tgz#2e194de044626d4a10e7f7fbc00ce73e83e4d5c7"
 
 minimalistic-crypto-utils@^1.0.1:
   version "1.0.1"
-  resolved "https://registry.npmjs.org/minimalistic-crypto-utils/-/minimalistic-crypto-utils-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/minimalistic-crypto-utils/-/minimalistic-crypto-utils-1.0.1.tgz#f6c00c1c0b082246e5c4d99dfb8c7c083b2b582a"
 
 minimatch@3.0.3:
   version "3.0.3"
@@ -10529,7 +10533,7 @@ minimatch@^3.0.0:
 
 minimist@^1.1.1, minimist@^1.1.3, minimist@^1.2.0, minimist@^1.2.3, minimist@^1.2.5:
   version "1.2.5"
-  resolved "https://registry.npmjs.org/minimist/-/minimist-1.2.5.tgz"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
 
 minipass@^3.0.0, minipass@^3.1.3:
   version "3.1.6"
@@ -10590,7 +10594,7 @@ ms@2.0.0:
 
 ms@2.1.2, ms@^2.1.1:
   version "2.1.2"
-  resolved "https://registry.npmjs.org/ms/-/ms-2.1.2.tgz"
+  resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
 
 ms@2.1.3:
   version "2.1.3"
@@ -10631,9 +10635,13 @@ multicast-dns@^7.2.0:
     dns-packet "^5.2.2"
     thunky "^1.0.2"
 
-multiformats@^9.0.0, multiformats@^9.0.2, multiformats@^9.0.4, multiformats@^9.1.0, multiformats@^9.1.2, multiformats@^9.4.13, multiformats@^9.4.2, multiformats@^9.4.5, multiformats@^9.4.7, multiformats@^9.5.4:
+multiformats@^9.0.0, multiformats@^9.0.2, multiformats@^9.0.4, multiformats@^9.1.0, multiformats@^9.1.2, multiformats@^9.4.13, multiformats@^9.4.7, multiformats@^9.5.4:
   version "9.5.8"
   resolved "https://registry.npmjs.org/multiformats/-/multiformats-9.5.8.tgz"
+
+multiformats@^9.4.2, multiformats@^9.4.5:
+  version "9.6.4"
+  resolved "https://registry.yarnpkg.com/multiformats/-/multiformats-9.6.4.tgz#5dce1f11a407dbb69aa612cb7e5076069bb759ca"
 
 multistream-select@^2.0.0:
   version "2.0.1"
@@ -10668,7 +10676,7 @@ mute-stream@0.0.7:
 
 nan@^2.12.1, nan@^2.14.2, nan@^2.3.0:
   version "2.15.0"
-  resolved "https://registry.npmjs.org/nan/-/nan-2.15.0.tgz"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.15.0.tgz#3f34a473ff18e15c1b5626b62903b5ad6e665fee"
 
 nanoid@^3.0.2, nanoid@^3.1.20, nanoid@^3.1.23:
   version "3.2.0"
@@ -10883,11 +10891,11 @@ no-case@^2.2.0:
 
 noble-ed25519@^1.2.6:
   version "1.2.6"
-  resolved "https://registry.npmjs.org/noble-ed25519/-/noble-ed25519-1.2.6.tgz"
+  resolved "https://registry.yarnpkg.com/noble-ed25519/-/noble-ed25519-1.2.6.tgz#a55b75c61da000498abb43ffd81caaa370bfed22"
 
 noble-secp256k1@^1.2.10:
   version "1.2.14"
-  resolved "https://registry.npmjs.org/noble-secp256k1/-/noble-secp256k1-1.2.14.tgz"
+  resolved "https://registry.yarnpkg.com/noble-secp256k1/-/noble-secp256k1-1.2.14.tgz#39429c941d51211ca40161569cee03e61d72599e"
 
 node-abi@^2.21.0:
   version "2.30.1"
@@ -10901,7 +10909,7 @@ node-addon-api@^1.7.1:
 
 node-addon-api@^2.0.0:
   version "2.0.2"
-  resolved "https://registry.npmjs.org/node-addon-api/-/node-addon-api-2.0.2.tgz"
+  resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-2.0.2.tgz#432cfa82962ce494b132e9d72a15b29f71ff5d32"
 
 node-addon-api@^3.0.2:
   version "3.2.1"
@@ -10923,7 +10931,7 @@ node-fetch@^2.6.1:
 
 node-forge@^0.10.0:
   version "0.10.0"
-  resolved "https://registry.npmjs.org/node-forge/-/node-forge-0.10.0.tgz"
+  resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.10.0.tgz#32dea2afb3e9926f02ee5ce8794902691a676bf3"
 
 node-gyp-build@^4.2.0, node-gyp-build@^4.3.0:
   version "4.3.0"
@@ -11365,7 +11373,7 @@ p-cancelable@^2.0.0:
 
 p-defer@^3.0.0:
   version "3.0.0"
-  resolved "https://registry.npmjs.org/p-defer/-/p-defer-3.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/p-defer/-/p-defer-3.0.0.tgz#d1dceb4ee9b2b604b1d94ffec83760175d4e6f83"
 
 p-each-series@^2.1.0:
   version "2.2.0"
@@ -11758,7 +11766,7 @@ peer-id@^0.16.0:
 
 pem-jwk@^2.0.0:
   version "2.0.0"
-  resolved "https://registry.npmjs.org/pem-jwk/-/pem-jwk-2.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/pem-jwk/-/pem-jwk-2.0.0.tgz#1c5bb264612fc391340907f5c1de60c06d22f085"
   dependencies:
     asn1.js "^5.0.1"
 
@@ -12571,7 +12579,7 @@ proper-lockfile@^4.0.0:
 
 protobufjs@^6.10.2, protobufjs@^6.11.2:
   version "6.11.2"
-  resolved "https://registry.npmjs.org/protobufjs/-/protobufjs-6.11.2.tgz"
+  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-6.11.2.tgz#de39fabd4ed32beaa08e9bb1e30d08544c1edf8b"
   dependencies:
     "@protobufjs/aspromise" "^1.1.2"
     "@protobufjs/base64" "^1.1.2"
@@ -13502,7 +13510,7 @@ safe-regex@^1.1.0:
 
 "safer-buffer@>= 2.1.2 < 3", "safer-buffer@>= 2.1.2 < 3.0.0", safer-buffer@^2.0.2, safer-buffer@^2.1.0, safer-buffer@~2.1.0:
   version "2.1.2"
-  resolved "https://registry.npmjs.org/safer-buffer/-/safer-buffer-2.1.2.tgz"
+  resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
 
 sane@^4.0.3:
   version "4.1.0"
@@ -13571,7 +13579,7 @@ scryptsy@^2.1.0:
 
 secp256k1@^4.0.0:
   version "4.0.3"
-  resolved "https://registry.npmjs.org/secp256k1/-/secp256k1-4.0.3.tgz"
+  resolved "https://registry.yarnpkg.com/secp256k1/-/secp256k1-4.0.3.tgz#c4559ecd1b8d3c1827ed2d1b94190d69ce267303"
   dependencies:
     elliptic "^6.5.4"
     node-addon-api "^2.0.0"
@@ -14158,7 +14166,7 @@ string.prototype.trimstart@^1.0.4:
 
 string_decoder@^1.0.0, string_decoder@^1.1.1:
   version "1.3.0"
-  resolved "https://registry.npmjs.org/string_decoder/-/string_decoder-1.3.0.tgz"
+  resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-1.3.0.tgz#42f114594a46cf1a8e30b0a84f56c78c3edac21e"
   dependencies:
     safe-buffer "~5.2.0"
 
@@ -14879,7 +14887,7 @@ uid-number@^0.0.6:
 
 uint8arrays@^3.0.0:
   version "3.0.0"
-  resolved "https://registry.npmjs.org/uint8arrays/-/uint8arrays-3.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/uint8arrays/-/uint8arrays-3.0.0.tgz#260869efb8422418b6f04e3fac73a3908175c63b"
   dependencies:
     multiformats "^9.4.2"
 
@@ -15091,7 +15099,7 @@ url@^0.11.0:
 
 ursa-optional@^0.10.1:
   version "0.10.2"
-  resolved "https://registry.npmjs.org/ursa-optional/-/ursa-optional-0.10.2.tgz"
+  resolved "https://registry.yarnpkg.com/ursa-optional/-/ursa-optional-0.10.2.tgz#bd74e7d60289c22ac2a69a3c8dea5eb2817f9681"
   dependencies:
     bindings "^1.5.0"
     nan "^2.14.2"
@@ -15119,7 +15127,7 @@ utf8-byte-length@^1.0.1:
 
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
-  resolved "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
+  resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
 
 util.promisify@~1.0.0:
   version "1.0.1"
@@ -15205,7 +15213,7 @@ varint@^5.0.0:
 
 varint@^6.0.0:
   version "6.0.0"
-  resolved "https://registry.npmjs.org/varint/-/varint-6.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/varint/-/varint-6.0.0.tgz#9881eb0ce8feaea6512439d19ddf84bf551661d0"
 
 vary@~1.1.2:
   version "1.1.2"
