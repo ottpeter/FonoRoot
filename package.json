@@ -39,7 +39,7 @@
     "crypto-js": "^4.1.1",
     "cuid": "^2.1.8",
     "debounce": "^1.2.1",
-    "ipfs-core": "^0.12.2",
+    "ipfs-core": "^0.17.0",
     "it-all": "^1.0.4",
     "near-api-js": "~0.43.1",
     "react": "~17.0.1",
